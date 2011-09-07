@@ -2996,8 +2996,6 @@ if($this->mobile == false && $this->getConfig("show_load_time") == true)
 <a href="http://encode-explorer.siineiolekala.net">Encode Explorer</a>
 </div>
 <!-- END: Info area -->
-
-<!-- Encode Explorer v6.1 -->
 </body>
 </html>
 	

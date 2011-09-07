@@ -5,9 +5,9 @@
  *
  *             Author / Autor : Marek Rei
  *
- *             Version / Versioon : 6.1
+ *             Version / Versioon : 6.2
  *
- *             Last change / Viimati muudetud: 23.04.2011
+ *             Last change / Viimati muudetud: 08.09.2011
  *
  *             Homepage / Koduleht: encode-explorer.siineiolekala.net
  *
@@ -190,19 +190,77 @@ $_CONFIG['time_format'] = "d.m.y H:i:s";
 $_CONFIG['charset'] = "UTF-8";
 
 /*
- * UPLOADING
- */
+* PERMISSIONS
+*/
 
 //
-// Parool failide uploadimiseks. Parooli märkimisega aktiviseerub ka uploadi võimalus.
-// NB! Failide upload ei tööta zone.ee ja hot.ee tasuta serveriruumis!
-// NB! Faile saab uploadida ainult kaustadesse, millele on eelnevalt antud vastavad õigused (chmod 777)
+// Kaustade varjamine. Kaustade nimed mida lehel ei kuvata.
+// Näiteks: CONFIG['hidden_dirs'] = array("ikoonid", "kaustanimi", "teinekaust");
 //
-// Password for uploading files. You need to set the password to activate uploading.
-// To upload into a directory it has to have proper rights.
-// Default: $_CONFIG['upload_password'] = "";
+// The array of folder names that will be hidden from the list.
+// Default: $_CONFIG['hidden_dirs'] = array();
 //
-$_CONFIG['upload_password'] = "";
+$_CONFIG['hidden_dirs'] = array();
+
+//
+// Failide varjamine. Failide nimed mida lehel ei kuvata.
+// NB! Märgitud nimega failid ja kaustad varjatakse kõigis alamkaustades.
+//
+// Filenames that will be hidden from the list.
+// Default: $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
+//
+$_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
+
+//
+// Määra kas lehe nägemiseks peab sisse logima.
+// 'false' tähendab, et leht on avalik
+// 'true' tähendab, et kasutaja peab sisestama parooli (vaata allpool).
+//
+// Whether authentication is required to see the contents of the page.
+// If set to false, the page is public.
+// If set to true, you should specify some users as well (see below).
+// Important: This only prevents people from seeing the list.
+// They will still be able to access the files with a direct link.
+// Default: $_CONFIG['require_login'] = false;
+//
+$_CONFIG['require_login'] = false;
+
+//
+// Kasutajanimed ja paroolid, lehele ligipääsu piiramiseks.
+// Näiteks: $_CONFIG['users'] = array(array("user1", "pass1"), array("user2", "pass2"));
+// Võimalik lehte kaitsta ka ainult üldise parooliga.
+// Näiteks: $_CONFIG['users'] = array(array(null, "pass"));
+// Kui ühtegi kasutajat märgitud ei ole, siis parooli ei küsita.
+//
+// Usernames and passwords for restricting access to the page.
+// The format is: array(username, password, status)
+// Status can be either "user" or "admin". User can read the page, admin can upload and delete.
+// For example: $_CONFIG['users'] = array(array("username1", "password1", "user"), array("username2", "password2", "admin"));
+// You can also keep require_login=false and specify an admin. 
+// That way everyone can see the page but username and password are needed for uploading.
+// For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+// Default: $_CONFIG['users'] = array();
+//
+$_CONFIG['users'] = array();
+
+//
+// Seaded uploadimiseks, uute kaustade loomiseks ja kustutamiseks.
+// Valikud kehtivad ainult andmin kontode jaoks, tavakasutajatel pole need kunagi lubatud.
+//
+// Permissions for uploading, creating new directories and deleting.
+// They only apply to admin accounts, regular users can never perform these operations.
+// Default:
+// $_CONFIG['upload_enable'] = true;
+// $_CONFIG['newdir_enable'] = true;
+// $_CONFIG['delete_enable'] = false;
+//
+$_CONFIG['upload_enable'] = true;
+$_CONFIG['newdir_enable'] = true;
+$_CONFIG['delete_enable'] = false;
+
+/*
+ * UPLOADING
+ */
 
 //
 // Nimekiri kaustadest kuhu on lubatud uploadida ja uusi kaustu luua.
@@ -238,7 +296,7 @@ $_CONFIG['upload_allow_type'] = array();
 // For example: $_CONFIG['upload_reject_extension'] = array("php", "html", "htm");
 // Default: $_CONFIG['upload_reject_extension'] = array();
 //
-$_CONFIG['upload_reject_extension'] = array();
+$_CONFIG['upload_reject_extension'] = array("php");
 
 /*
  * LOGGING
@@ -263,46 +321,6 @@ $_CONFIG['upload_email'] = "";
 // Default: $_CONFIG['log_file'] = "";
 //
 $_CONFIG['log_file'] = "";
-
-/*
- * PERMISSIONS
- */
-
-//
-// Kaustade varjamine. Kaustade nimed mida lehel ei kuvata.
-// Näiteks: CONFIG['hidden_dirs'] = array("ikoonid", "kaustanimi", "teinekaust");
-//
-// The array of folder names that will be hidden from the list.
-// Default: $_CONFIG['hidden_dirs'] = array();
-//
-$_CONFIG['hidden_dirs'] = array();
-
-//
-// Failide varjamine. Failide nimed mida lehel ei kuvata.
-// NB! Märgitud nimega failid ja kaustad varjatakse kõigis alamkaustades.
-//
-// Filenames that will be hidden from the list.
-// Default: $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
-//
-$_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
-
-//
-// Kasutajanimed ja paroolid, lehele ligipääsu piiramiseks.
-// Näiteks: $_CONFIG['users'] = array(array("user1", "pass1"), array("user2", "pass2"));
-// Võimalik lehte kaitsta ka ainult üldise parooliga.
-// Näiteks: $_CONFIG['users'] = array(array(null, "pass"));
-// Kui ühtegi kasutajat märgitud ei ole, siis parooli ei küsita.
-//
-// Usernames and passwords for restricting access to the page.
-// For example: $_CONFIG['users'] = array(array("user1", "pass1"), array("user2", "pass2"));
-// You can also just use one global password.
-// For example: $_CONFIG['users'] = array(array("", "pass"));
-// If not passwords are set, then no authentication is required.
-// Important: This only prevents people from seeing the list.
-// They will still be able to access the files with a direct link.
-// Default: $_CONFIG['users'] = array();
-//
-$_CONFIG['users'] = array();
 
 /*
  * SYSTEM
@@ -430,7 +448,8 @@ $_TRANSLATIONS["en"] = array(
 	"wrong_pass" => "Wrong username or password",
 	"username" => "Username",
 	"log_in" => "Log in",
-	"upload_type_not_allowed" => "This file type is not allowed for uploading."
+	"upload_type_not_allowed" => "This file type is not allowed for uploading.",
+	"del" => "Del" // short for Delete
 );
 
 // Estonian
@@ -513,6 +532,36 @@ $_TRANSLATIONS["el"] = array(
 	"root" => "Root"
 );
 
+// Hungarian
+$_TRANSLATIONS["hu"] = array(
+	"file_name" => "Fájl név",
+	"size" => "Méret",
+	"last_changed" => "Utolsó módosítás",
+	"total_used_space" => "Összes elfoglalt terület",
+	"free_space" => "Szabad terület",
+	"password" => "Jelszó",
+	"upload" => "Feltöltés",
+	"failed_upload" => "A fájl feltöltése nem sikerült!",
+	"failed_move" => "A fájl mozgatása nem sikerült!",
+	"wrong_password" => "Hibás jelszó",
+	"make_directory" => "Új mappa",
+	"new_dir_failed" => "A mappa létrehozása nem sikerült",
+	"chmod_dir_failed" => "A mappa jogainak megváltoztatása nem sikerült",
+	"unable_to_read_dir" => "A mappa nem olvasható",
+	"location" => "Hely",
+	"root" => "Gyökér",
+	"log_file_permission_error" => "A log fájl írása jogosultsági okok miatt nem sikerült.",
+	"upload_not_allowed" => "Ebbe a mappába a feltöltés nem engedélyezett.",
+	"upload_dir_not_writable" => "A mappa nem írható.",
+	"mobile_version" => "Mobil nézet",
+	"standard_version" => "Web nézet",
+	"page_load_time" => "Letöltési id? %.2f ms",
+	"wrong_pass" => "Rossz felhasználónév vagy jelszó",
+	"username" => "Felhasználónév",
+	"log_in" => "Belépés",
+	"upload_type_not_allowed" => "A fájltípus feltöltése tiltott."
+);
+
 // Italian
 $_TRANSLATIONS["it"] = array(
 	"file_name" => "Nome file",
@@ -553,6 +602,66 @@ $_TRANSLATIONS["no"] = array(
 	"root" => "Rot"
 );
 
+//Polish
+$_TRANSLATIONS["pl"] = array(
+	"file_name" => "Nazwa Pliku",
+	"size" => "Rozmiar",
+	"last_changed" => "Data Zmiany",
+	"total_used_space" => "Total used space",
+	"free_space" => "Wolnego obszaru",
+	"password" => "Haslo",
+	"upload" => "Przeslij",
+	"failed_upload" => "Przeslanie pliku nie powiodlo sie",
+	"failed_move" => "Przenosienie pliku nie powidlo sie!",
+	"wrong_password" => "Niepoprawne haslo",
+	"make_directory" => "Nowy folder",
+	"new_dir_failed" => "Blad podczas tworzenia nowego foldera",
+	"chmod_dir_failed" => "Blad podczas zmiany uprawnienia foldera",
+	"unable_to_read_dir" => "Odczytanie foldera nie powiodlo sie",
+	"location" => "Miejsce",
+	"root" => "Root",
+	"log_file_permission_error" => "Brak uprawnien aby utowrzyc dziennik dzialan.",
+	"upload_not_allowed" => "Konfiguracja zabrania przeslanie pliku do tego foldera.",
+	"upload_dir_not_writable" => "Nie mozna zapisac pliku do tego foldera.",
+	"mobile_version" => "Wersja Mobile",
+	"standard_version" => "Widok standardowy",
+	"page_load_time" => "Zaladowano w %.2f ms",
+	"wrong_pass" => "Nie poprawna nazwa uzytkownika lub hasla",
+	"username" => "Uzytkownik",
+	"log_in" => "Zaloguj sie",
+	"upload_type_not_allowed" => "Ten rodazaj pliku jest zabrioniony."
+);
+
+// Portuguese (Brazil)
+$_TRANSLATIONS["pt_BR"] = array(
+	"file_name" => "Nome do arquivo",
+	"size" => "Tamanho",
+	"last_changed" => "Modificado em",
+	"total_used_space" => "Total de espaço utilizado",
+	"free_space" => "Espaço livre",
+	"password" => "Senha",
+	"upload" => "Enviar",
+	"failed_upload" => "Falha ao enviar o arquivo!",
+	"failed_move" => "Falha ao mover o arquivo para o diretório correto!",
+	"wrong_password" => "Senha errada",
+	"make_directory" => "Nova pasta",
+	"new_dir_failed" => "Falha ao criar diretório",
+	"chmod_dir_failed" => "Falha ao mudar os privilégios do diretório",
+	"unable_to_read_dir" => "Não foi possível ler o diretório",
+	"location" => "Localização",
+	"root" => "Raíz",
+	"log_file_permission_error" => "O script não tem permissão para escrever o arquivo de log.",
+	"upload_not_allowed" => "A configuração do script não permite envios neste diretório.",
+	"upload_dir_not_writable" => "Não há permissão para escrita neste diretório.",
+	"mobile_version" => "Versão Móvel",
+	"standard_version" => "Versão Padrão",
+	"page_load_time" => "Página carregada em %.2f ms",
+	"wrong_pass" => "Nome de usuário ou senha errados",
+	"username" => "Nome de Usuário",
+	"log_in" => "Log in",
+	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo."
+);
+
 // Romanian
 $_TRANSLATIONS["ro"] = array(
 	"file_name" => "Nume fisier",
@@ -571,6 +680,36 @@ $_TRANSLATIONS["ro"] = array(
 	"unable_to_read_dir" => "Nu s-a putut citi directorul",
 	"location" => "Locatie",
 	"root" => "Root"
+);
+
+// Russian
+$_TRANSLATIONS["ru"] = array(
+    "file_name" => "Имя файла",
+    "size" => "Размер",
+    "last_changed" => "Последнее изменение",
+    "total_used_space" => "Всего использовано",
+    "free_space" => "Свободно",
+    "password" => "Пароль",
+    "upload" => "Загрузка",
+    "failed_upload" => "Не удалось загрузить файл!",
+    "failed_move" => "Не удалось переместить файл в нужную папку!",
+    "wrong_password" => "Неверный пароль",
+    "make_directory" => "Новая папка",
+    "new_dir_failed" => "Не удалось создать папку",
+    "chmod_dir_failed" => "Не удалось изменить права доступа к папке",
+    "unable_to_read_dir" => "Не возможно прочитать папку",
+    "location" => "Расположение",
+    "root" => "Корневая папка",
+    "log_file_permission_error" => "Скрипт не имеет прав для записи лога файла.",
+    "upload_not_allowed" => "Загрузка в эту папку запрещена в настройках скрипта",
+    "upload_dir_not_writable" => "В эту папку запрещена запись",
+    "mobile_version" => "Мобильный вид",
+    "standard_version" => "Обычный вид",
+    "page_load_time" => "Страница загружена за %.2f мс.",
+    "wrong_pass" => "Неверное имя пользователя или пароль",
+    "username" => "Имя пользователя",
+    "log_in" => "Войти",
+    "upload_type_not_allowed" => "Этот тип файла запрещено загружать"
 );
 
 // Slovensky
@@ -716,6 +855,7 @@ div.subtitle{
 	position: relative;
 	margin: 0 auto;
 	max-width:680px;
+	overflow:hidden;
 }
 
 #error {
@@ -759,6 +899,10 @@ table.table tr.row td.icon {
 	padding-bottom:1px;
 }
 
+table.table td.del {
+	width:25px;
+}
+
 table.table tr.row td.size {
 	width: 100px; 
 	text-align: right;
@@ -798,6 +942,17 @@ table.table tr.header img {
 	display:block;
 }
 
+/* Login bar (at the bottom of the page) */
+#login_bar {
+	margin: 0 auto;
+	margin-top:2px;
+	max-width:680px;
+}
+
+#login_bar input.submit{
+	float:right;
+}
+
 /* Upload area */
 
 #upload {
@@ -819,7 +974,7 @@ table.table tr.header img {
 }
 
 #upload input.upload_dirname, #upload input.upload_password{
-	width:100px;
+	width:140px;
 }
 
 #upload input.upload_file{
@@ -873,6 +1028,7 @@ body.mobile {
 
 body.mobile a.item {
 	display:block;
+	padding:10px 0;
 }
 
 body.mobile a.item span.size {
@@ -906,7 +1062,7 @@ body.mobile #upload #password_container, body.mobile #upload #upload_container, 
 }
 
 body.mobile #upload input.upload_dirname, body.mobile #upload input.upload_password{
-	width:200px;
+	width:240px;
 }
 
 body.mobile #upload {
@@ -943,6 +1099,19 @@ $_IMAGES["arrow_up"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEA
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABbSURBVCjPY/jPgB8yDDkFmyVWv14kh1PB
 eoll31f/n/ytUw6rgtUSi76s+L/x/8z/Vd8KFbEomPt16f/1/1f+X/S/7X/qeSwK+v63/K/6X/g/
 83/S/5hvQywkAdMGCdCoabZeAAAAAElFTkSuQmCC";
+$_IMAGES["del"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
+U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJdSURBVDjLpZP7S1NhGMf9W7YfogSJboSE
+UVCY8zJ31trcps6zTI9bLGJpjp1hmkGNxVz4Q6ildtXKXzJNbJRaRmrXoeWx8tJOTWptnrNryre5
+YCYuI3rh+8vL+/m8PA/PkwIg5X+y5mJWrxfOUBXm91QZM6UluUmthntHqplxUml2lciF6wrmdHri
+I0Wx3xw2hAediLwZRWRkCPzdDswaSvGqkGCfq8VEUsEyPF1O8Qu3O7A09RbRvjuIttsRbT6HHzeb
+sDjcB4/JgFFlNv9MnkmsEszodIIY7Oaut2OJcSF68Qx8dgv8tmqEL1gQaaARtp5A+N4NzB0lMXxo
+n/uxbI8gIYjB9HytGYuusfiPIQcN71kjgnW6VeFOkgh3XcHLvAwMSDPohOADdYQJdF1FtLMZPmsl
+vhZJk2ahkgRvq4HHUoWHRDqTEDDl2mDkfheiDgt8pw340/EocuClCuFvboQzb0cwIZgki4KhzlaE
+6w0InipbVzBfqoK/qRH94i0rgokSFeO11iBkp8EdV8cfJo0yD75aE2ZNRvSJ0lZKcBXLaUYmQrCz
+DT6tDN5SyRqYlWeDLZAg0H4JQ+Jt6M3atNLE10VSwQsN4Z6r0CBwqzXesHmV+BeoyAUri8EyMfi2
+FowXS5dhd7doo2DVII0V5BAjigP89GEVAtda8b2ehodU4rNaAW+dGfzlFkyo89GTlcrHYCLpKD+V
+7yeeHNzLjkp24Uu1Ed6G8/F8qjqGRzlbl2H2dzjpMg1KdwsHxOlmJ7GTeZC/nesXbeZ6c9OYnuxU
+c3fmBuFft/Ff8xMd0s65SXIb/gAAAABJRU5ErkJggg==";
 
 
 $_IMAGES["archive"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
@@ -1591,14 +1760,15 @@ class GateKeeper
 		return false;
 	}
 	
-	public static function isAuthEnabled()
+	public static function isLoginRequired()
 	{
-		if(count(EncodeExplorer::getConfig("users")) == 0)
+		if(EncodeExplorer::getConfig("require_login") == false){
 			return false;
+		}
 		return true;
 	}
 	
-	public static function isLoggedIn()
+	public static function isUserLoggedIn()
 	{
 		if(isset($_SESSION['ee_user_name']) && isset($_SESSION['ee_user_pass']))
 		{
@@ -1610,20 +1780,54 @@ class GateKeeper
 	
 	public static function isAccessAllowed()
 	{
-		if(!GateKeeper::isAuthEnabled() || GateKeeper::isLoggedIn())
+		if(!GateKeeper::isLoginRequired() || GateKeeper::isUserLoggedIn())
 			return true;
 		return false;
 	}
 	
+	public static function isUploadAllowed(){
+		if(EncodeExplorer::getConfig("upload_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
+			return true;
+		return false;
+	}
+	
+	public static function isNewdirAllowed(){
+		if(EncodeExplorer::getConfig("newdir_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
+			return true;
+		return false;
+	}
+	
+	public static function isDeleteAllowed(){
+		if(EncodeExplorer::getConfig("delete_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
+			return true;
+		return false;
+	}
+	
+	public static function getUserStatus(){
+		if(GateKeeper::isUserLoggedIn() == true && EncodeExplorer::getConfig("users") != null && is_array(EncodeExplorer::getConfig("users"))){
+			foreach(EncodeExplorer::getConfig("users") as $user){
+				if($user[0] != null && $user[0] == $_SESSION['ee_user_name'])
+					return $user[2];
+			}
+		}
+		return null;
+	}
+	
 	public static function getUserName()
 	{
-		if(GateKeeper::isLoggedIn() == true && isset($_SESSION['ee_user_name']) && strlen($_SESSION['ee_user_name']) > 0)
+		if(GateKeeper::isUserLoggedIn() == true && isset($_SESSION['ee_user_name']) && strlen($_SESSION['ee_user_name']) > 0)
 			return $_SESSION['ee_user_name'];
 		if(isset($_SERVER["REMOTE_USER"]) && strlen($_SERVER["REMOTE_USER"]) > 0)
 			return $_SERVER["REMOTE_USER"];
 		if(isset($_SERVER['PHP_AUTH_USER']) && strlen($_SERVER['PHP_AUTH_USER']) > 0)
 			return $_SERVER['PHP_AUTH_USER'];
 		return "an anonymous user";
+	}
+	
+	public static function showLoginBox(){
+		if(!GateKeeper::isUserLoggedIn() && count(EncodeExplorer::getConfig("users")) > 0)
+			return true;
+		return false;
 	}
 }
 
@@ -1632,6 +1836,7 @@ class GateKeeper
 //
 class FileManager
 {
+	/* Obsolete code
 	function checkPassword($inputPassword)
 	{
 		global $encodeExplorer;
@@ -1645,7 +1850,7 @@ class FileManager
 			return false;
 		}
 	}
-
+	*/
 	function newFolder($location, $dirname)
 	{
 		global $encodeExplorer;
@@ -1734,18 +1939,63 @@ class FileManager
 			Logger::emailNotification($location->getDir(true, false, false, 0).$name, true);
 		}
 	}
+	
+	public static function delete_dir($dir) {
+		if (is_dir($dir)) {
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..") {
+					if (filetype($dir."/".$object) == "dir") 
+						FileManager::delete_dir($dir."/".$object); 
+					else 
+						unlink($dir."/".$object);
+				}
+			}
+			reset($objects);
+			rmdir($dir);
+		}
+	}
+	
+	public static function delete_file($file){
+		if(is_file($file)){
+			unlink($file);
+		}
+	}
 
 	//
 	// The main function, checks if the user wants to perform any supported operations
 	// 
 	function run($location)
 	{
-		if(isset($_POST['password']) && $this->checkPassword($_POST['password']) && $location->uploadAllowed() && GateKeeper::isAccessAllowed())
-		{
-			if(isset($_POST['userdir']) && strlen($_POST['userdir']) > 0)
+		if(isset($_POST['userdir']) && strlen($_POST['userdir']) > 0){
+			if($location->uploadAllowed() && GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isNewdirAllowed()){
 				$this->newFolder($location, $_POST['userdir']);
-			if(isset($_FILES['userfile']['name']) && strlen($_FILES['userfile']['name']) > 0)
+			}
+		}
+			
+		if(isset($_FILES['userfile']['name']) && strlen($_FILES['userfile']['name']) > 0){
+			if($location->uploadAllowed() && GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isUploadAllowed()){
 				$this->uploadFile($location, $_FILES['userfile']);
+			}
+		}
+		
+		if(isset($_GET['del'])){
+			if(GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isDeleteAllowed()){
+				$split_path = Location::splitPath($_GET['del']);
+				$path = "";
+				for($i = 0; $i < count($split_path); $i++){
+					$path .= $split_path[$i];
+					if($i + 1 < count($split_path))
+						$path .= "/";
+				}
+				if($path == "" || $path == "/" || $path == "\\" || $path == ".")
+					return;
+				
+				if(is_dir($path))
+					FileManager::delete_dir($path);
+				else if(is_file($path))
+					FileManager::delete_file($path);
+			}
 		}
 	}
 }
@@ -1938,7 +2188,7 @@ class Location
 	//
 	// Split a file path into array elements
 	// 
-	function splitPath($dir)
+	public static function splitPath($dir)
 	{
 		$dir = stripslashes($dir);
 		$path1 = preg_split("/[\\\\\/]+/", $dir);
@@ -2032,7 +2282,7 @@ class Location
 	//
 	function uploadAllowed()
 	{
-		if(strlen(EncodeExplorer::getConfig('upload_password')) <= 0)
+		if(EncodeExplorer::getConfig('upload_enable') != true)
 			return false;
 		if(EncodeExplorer::getConfig('upload_dirs') == null || count(EncodeExplorer::getConfig('upload_dirs')) == 0)
 			return true;
@@ -2232,11 +2482,11 @@ class EncodeExplorer
 		else if($sort_by == "mod")
 			$text = $this->getString("last_changed");
 
-		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, $this->location->getDir(false, true, false, 0))."\">
+		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, null, $this->location->getDir(false, true, false, 0))."\">
 			$text <img style=\"border:0;\" alt=\"".$sort_as."\" src=\"?img=".$img."\" /></a>";
 	}
 	
-	function makeLink($switchVersion, $logout, $sort_by, $sort_as, $dir)
+	function makeLink($switchVersion, $logout, $sort_by, $sort_as, $delete, $dir)
 	{
 		$link = "?";
 		if($switchVersion == true && EncodeExplorer::getConfig("mobile_enabled") == true)
@@ -2267,6 +2517,8 @@ class EncodeExplorer
 			$link .= "sort_as=".$sort_as."&amp;";
 		
 		$link .= "dir=".$dir;
+		if($delete != null)
+			$link .= "&del=".$delete;
 		return $link;
 	}
 
@@ -2390,12 +2642,18 @@ class EncodeExplorer
 	{
 		?>
 		<div id="login">
-		<form enctype="multipart/form-data" action="<?php print $this->makeLink(false, false, null, null, ""); ?>" method="post">
+		<form enctype="multipart/form-data" action="<?php print $this->makeLink(false, false, null, null, null, ""); ?>" method="post">
 		<?php 
-		if(GateKeeper::isAuthEnabled())
+		if(GateKeeper::isLoginRequired())
 		{
-			$users = EncodeExplorer::getConfig("users");
-			if($users[0][0] != null && strlen($users[0][0]) > 0)
+			$require_username = false;
+			foreach(EncodeExplorer::getConfig("users") as $user){
+				if($user[0] != null && strlen($user[0]) > 0){
+					$require_username = true;
+					break;
+				}
+			}
+			if($require_username)
 			{
 			?>
 			<div><label for="user_name"><?php print $this->getString("username"); ?>:</label>
@@ -2428,7 +2686,8 @@ class EncodeExplorer
 <meta content="text/html; charset=<?php print $this->getConfig('charset'); ?>" http-equiv="content-type" />
 <?php
 if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file')) > 0)
-	|| ($this->getConfig('thumbnails') != null && $this->getConfig('thumbnails') == true && $this->mobile == false))
+	|| ($this->getConfig('thumbnails') != null && $this->getConfig('thumbnails') == true && $this->mobile == false)
+	|| (GateKeeper::isDeleteAllowed()))
 { 
 ?>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
@@ -2436,6 +2695,14 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 //<![CDATA[
 $(document).ready(function() {
 <?php
+	if(GateKeeper::isDeleteAllowed()){
+?>
+	$('td.del a').click(function(){
+		var answer = confirm('Are you sure you want to delete : \'' + $(this).parent().parent().children("td.name").children("a").html() + "\' ?");
+		return answer;
+	});
+<?php 
+	}	
 	if($this->logging == true)
 	{ 
 ?>
@@ -2513,7 +2780,7 @@ if(EncodeExplorer::getConfig('show_top') == true)
 {
 ?>
 <div id="top">
-	<a href="<?php print $this->makeLink(false, false, null, null, ""); ?>"><span><?php if(EncodeExplorer::getConfig('main_title') != null) print EncodeExplorer::getConfig('main_title'); ?></span></a>
+	<a href="<?php print $this->makeLink(false, false, null, null, null, ""); ?>"><span><?php if(EncodeExplorer::getConfig('main_title') != null) print EncodeExplorer::getConfig('main_title'); ?></span></a>
 <?php 
 if(EncodeExplorer::getConfig("secondary_titles") != null && is_array(EncodeExplorer::getConfig("secondary_titles")) && count(EncodeExplorer::getConfig("secondary_titles")) > 0 && $this->mobile == false)
 {
@@ -2540,7 +2807,7 @@ if($this->mobile == false && EncodeExplorer::getConfig("show_path") == true)
 <?php
 	for($i = 0; $i < count($this->location->path); $i++)
 	{
-		print "&gt; <a href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, count($this->location->path) - $i - 1))."\">";
+		print "&gt; <a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, count($this->location->path) - $i - 1))."\">";
 		print $this->location->getPathLink($i, true);
 		print "</a>\n";
 	}
@@ -2561,14 +2828,17 @@ if($this->mobile == false)
 	<td class="name"><?php print $this->makeArrow("name");?></td>
 	<td class="size"><?php print $this->makeArrow("size"); ?></td>
 	<td class="changed"><?php print $this->makeArrow("mod"); ?></td>
+	<?php if($this->mobile == false && GateKeeper::isDeleteAllowed()){?>
+	<td class="del"><?php print EncodeExplorer::getString("del"); ?></td>
+	<?php } ?>
 </tr>
 <?php 
 }
 ?>
 <tr class="row two">
 	<td class="icon"><img alt="dir" src="?img=directory" /></td>
-	<td colspan="<?php print ($this->mobile == true?2:3); ?>" class="long">
-		<a class="item" href="<?php print $this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
+	<td colspan="<?php print (($this->mobile == true?2:3)); ?>" class="long">
+		<a class="item" href="<?php print $this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
 	</td>
 </tr>
 <?php
@@ -2587,11 +2857,14 @@ if($this->dirs)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style."\">\n";
 		print "<td class=\"icon\"><img alt=\"dir\" src=\"?img=directory\" /></td>\n";
-		print "<td colspan=\"".($this->mobile == true?2:3)."\">\n";
-		print "<a href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded())."\" class=\"item dir\">";
+		print "<td class=\"name\" colspan=\"".($this->mobile == true?2:3)."\">\n";
+		print "<a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded())."\" class=\"item dir\">";
 		print $dir->getNameHtml();
 		print "</a>\n";
 		print "</td>\n";
+		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
+			print "<td class=\"del\"><a href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\" alt=\"Delete\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
+		}
 		print "</tr>\n";
 		$row =! $row;
 	}
@@ -2628,6 +2901,9 @@ if($this->files)
 			print "<td class=\"size\">".$this->formatSize($file->getSize())."</td>\n";
 			print "<td class=\"changed\">".$this->formatModTime($file->getModTime())."</td>\n";
 		}
+		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
+			print "<td class=\"del\"><a href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$file->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\" alt=\"Delete\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
+		}
 		print "</tr>\n";
 		$row =! $row;
 	}
@@ -2647,27 +2923,50 @@ if($this->files)
 </div>
 
 <?php
-if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed())
+if(GateKeeper::isAccessAllowed() && GateKeeper::showLoginBox()){
+?>
+<!-- START: Login area -->
+<form enctype="multipart/form-data" action="" method="post">
+	<div id="login_bar">
+	<?php print $this->getString("username"); ?>:
+	<input type="text" name="user_name" value="" id="user_name" />
+	<?php print $this->getString("password"); ?>:
+	<input type="password" name="user_pass" id="user_pass" />
+	<input type="submit" class="submit" value="<?php print $this->getString("log_in"); ?>" />
+	<div class="bar"></div>
+	</div>
+</form>
+<!-- END: Login area -->
+<?php 
+}
+
+if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKeeper::isUploadAllowed() || GateKeeper::isNewdirAllowed()))
 {
 ?>
 <!-- START: Upload area -->
-<div id="upload">
-	<form enctype="multipart/form-data" action="" method="post">
-		<div id="password_container">
-			<?php print $this->getString("password"); ?>: 
-			<input type="password" name="password" class="upload_password" />
-		</div>
+<form enctype="multipart/form-data" action="" method="post">
+	<div id="upload">
+		<?php 
+		if(GateKeeper::isNewdirAllowed()){
+		?>
 		<div id="newdir_container">
 			<input name="userdir" type="text" class="upload_dirname" />
-			<input type="submit" value="<?php print $this->getString("make_directory"); ?>" class="upload_sumbit" />
+			<input type="submit" value="<?php print $this->getString("make_directory"); ?>" />
 		</div>
+		<?php 
+		}
+		if(GateKeeper::isUploadAllowed()){
+		?>
 		<div id="upload_container">
 			<input name="userfile" type="file" class="upload_file" />
 			<input type="submit" value="<?php print $this->getString("upload"); ?>" class="upload_sumbit" />
 		</div>
-	</form>
-	<div class="bar"></div>
-</div>
+		<?php 
+		}
+		?>
+		<div class="bar"></div>
+	</div>
+</form>
 <!-- END: Upload area -->
 <?php
 }
@@ -2676,12 +2975,12 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed())
 <!-- START: Info area -->
 <div id="info">
 <?php
-if(GateKeeper::isLoggedIn())
-	print "<a href=\"".$this->makeLink(false, true, null, null, "")."\">Log out</a> | ";
+if(GateKeeper::isUserLoggedIn())
+	print "<a href=\"".$this->makeLink(false, true, null, null, null, "")."\">Log out</a> | ";
 
 if(EncodeExplorer::getConfig("mobile_enabled") == true)
 {
-	print "<a href=\"".$this->makeLink(true, false, null, null, $this->location->getDir(false, true, false, 0))."\">\n";
+	print "<a href=\"".$this->makeLink(true, false, null, null, null, $this->location->getDir(false, true, false, 0))."\">\n";
 	print ($this->mobile == true)?$this->getString("standard_version"):$this->getString("mobile_version")."\n";
 	print "</a> | \n";
 }

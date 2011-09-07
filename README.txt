@@ -4,9 +4,9 @@
  *
  *             Author / Autor : Marek Rei
  *
- *             Version / Versioon : 6.1
+ *             Version / Versioon : 6.2
  *
- *             Last change / Viimati muudetud: 23.04.2011
+ *             Last change / Viimati muudetud: 08.09.2011
  *
  *             Homepage / Koduleht: encode-explorer.siineiolekala.net
  *

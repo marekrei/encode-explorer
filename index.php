@@ -2199,17 +2199,13 @@ class EncodeExplorer
 
 	function sort()
 	{
-		if(is_array($this->files)){
-			usort($this->files, "EncodeExplorer::cmp_".$this->sort_by);
-			if($this->sort_as == "desc")
-				$this->files = array_reverse($this->files);
-		}
+		usort($this->files, "EncodeExplorer::cmp_".$this->sort_by);
+		if($this->sort_as == "desc")
+			$this->files = array_reverse($this->files);
 		
-		if(is_array($this->dirs)){
-			usort($this->dirs, "EncodeExplorer::cmp_name");
-			if($this->sort_by == "name" && $this->sort_as == "desc")
-				$this->dirs = array_reverse($this->dirs);
-		}
+		usort($this->dirs, "EncodeExplorer::cmp_name");
+		if($this->sort_by == "name" && $this->sort_as == "desc")
+			$this->dirs = array_reverse($this->dirs);
 	}
 
 	function makeArrow($sort_by)

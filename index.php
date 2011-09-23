@@ -3,11 +3,11 @@
  *
  *             Encode Explorer
  *
- *             Author / Autor : Marek Rei
+ *             Author / Autor : Marek Rei (marek ät siineiolekala dot net)
  *
- *             Version / Versioon : 6.2
+ *             Version / Versioon : 6.3
  *
- *             Last change / Viimati muudetud: 08.09.2011
+ *             Last change / Viimati muudetud: 23.09.2011
  *
  *             Homepage / Koduleht: encode-explorer.siineiolekala.net
  *
@@ -332,7 +332,8 @@ $_CONFIG['log_file'] = "";
 // Vaikimisi: .
 //
 // The starting directory. Normally no need to change this.
-// Use only relative subdirectories!
+// Use only relative subdirectories! 
+// For example: $_CONFIG['starting_dir'] = "./mysubdir/";
 // Default: $_CONFIG['starting_dir'] = ".";
 //
 $_CONFIG['starting_dir'] = ".";
@@ -916,6 +917,11 @@ input {
 
 table.table {
 	width:100%;
+	border-collapse: collapse; 
+}
+
+table.table td{
+	padding:3px;
 }
 
 table.table tr.row.two {
@@ -948,6 +954,10 @@ table.table tr.row td.changed {
 
 table.table tr.header img {
 	vertical-align:bottom;
+}
+
+table img{
+	border:0;
 }
 
 /* Info area */ 
@@ -2551,7 +2561,7 @@ class EncodeExplorer
 		
 		$link .= "dir=".$dir;
 		if($delete != null)
-			$link .= "&del=".$delete;
+			$link .= "&amp;del=".$delete;
 		return $link;
 	}
 
@@ -2711,12 +2721,13 @@ class EncodeExplorer
 		global $_ERROR;
 		global $_START_TIME;
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $this->getConfig('lang'); ?>" lang="<?php print $this->getConfig('lang'); ?>">
 <head>
-<?php css(); ?>
 <meta name="viewport" content="width=device-width" />
-<meta content="text/html; charset=<?php print $this->getConfig('charset'); ?>" http-equiv="content-type" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php print $this->getConfig('charset'); ?>">
+<?php css(); ?>
+<!-- <meta charset="<?php print $this->getConfig('charset'); ?>" /> -->
 <?php
 if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file')) > 0)
 	|| ($this->getConfig('thumbnails') != null && $this->getConfig('thumbnails') == true && $this->mobile == false)
@@ -2731,7 +2742,7 @@ $(document).ready(function() {
 	if(GateKeeper::isDeleteAllowed()){
 ?>
 	$('td.del a').click(function(){
-		var answer = confirm('Are you sure you want to delete : \'' + $(this).parent().parent().children("td.name").children("a").html() + "\' ?");
+		var answer = confirm('Are you sure you want to delete : \'' + $(this).attr("data-name") + "\' ?");
 		return answer;
 	});
 <?php 
@@ -2851,13 +2862,13 @@ if($this->mobile == false && EncodeExplorer::getConfig("show_path") == true)
 ?>
 
 <!-- START: List table -->
-<table class="table" border="0" cellpadding="3" cellspacing="0">
+<table class="table">
 <?php 
 if($this->mobile == false)
 {
 ?>
 <tr class="row one header">
-	<td class="icon">&nbsp;</td>
+	<td class="icon"> </td>
 	<td class="name"><?php print $this->makeArrow("name");?></td>
 	<td class="size"><?php print $this->makeArrow("size"); ?></td>
 	<td class="changed"><?php print $this->makeArrow("mod"); ?></td>
@@ -2870,7 +2881,7 @@ if($this->mobile == false)
 ?>
 <tr class="row two">
 	<td class="icon"><img alt="dir" src="?img=directory" /></td>
-	<td colspan="<?php print (($this->mobile == true?2:3)); ?>" class="long">
+	<td colspan="<?php print (($this->mobile == true?2:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
 		<a class="item" href="<?php print $this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
 	</td>
 </tr>
@@ -2896,7 +2907,7 @@ if($this->dirs)
 		print "</a>\n";
 		print "</td>\n";
 		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
-			print "<td class=\"del\"><a href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\" alt=\"Delete\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
+			print "<td class=\"del\"><a data-name=\"".htmlentities($dir->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
 		}
 		print "</tr>\n";
 		$row =! $row;
@@ -2935,7 +2946,11 @@ if($this->files)
 			print "<td class=\"changed\">".$this->formatModTime($file->getModTime())."</td>\n";
 		}
 		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
-			print "<td class=\"del\"><a href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$file->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\" alt=\"Delete\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
+			print "<td class=\"del\">
+				<a data-name=\"".htmlentities($file->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$file->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\">
+					<img src=\"?img=del\" alt=\"Delete\" />
+				</a>
+			</td>";
 		}
 		print "</tr>\n";
 		$row =! $row;
@@ -2959,7 +2974,7 @@ if($this->files)
 if(GateKeeper::isAccessAllowed() && GateKeeper::showLoginBox()){
 ?>
 <!-- START: Login area -->
-<form enctype="multipart/form-data" action="" method="post">
+<form enctype="multipart/form-data" method="post">
 	<div id="login_bar">
 	<?php print $this->getString("username"); ?>:
 	<input type="text" name="user_name" value="" id="user_name" />
@@ -2977,7 +2992,7 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKee
 {
 ?>
 <!-- START: Upload area -->
-<form enctype="multipart/form-data" action="" method="post">
+<form enctype="multipart/form-data" method="post">
 	<div id="upload">
 		<?php 
 		if(GateKeeper::isNewdirAllowed()){

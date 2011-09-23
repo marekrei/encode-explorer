@@ -2,11 +2,11 @@
  *
  *             Encode Explorer
  *
- *             Author / Autor : Marek Rei
+ *             Author / Autor : Marek Rei (marek ät siineiolekala dot net)
  *
- *             Version / Versioon : 6.2
+ *             Version / Versioon : 6.3
  *
- *             Last change / Viimati muudetud: 08.09.2011
+ *             Last change / Viimati muudetud: 23.09.2011
  *
  *             Homepage / Koduleht: encode-explorer.siineiolekala.net
  *

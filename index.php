@@ -16,7 +16,7 @@
  *                  Comments needed for configuring are in both estonian and english.
  *                  If you change anything, save with UTF-8! Otherwise you may
  *                  encounter problems, especially when displaying images.
- *                  
+ *
  *             NB!: Kommentaarid on inglise keeles.
  *                  Seadistamiseks vajalikud kommentaarid on eesti ja inglise keeles.
  *                  Kui midagi muudate, salvestage UTF-8 formaati! Vastasel juhul
@@ -31,8 +31,8 @@
  *   Encode Explorer is written in the hopes that it can be useful to people.
  *   It has NO WARRANTY and when you use it, the author is not responsible
  *   for how it works (or doesn't).
- *   
- *   The icon images are designed by Mark James (http://www.famfamfam.com) 
+ *
+ *   The icon images are designed by Mark James (http://www.famfamfam.com)
  *   and distributed under the Creative Commons Attribution 3.0 License.
  *
  ***************************************************************************/
@@ -53,7 +53,7 @@ $_CONFIG = array();
 $_ERROR = "";
 $_START_TIME = microtime(TRUE);
 
-/* 
+/*
  * GENERAL SETTINGS
  */
 
@@ -90,7 +90,7 @@ $_CONFIG['thumbnails_height'] = 300;
 //
 // Mobillidele mõeldud kasutajaliides. true/false
 // Vaikimisi: true
-// 
+//
 // Mobile interface enabled. true/false
 // Default: $_CONFIG['mobile_enabled'] = true;
 //
@@ -112,17 +112,17 @@ $_CONFIG['mobile_default'] = false;
 //
 // Kas failid avatakse uues aknas? true/false
 //
-// Will the files be opened in a new window? true/false 
+// Will the files be opened in a new window? true/false
 // Default: $_CONFIG['open_in_new_window'] = false;
 //
 $_CONFIG['open_in_new_window'] = false;
 
 //
-// Kui sügavalt alamkataloogidest suurust näitav script faile otsib? 
+// Kui sügavalt alamkataloogidest suurust näitav script faile otsib?
 // Määra see nullist suuremaks, kui soovid kogu kasutatud ruumi suurust kuvada.
 // Vaikimisi: 0
 //
-// How deep in subfolders will the script search for files? 
+// How deep in subfolders will the script search for files?
 // Set it larger than 0 to display the total used space.
 // Default: $_CONFIG['calculate_space_level'] = 0;
 //
@@ -132,7 +132,7 @@ $_CONFIG['calculate_space_level'] = 0;
 // Kas kuvatakse lehe päis? true/false
 // Vaikimisi: true;
 //
-// Will the page header be displayed? 0=no, 1=yes. 
+// Will the page header be displayed? 0=no, 1=yes.
 // Default: $_CONFIG['show_top'] = true;
 //
 $_CONFIG['show_top'] = true;
@@ -166,7 +166,7 @@ $_CONFIG['show_path'] = true;
 //
 // Kuva lehe laadimise aega. true/false
 // Vaikimisi: false
-// 
+//
 // Display the time it took to load the page.
 // Default: $_CONFIG['show_load_time'] = true;
 //
@@ -181,10 +181,10 @@ $_CONFIG['show_load_time'] = true;
 $_CONFIG['time_format'] = "d.m.y H:i:s";
 
 //
-// Kodeering, mida lehel kasutatakse. 
+// Kodeering, mida lehel kasutatakse.
 // Tuleb panna sobivaks, kui täpitähtedega tekib probleeme. Vaikimisi: UTF-8
 //
-// Charset. Use the one that suits for you. 
+// Charset. Use the one that suits for you.
 // Default: $_CONFIG['charset'] = "UTF-8";
 //
 $_CONFIG['charset'] = "UTF-8";
@@ -226,19 +226,19 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 $_CONFIG['require_login'] = false;
 
 //
-// Kasutajanimed ja paroolid, lehele ligipääsu piiramiseks.
-// Näiteks: $_CONFIG['users'] = array(array("user1", "pass1"), array("user2", "pass2"));
-// Võimalik lehte kaitsta ka ainult üldise parooliga.
-// Näiteks: $_CONFIG['users'] = array(array(null, "pass"));
-// Kui ühtegi kasutajat märgitud ei ole, siis parooli ei küsita.
-//
 // Usernames and passwords for restricting access to the page.
-// The format is: array(username, password, status)
+// The format is: array(username, hash, status)
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
-// For example: $_CONFIG['users'] = array(array("username1", "password1", "user"), array("username2", "password2", "admin"));
-// You can also keep require_login=false and specify an admin. 
+// For example: $_CONFIG['users'] = array(array("username1", "hash1", "user"), array("username2", "hash2", "admin"));
+// You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
-// For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+//
+// The password hash is a BCRYPT hash and is created this way:
+// crypt('password', '$2a$06$' . 'passwordSaltWithAtLeast22Characters');
+// The salt must have at least 22 characters and can contain any character (expect the quotes) of
+// '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./'
+//
+// For example: $_CONFIG['users'] = array(array("username", "$2a$06$UMj/44z3r.SsaSR/70ylAu/kkpVXEbirvRedw6EWhxObl5oWqJDcm", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
 $_CONFIG['users'] = array();
@@ -269,7 +269,7 @@ $_CONFIG['delete_enable'] = false;
 // Kõik kaustad märgitute all on automaatselt kaasa arvatud.
 // Kui nimekiri on tühi (vaikimisi), siis on kõikidesse kaustadesse failide lisamine lubatud.
 //
-// List of directories where users are allowed to upload. 
+// List of directories where users are allowed to upload.
 // For example: $_CONFIG['upload_dirs'] = array("./myuploaddir1/", "./mydir/upload2/");
 // The path should be relative to the main directory, start with "./" and end with "/".
 // All the directories below the marked ones are automatically included as well.
@@ -327,19 +327,19 @@ $_CONFIG['log_file'] = "";
  */
 
 //
-// Algkataloogi suhteline aadress. Reeglina ei ole vaja muuta. 
+// Algkataloogi suhteline aadress. Reeglina ei ole vaja muuta.
 // Kasutage ainult suhtelisi alamkatalooge!
 // Vaikimisi: .
 //
 // The starting directory. Normally no need to change this.
-// Use only relative subdirectories! 
+// Use only relative subdirectories!
 // For example: $_CONFIG['starting_dir'] = "./mysubdir/";
 // Default: $_CONFIG['starting_dir'] = ".";
 //
 $_CONFIG['starting_dir'] = ".";
 
 //
-// Asukoht serveris. Tavaliselt ei ole vaja siia midagi panna kuna script leiab ise õige asukoha. 
+// Asukoht serveris. Tavaliselt ei ole vaja siia midagi panna kuna script leiab ise õige asukoha.
 // Mõnes serveris tuleb piirangute tõttu see aadress ise teistsuguseks määrata.
 // See fail peaks asuma serveris aadressil [AADRESS]/index.php
 // Aadress võib olla näiteks "/www/data/www.minudomeen.ee/minunimi"
@@ -360,14 +360,14 @@ $_CONFIG['basedir'] = "";
 $_CONFIG['large_files'] = false;
 
 //
-// Küpsise/sessiooni nimi. 
+// Küpsise/sessiooni nimi.
 // Anna sellele originaalne väärtus kui soovid samas ruumis kasutada mitut koopiat
 // ning ei taha, et toimuks andmete jagamist nende vahel.
 // Väärtus tohib sisaldada ainult tähti ja numbreid. Näiteks: MYSESSION1
 //
-// The session name, which is used as a cookie name. 
+// The session name, which is used as a cookie name.
 // Change this to something original if you have multiple copies in the same space
-// and wish to keep their authentication separate. 
+// and wish to keep their authentication separate.
 // The value can contain only letters and numbers. For example: MYSESSION1
 // More info at: http://www.php.net/manual/en/function.session-name.php
 // Default: $_CONFIG['session_name'] = "";
@@ -917,7 +917,7 @@ input {
 
 table.table {
 	width:100%;
-	border-collapse: collapse; 
+	border-collapse: collapse;
 }
 
 table.table td{
@@ -943,7 +943,7 @@ table.table td.del {
 }
 
 table.table tr.row td.size {
-	width: 100px; 
+	width: 100px;
 	text-align: right;
 }
 
@@ -960,7 +960,7 @@ table img{
 	border:0;
 }
 
-/* Info area */ 
+/* Info area */
 
 #info {
 	color:#000000;
@@ -1532,9 +1532,9 @@ class ImageServer
 			{
 				$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
 				$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
-				
+
 				if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
-					|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag)) 
+					|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag))
 				{
 					header('HTTP/1.1 304 Not Modified');
 					return true;
@@ -1561,26 +1561,26 @@ class ImageServer
 		}
 		return false;
 	}
-	
+
 	public static function isEnabledPdf()
 	{
 		if(class_exists("Imagick"))
 			return true;
 		return false;
 	}
-	
+
 	public static function openPdf($file)
 	{
 		if(!ImageServer::isEnabledPdf())
 			return null;
-			
+
 		$im = new Imagick($file.'[0]');
 		$im->setImageFormat( "png" );
 		$str = $im->getImageBlob();
 		$im2 = imagecreatefromstring($str);
 		return $im2;
 	}
-	
+
 	//
 	// Creates and returns a thumbnail image object from an image file
 	//
@@ -1590,7 +1590,7 @@ class ImageServer
 			$max_width = EncodeExplorer::getConfig('thumbnails_width');
 		else
 			$max_width = 200;
-		
+
 		if(is_int(EncodeExplorer::getConfig('thumbnails_height')))
 			$max_height = EncodeExplorer::getConfig('thumbnails_height');
 		else
@@ -1602,37 +1602,37 @@ class ImageServer
 			$image = ImageServer::openImage($file);
 		if($image == null)
 			return;
-			
+
 		imagealphablending($image, true);
 		imagesavealpha($image, true);
-			
+
 		$width = imagesx($image);
 		$height = imagesy($image);
-			
+
 		$new_width = $max_width;
 		$new_height = $max_height;
 		if(($width/$height) > ($new_width/$new_height))
 			$new_height = $new_width * ($height / $width);
-		else 
-			$new_width = $new_height * ($width / $height);   
-		
+		else
+			$new_width = $new_height * ($width / $height);
+
 		if($new_width >= $width && $new_height >= $height)
 		{
 			$new_width = $width;
 			$new_height = $height;
 		}
-		
+
 		$new_image = ImageCreateTrueColor($new_width, $new_height);
 		imagealphablending($new_image, true);
 		imagesavealpha($new_image, true);
 		$trans_colour = imagecolorallocatealpha($new_image, 0, 0, 0, 127);
 		imagefill($new_image, 0, 0, $trans_colour);
-		
+
 		imagecopyResampled ($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-		
+
 		return $new_image;
 	}
-	
+
 	//
 	// Function for displaying the thumbnail.
 	// Includes attempts at cacheing it so that generation is minimised.
@@ -1643,11 +1643,11 @@ class ImageServer
 			$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
 		else
 			$mtime = gmdate('r', filemtime($file));
-			
+
 		$etag = md5($mtime.$file);
-		
+
 		if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
-			|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag)) 
+			|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag))
 		{
 			header('HTTP/1.1 304 Not Modified');
 			return;
@@ -1661,11 +1661,11 @@ class ImageServer
 			imagepng($image);
 		}
 	}
-	
+
 	//
 	// A helping function for opening different types of image files
 	//
-	public static function openImage ($file) 
+	public static function openImage ($file)
 	{
 	    $size = getimagesize($file);
 	    switch($size["mime"])
@@ -1706,7 +1706,7 @@ class Logger
 				$encodeExplorer->setErrorString("log_file_permission_error");
 		}
 	}
-	
+
 	public static function logAccess($path, $isDir)
 	{
 		$message = $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." accessed ";
@@ -1714,7 +1714,7 @@ class Logger
 		$message .= " ".$path;
 		Logger::log($message);
 	}
-	
+
 	public static function logQuery()
 	{
 		if(isset($_POST['log']) && strlen($_POST['log']) > 0)
@@ -1725,7 +1725,7 @@ class Logger
 		else
 			return false;
 	}
-	
+
 	public static function logCreation($path, $isDir)
 	{
 		$message = $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." created ";
@@ -1733,7 +1733,7 @@ class Logger
 		$message .= " ".$path;
 		Logger::log($message);
 	}
-	
+
 	public static function emailNotification($path, $isFile)
 	{
 		if(strlen(EncodeExplorer::getConfig('upload_email')) > 0)
@@ -1757,25 +1757,25 @@ class GateKeeper
 		global $encodeExplorer;
 		if(strlen(EncodeExplorer::getConfig("session_name")) > 0)
 				session_name(EncodeExplorer::getConfig("session_name"));
-				
+
 		if(count(EncodeExplorer::getConfig("users")) > 0)
-			session_start();			
+			session_start();
 		else
 			return;
-			
+
 		if(isset($_GET['logout']))
 		{
 			$_SESSION['ee_user_name'] = null;
 			$_SESSION['ee_user_pass'] = null;
 		}
-			
+
 		if(isset($_POST['user_pass']) && strlen($_POST['user_pass']) > 0)
 		{
 			if(GateKeeper::isUser((isset($_POST['user_name'])?$_POST['user_name']:""), $_POST['user_pass']))
 			{
 				$_SESSION['ee_user_name'] = isset($_POST['user_name'])?$_POST['user_name']:"";
 				$_SESSION['ee_user_pass'] = $_POST['user_pass'];
-				
+
 				$addr = $_SERVER['PHP_SELF'];
 				if(isset($_GET['m']))
 					$addr .= "?m";
@@ -1787,22 +1787,20 @@ class GateKeeper
 				$encodeExplorer->setErrorString("wrong_pass");
 		}
 	}
-	
+
 	public static function isUser($userName, $userPass)
 	{
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
-			if($user[1] == $userPass)
+			if($user[0] == $userName)
 			{
-				if(strlen($userName) == 0 || $userName == $user[0])
-				{
-					return true;
-				}
+				return $user[1] == crypt($userPass, $user[1]);
 			}
 		}
+
 		return false;
 	}
-	
+
 	public static function isLoginRequired()
 	{
 		if(EncodeExplorer::getConfig("require_login") == false){
@@ -1810,7 +1808,7 @@ class GateKeeper
 		}
 		return true;
 	}
-	
+
 	public static function isUserLoggedIn()
 	{
 		if(isset($_SESSION['ee_user_name']) && isset($_SESSION['ee_user_pass']))
@@ -1820,32 +1818,32 @@ class GateKeeper
 		}
 		return false;
 	}
-	
+
 	public static function isAccessAllowed()
 	{
 		if(!GateKeeper::isLoginRequired() || GateKeeper::isUserLoggedIn())
 			return true;
 		return false;
 	}
-	
+
 	public static function isUploadAllowed(){
 		if(EncodeExplorer::getConfig("upload_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
 			return true;
 		return false;
 	}
-	
+
 	public static function isNewdirAllowed(){
 		if(EncodeExplorer::getConfig("newdir_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
 			return true;
 		return false;
 	}
-	
+
 	public static function isDeleteAllowed(){
 		if(EncodeExplorer::getConfig("delete_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
 			return true;
 		return false;
 	}
-	
+
 	public static function getUserStatus(){
 		if(GateKeeper::isUserLoggedIn() == true && EncodeExplorer::getConfig("users") != null && is_array(EncodeExplorer::getConfig("users"))){
 			foreach(EncodeExplorer::getConfig("users") as $user){
@@ -1855,7 +1853,7 @@ class GateKeeper
 		}
 		return null;
 	}
-	
+
 	public static function getUserName()
 	{
 		if(GateKeeper::isUserLoggedIn() == true && isset($_SESSION['ee_user_name']) && strlen($_SESSION['ee_user_name']) > 0)
@@ -1866,7 +1864,7 @@ class GateKeeper
 			return $_SERVER['PHP_AUTH_USER'];
 		return "an anonymous user";
 	}
-	
+
 	public static function showLoginBox(){
 		if(!GateKeeper::isUserLoggedIn() && count(EncodeExplorer::getConfig("users")) > 0)
 			return true;
@@ -1874,7 +1872,7 @@ class GateKeeper
 	}
 }
 
-// 
+//
 // The class for any kind of file managing (new folder, upload, etc).
 //
 class FileManager
@@ -1904,7 +1902,7 @@ class FileManager
 			{
 				$dirname = str_replace($forbidden[$i], "", $dirname);
 			}
-			
+
 			if(!$location->uploadAllowed())
 			{
 				// The system configuration does not allow uploading here
@@ -1943,12 +1941,12 @@ class FileManager
 
 		$upload_dir = $location->getFullPath();
 		$upload_file = $upload_dir . $name;
-		
+
 		if(function_exists("finfo_open") && function_exists("finfo_file"))
 			$mime_type = File::getFileMime($userfile['tmp_name']);
 		else
 			$mime_type = $userfile['type'];
-	
+
 		$extension = File::getFileExtension($userfile['name']);
 
 		if(!$location->uploadAllowed())
@@ -1982,15 +1980,15 @@ class FileManager
 			Logger::emailNotification($location->getDir(true, false, false, 0).$name, true);
 		}
 	}
-	
+
 	public static function delete_dir($dir) {
 		if (is_dir($dir)) {
 			$objects = scandir($dir);
 			foreach ($objects as $object) {
 				if ($object != "." && $object != "..") {
-					if (filetype($dir."/".$object) == "dir") 
-						FileManager::delete_dir($dir."/".$object); 
-					else 
+					if (filetype($dir."/".$object) == "dir")
+						FileManager::delete_dir($dir."/".$object);
+					else
 						unlink($dir."/".$object);
 				}
 			}
@@ -1998,7 +1996,7 @@ class FileManager
 			rmdir($dir);
 		}
 	}
-	
+
 	public static function delete_file($file){
 		if(is_file($file)){
 			unlink($file);
@@ -2007,7 +2005,7 @@ class FileManager
 
 	//
 	// The main function, checks if the user wants to perform any supported operations
-	// 
+	//
 	function run($location)
 	{
 		if(isset($_POST['userdir']) && strlen($_POST['userdir']) > 0){
@@ -2015,13 +2013,13 @@ class FileManager
 				$this->newFolder($location, $_POST['userdir']);
 			}
 		}
-			
+
 		if(isset($_FILES['userfile']['name']) && strlen($_FILES['userfile']['name']) > 0){
 			if($location->uploadAllowed() && GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isUploadAllowed()){
 				$this->uploadFile($location, $_FILES['userfile']);
 			}
 		}
-		
+
 		if(isset($_GET['del'])){
 			if(GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isDeleteAllowed()){
 				$split_path = Location::splitPath($_GET['del']);
@@ -2033,7 +2031,7 @@ class FileManager
 				}
 				if($path == "" || $path == "/" || $path == "\\" || $path == ".")
 					return;
-				
+
 				if(is_dir($path))
 					FileManager::delete_dir($path);
 				else if(is_file($path))
@@ -2053,7 +2051,7 @@ class Dir
 
 	//
 	// Constructor
-	// 
+	//
 	function Dir($name, $location)
 	{
 		$this->name = $name;
@@ -2077,7 +2075,7 @@ class Dir
 
 	//
 	// Debugging output
-	// 
+	//
 	function debug()
 	{
 		print("Dir name (htmlspecialchars): ".$this->getName()."\n");
@@ -2099,12 +2097,12 @@ class File
 
 	//
 	// Constructor
-	// 
+	//
 	function File($name, $location)
 	{
 		$this->name = $name;
 		$this->location = $location;
-		
+
 		$this->type = File::getFileType($this->location->getDir(true, false, false, 0).$this->getName());
 		$this->size = File::getFileSize($this->location->getDir(true, false, false, 0).$this->getName());
 		$this->modTime = filemtime($this->location->getDir(true, false, false, 0).$this->getName());
@@ -2134,7 +2132,7 @@ class File
 	{
 		return $this->type;
 	}
-	
+
 	function getModTime()
 	{
 		return $this->modTime;
@@ -2142,7 +2140,7 @@ class File
 
 	//
 	// Determine the size of a file
-	// 
+	//
 	public static function getFileSize($file)
 	{
 		$sizeInBytes = filesize($file);
@@ -2153,20 +2151,20 @@ class File
 		}
 		return $sizeInBytes;
 	}
-	
+
 	public static function getFileType($filepath)
 	{
 		/*
 		 * This extracts the information from the file contents.
 		 * Unfortunately it doesn't properly detect the difference between text-based file types.
-		 * 
+		 *
 		$mime_type = File::getMimeType($filepath);
 		$mime_type_chunks = explode("/", $mime_type, 2);
 		$type = $mime_type_chunks[1];
 		*/
 		return File::getFileExtension($filepath);
 	}
-	
+
 	public static function getFileMime($filepath)
 	{
 		$fhandle = finfo_open(FILEINFO_MIME);
@@ -2177,7 +2175,7 @@ class File
 		$mime_type = $mime_type_chunks[0];
 		return $mime_type;
 	}
-	
+
 	public static function getFileExtension($filepath)
 	{
 		return strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
@@ -2185,7 +2183,7 @@ class File
 
 	//
 	// Debugging output
-	// 
+	//
 	function debug()
 	{
 		print("File name: ".$this->getName()."\n");
@@ -2193,7 +2191,7 @@ class File
 		print("File size: ".$this->size."\n");
 		print("File modTime: ".$this->modTime."\n");
 	}
-	
+
 	function isImage()
 	{
 		$type = $this->getType();
@@ -2201,21 +2199,21 @@ class File
 			return true;
 		return false;
 	}
-	
+
 	function isPdf()
 	{
 		if(strtolower($this->getType()) == "pdf")
 			return true;
-		return false;		
+		return false;
 	}
-	
+
 	public static function isPdfFile($file)
 	{
 		if(File::getFileType($file) == "pdf")
 			return true;
 		return false;
 	}
-	
+
 	function isValidForThumb()
 	{
 		if($this->isImage() || ($this->isPdf() && ImageServer::isEnabledPdf()))
@@ -2230,7 +2228,7 @@ class Location
 
 	//
 	// Split a file path into array elements
-	// 
+	//
 	public static function splitPath($dir)
 	{
 		$dir = stripslashes($dir);
@@ -2248,7 +2246,7 @@ class Location
 	//
 	// Get the current directory.
 	// Options: Include the prefix ("./"); URL-encode the string; HTML-encode the string; return directory n-levels up
-	// 
+	//
 	function getDir($prefix, $encoded, $html, $up)
 	{
 		$dir = "";
@@ -2281,7 +2279,7 @@ class Location
 
 	//
 	// Debugging output
-	// 
+	//
 	function debug()
 	{
 		print_r($this->path);
@@ -2294,7 +2292,7 @@ class Location
 
 	//
 	// Set the current directory
-	// 
+	//
 	function init()
 	{
 		if(!isset($_GET['dir']) || strlen($_GET['dir']) == 0)
@@ -2306,7 +2304,7 @@ class Location
 			$this->path = $this->splitPath($_GET['dir']);
 		}
 	}
-	
+
 	//
 	// Checks if the current directory is below the input path
 	//
@@ -2319,7 +2317,7 @@ class Location
 		}
 		return false;
 	}
-	
+
 	//
 	// Check if uploading is allowed into the current directory, based on the configuration
 	//
@@ -2329,7 +2327,7 @@ class Location
 			return false;
 		if(EncodeExplorer::getConfig('upload_dirs') == null || count(EncodeExplorer::getConfig('upload_dirs')) == 0)
 			return true;
-			
+
 		$upload_dirs = EncodeExplorer::getConfig('upload_dirs');
 		for($i = 0; $i < count($upload_dirs); $i++)
 		{
@@ -2338,17 +2336,17 @@ class Location
 		}
 		return false;
 	}
-	
+
 	function isWritable()
 	{
 		return is_writable($this->getDir(true, false, false, 0));
 	}
-	
+
 	public static function isDirWritable($dir)
 	{
 		return is_writable($dir);
 	}
-	
+
 	public static function isFileWritable($file)
 	{
 		if(file_exists($file))
@@ -2376,10 +2374,10 @@ class EncodeExplorer
 	var $logging;
 	var $spaceUsed;
 	var $lang;
-	
+
 	//
 	// Determine sorting, calculate space.
-	// 
+	//
 	function init()
 	{
 		$this->sort_by = "";
@@ -2398,21 +2396,21 @@ class EncodeExplorer
 			$this->sort_by = "name";
 			$this->sort_as = "desc";
 		}
-		
-		
+
+
 		global $_TRANSLATIONS;
 		if(isset($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else
 			$this->lang = EncodeExplorer::getConfig("lang");
-		
+
 		$this->mobile = false;
 		if(EncodeExplorer::getConfig("mobile_enabled") == true)
 		{
 			if((EncodeExplorer::getConfig("mobile_default") == true || isset($_GET['m'])) && !isset($_GET['s']))
 				$this->mobile = true;
 		}
-		
+
 		$this->logging = false;
 		if(EncodeExplorer::getConfig("log_file") != null && strlen(EncodeExplorer::getConfig("log_file")) > 0)
 			$this->logging = true;
@@ -2420,7 +2418,7 @@ class EncodeExplorer
 
 	//
 	// Read the file list from the directory
-	// 
+	//
 	function readDir()
 	{
 		global $encodeExplorer;
@@ -2433,7 +2431,7 @@ class EncodeExplorer
 			$this->files = array();
 			while ($object = readdir($open_dir))
 			{
-				if($object != "." && $object != "..") 
+				if($object != "." && $object != "..")
 				{
 					if(is_dir($this->location->getDir(true, false, false, 0)."/".$object))
 					{
@@ -2454,27 +2452,27 @@ class EncodeExplorer
 
 	//
 	// A recursive function for calculating the total used space
-	// 
-	function sum_dir($start_dir, $ignore_files, $levels = 1) 
+	//
+	function sum_dir($start_dir, $ignore_files, $levels = 1)
 	{
-		if ($dir = opendir($start_dir)) 
+		if ($dir = opendir($start_dir))
 		{
 			$total = 0;
-			while ((($file = readdir($dir)) !== false)) 
+			while ((($file = readdir($dir)) !== false))
 			{
-				if (!in_array($file, $ignore_files)) 
+				if (!in_array($file, $ignore_files))
 				{
-					if ((is_dir($start_dir . '/' . $file)) && ($levels - 1 >= 0)) 
+					if ((is_dir($start_dir . '/' . $file)) && ($levels - 1 >= 0))
 					{
 						$total += $this->sum_dir($start_dir . '/' . $file, $ignore_files, $levels-1);
 					}
-					elseif (is_file($start_dir . '/' . $file)) 
-					{					
+					elseif (is_file($start_dir . '/' . $file))
+					{
 						$total += File::getFileSize($start_dir . '/' . $file) / 1024;
 					}
 				}
 			}
-			
+
 			closedir($dir);
 			return $total;
 		}
@@ -2497,7 +2495,7 @@ class EncodeExplorer
 			if($this->sort_as == "desc")
 				$this->files = array_reverse($this->files);
 		}
-		
+
 		if(is_array($this->dirs)){
 			usort($this->dirs, "EncodeExplorer::cmp_name");
 			if($this->sort_by == "name" && $this->sort_as == "desc")
@@ -2506,7 +2504,7 @@ class EncodeExplorer
 	}
 
 	function makeArrow($sort_by)
-	{	
+	{
 		if($this->sort_by == $sort_by && $this->sort_as == "asc")
 		{
 			$sort_as = "desc";
@@ -2528,7 +2526,7 @@ class EncodeExplorer
 		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, null, $this->location->getDir(false, true, false, 0))."\">
 			$text <img style=\"border:0;\" alt=\"".$sort_as."\" src=\"?img=".$img."\" /></a>";
 	}
-	
+
 	function makeLink($switchVersion, $logout, $sort_by, $sort_as, $delete, $dir)
 	{
 		$link = "?";
@@ -2543,22 +2541,22 @@ class EncodeExplorer
 			$link .= "m&amp;";
 		else if($this->mobile == false && EncodeExplorer::getConfig("mobile_enabled") == true && EncodeExplorer::getConfig("mobile_default") == true)
 			$link .= "s&amp;";
-			
+
 		if($logout == true)
 		{
 			$link .= "logout";
 			return $link;
 		}
-			
+
 		if(isset($this->lang) && $this->lang != EncodeExplorer::getConfig("lang"))
 			$link .= "lang=".$this->lang."&amp;";
-			
+
 		if($sort_by != null && strlen($sort_by) > 0)
 			$link .= "sort_by=".$sort_by."&amp;";
-			
+
 		if($sort_as != null && strlen($sort_as) > 0)
 			$link .= "sort_as=".$sort_as."&amp;";
-		
+
 		$link .= "dir=".$dir;
 		if($delete != null)
 			$link .= "&amp;del=".$delete;
@@ -2579,11 +2577,11 @@ class EncodeExplorer
 		return date($timeformat, $time);
 	}
 
-	function formatSize($size) 
+	function formatSize($size)
 	{
 		$sizes = Array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
 		$y = $sizes[0];
-		for ($i = 1; (($i < count($sizes)) && ($size >= 1024)); $i++) 
+		for ($i = 1; (($i < count($sizes)) && ($size >= 1024)); $i++)
 		{
 			$size = $size / 1024;
 			$y  = $sizes[$i];
@@ -2593,7 +2591,7 @@ class EncodeExplorer
 
 	//
 	// Debugging output
-	// 
+	//
 	function debug()
 	{
 		print("Explorer location: ".$this->location->getDir(true, false, false, 0)."\n");
@@ -2602,26 +2600,26 @@ class EncodeExplorer
 		for($i = 0; $i < count($this->files); $i++)
 			$this->files[$i]->output();
 	}
-	
+
 	//
 	// Comparison functions for sorting.
 	//
-	
+
 	public static function cmp_name($b, $a)
 	{
 		return strcasecmp($a->name, $b->name);
 	}
-	
+
 	public static function cmp_size($a, $b)
 	{
 		return ($a->size - $b->size);
 	}
-	
+
 	public static function cmp_mod($b, $a)
 	{
 		return ($a->modTime - $b->modTime);
 	}
-	
+
 	//
 	// The function for getting a translated string.
 	// Falls back to english if the correct language is missing something.
@@ -2629,21 +2627,21 @@ class EncodeExplorer
 	public static function getLangString($stringName, $lang)
 	{
 		global $_TRANSLATIONS;
-		if(isset($_TRANSLATIONS[$lang]) && is_array($_TRANSLATIONS[$lang]) 
+		if(isset($_TRANSLATIONS[$lang]) && is_array($_TRANSLATIONS[$lang])
 			&& isset($_TRANSLATIONS[$lang][$stringName]))
 			return $_TRANSLATIONS[$lang][$stringName];
-		else if(isset($_TRANSLATIONS["en"]))// && is_array($_TRANSLATIONS["en"]) 
+		else if(isset($_TRANSLATIONS["en"]))// && is_array($_TRANSLATIONS["en"])
 			//&& isset($_TRANSLATIONS["en"][$stringName]))
 			return $_TRANSLATIONS["en"][$stringName];
 		else
 			return "Translation error";
 	}
-	
+
 	function getString($stringName)
 	{
 		return EncodeExplorer::getLangString($stringName, $this->lang);
 	}
-	
+
 	//
 	// The function for getting configuration values
 	//
@@ -2654,7 +2652,7 @@ class EncodeExplorer
 			return $_CONFIG[$name];
 		return null;
 	}
-	
+
 	public static function setError($message)
 	{
 		global $_ERROR;
@@ -2663,7 +2661,7 @@ class EncodeExplorer
 		else
 			$_ERROR = $message;
 	}
-	
+
 	function setErrorString($stringName)
 	{
 		EncodeExplorer::setError($this->getString($stringName));
@@ -2671,7 +2669,7 @@ class EncodeExplorer
 
 	//
 	// Main function, activating tasks
-	// 
+	//
 	function run($location)
 	{
 		$this->location = $location;
@@ -2680,42 +2678,28 @@ class EncodeExplorer
 		$this->sort();
 		$this->outputHtml();
 	}
-	
+
 	public function printLoginBox()
 	{
+		if(GateKeeper::isLoginRequired())
+		{
 		?>
 		<div id="login">
 		<form enctype="multipart/form-data" action="<?php print $this->makeLink(false, false, null, null, null, ""); ?>" method="post">
-		<?php 
-		if(GateKeeper::isLoginRequired())
-		{
-			$require_username = false;
-			foreach(EncodeExplorer::getConfig("users") as $user){
-				if($user[0] != null && strlen($user[0]) > 0){
-					$require_username = true;
-					break;
-				}
-			}
-			if($require_username)
-			{
-			?>
 			<div><label for="user_name"><?php print $this->getString("username"); ?>:</label>
-			<input type="text" name="user_name" value="" id="user_name" /></div>
-			<?php 
-			}
-			?>
+			<input name="user_name" id="user_name" type="text" /></div>
 			<div><label for="user_pass"><?php print $this->getString("password"); ?>:</label>
-			<input type="password" name="user_pass" id="user_pass" /></div>
+			<input name="user_pass" id="user_pass" type="password" /></div>
 			<div><input type="submit" value="<?php print $this->getString("log_in"); ?>" class="button" /></div>
 		</form>
 		</div>
-	<?php 
+	<?php
 		}
 	}
 
 	//
 	// Printing the actual page
-	// 
+	//
 	function outputHtml()
 	{
 		global $_ERROR;
@@ -2732,7 +2716,7 @@ class EncodeExplorer
 if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file')) > 0)
 	|| ($this->getConfig('thumbnails') != null && $this->getConfig('thumbnails') == true && $this->mobile == false)
 	|| (GateKeeper::isDeleteAllowed()))
-{ 
+{
 ?>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -2745,10 +2729,10 @@ $(document).ready(function() {
 		var answer = confirm('Are you sure you want to delete : \'' + $(this).attr("data-name") + "\' ?");
 		return answer;
 	});
-<?php 
-	}	
+<?php
+	}
 	if($this->logging == true)
-	{ 
+	{
 ?>
 		function logFileClick(path)
 		{
@@ -2760,12 +2744,12 @@ $(document).ready(function() {
 					cache: false
 				});
 		}
-		
+
 		$("a.file").click(function(){
 			logFileClick("<?php print $this->location->getDir(true, true, false, 0);?>" + $(this).html());
 			return true;
 		});
-<?php 
+<?php
 	}
 	if(EncodeExplorer::getConfig("thumbnails") == true && $this->mobile == false)
 	{
@@ -2778,10 +2762,10 @@ $(document).ready(function() {
 			diff = 0;
 			if(e.clientY + $("#thumb").height() > $(window).height())
 				diff = e.clientY + $("#thumb").height() - $(window).height();
-			
+
 			$("#thumb").css("top",(e.pageY - yOffset - diff) + "px");
 		}
-		
+
 		$("a.thumb").hover(function(e){
 			$("#thumb").remove();
 			$("body").append("<div id=\"thumb\"><img src=\"?thumb="+ $(this).attr("href") +"\" alt=\"Preview\" \/><\/div>");
@@ -2797,19 +2781,19 @@ $(document).ready(function() {
 			});
 
 		$("a.thumb").click(function(e){$("#thumb").remove(); return true;});
-<?php 
+<?php
 	}
 ?>
 	});
-//]]>                
+//]]>
 </script>
-<?php 
+<?php
 }
 ?>
 <title><?php if(EncodeExplorer::getConfig('main_title') != null) print EncodeExplorer::getConfig('main_title'); ?></title>
 </head>
 <body class="<?php print ($this->mobile == true?"mobile":"standard");?>">
-<?php 
+<?php
 //
 // Print the error (if there is something to print)
 //
@@ -2825,7 +2809,7 @@ if(EncodeExplorer::getConfig('show_top') == true)
 ?>
 <div id="top">
 	<a href="<?php print $this->makeLink(false, false, null, null, null, ""); ?>"><span><?php if(EncodeExplorer::getConfig('main_title') != null) print EncodeExplorer::getConfig('main_title'); ?></span></a>
-<?php 
+<?php
 if(EncodeExplorer::getConfig("secondary_titles") != null && is_array(EncodeExplorer::getConfig("secondary_titles")) && count(EncodeExplorer::getConfig("secondary_titles")) > 0 && $this->mobile == false)
 {
 	$secondary_titles = EncodeExplorer::getConfig("secondary_titles");
@@ -2841,7 +2825,7 @@ if(!GateKeeper::isAccessAllowed())
 {
 	$this->printLoginBox();
 }
-else 
+else
 {
 if($this->mobile == false && EncodeExplorer::getConfig("show_path") == true)
 {
@@ -2857,13 +2841,13 @@ if($this->mobile == false && EncodeExplorer::getConfig("show_path") == true)
 	}
 ?>
 </div>
-<?php 
+<?php
 }
 ?>
 
 <!-- START: List table -->
 <table class="table">
-<?php 
+<?php
 if($this->mobile == false)
 {
 ?>
@@ -2876,7 +2860,7 @@ if($this->mobile == false)
 	<td class="del"><?php print EncodeExplorer::getString("del"); ?></td>
 	<?php } ?>
 </tr>
-<?php 
+<?php
 }
 ?>
 <tr class="row two">
@@ -2965,7 +2949,7 @@ if($this->files)
 
 </table>
 <!-- END: List table -->
-<?php 
+<?php
 }
 ?>
 </div>
@@ -2985,7 +2969,7 @@ if(GateKeeper::isAccessAllowed() && GateKeeper::showLoginBox()){
 	</div>
 </form>
 <!-- END: Login area -->
-<?php 
+<?php
 }
 
 if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKeeper::isUploadAllowed() || GateKeeper::isNewdirAllowed()))
@@ -2994,14 +2978,14 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKee
 <!-- START: Upload area -->
 <form enctype="multipart/form-data" method="post">
 	<div id="upload">
-		<?php 
+		<?php
 		if(GateKeeper::isNewdirAllowed()){
 		?>
 		<div id="newdir_container">
 			<input name="userdir" type="text" class="upload_dirname" />
 			<input type="submit" value="<?php print $this->getString("make_directory"); ?>" />
 		</div>
-		<?php 
+		<?php
 		}
 		if(GateKeeper::isUploadAllowed()){
 		?>
@@ -3009,7 +2993,7 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKee
 			<input name="userfile" type="file" class="upload_file" />
 			<input type="submit" value="<?php print $this->getString("upload"); ?>" class="upload_sumbit" />
 		</div>
-		<?php 
+		<?php
 		}
 		?>
 		<div class="bar"></div>
@@ -3040,19 +3024,19 @@ if($this->mobile == false && $this->getConfig("show_load_time") == true)
 {
 	printf($this->getString("page_load_time")." | ", (microtime(TRUE) - $_START_TIME)*1000);
 }
-?> 
+?>
 <a href="http://encode-explorer.siineiolekala.net">Encode Explorer</a>
 </div>
 <!-- END: Info area -->
 </body>
 </html>
-	
+
 <?php
 	}
 }
 
 //
-// This is where the system is activated. 
+// This is where the system is activated.
 // We check if the user wants an image and show it. If not, we show the explorer.
 //
 $encodeExplorer = new EncodeExplorer();

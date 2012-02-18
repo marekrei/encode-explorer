@@ -233,7 +233,7 @@ $_CONFIG['require_login'] = false;
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
 //
-// The password hash is using the BCRYPT algorithm and is created this way:
+// The password hash is a BCRYPT hash and is created this way:
 // crypt('password', '$2a$06$' . 'passwordSaltWithAtLeast22Characters');
 // The salt must have at least 22 characters and can contain any character (expect the quotes) of
 // '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./'

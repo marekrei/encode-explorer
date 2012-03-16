@@ -1518,8 +1518,12 @@ EfzLR91cOg8TPTgr3MudFx+d9owK7KMNVfQOtyQ1OO9qiHsWkiRRUHhKQLuwfH9+1XpfhVVfU0V3
 //k4zFwdzjIlSA/Sv8jTOZObBL9uugczuNaCP5K8bFBIhduE5bdC3d6MYIkkt7jOKXT1l34DkIu9
 e0agZjoAAAAASUVORK5CYII=";
 $_IMAGES["mov"] = $_IMAGES["video"];
+$_IMAGES["mp2"] = $_IMAGES["audio"];
 $_IMAGES["mp3"] = $_IMAGES["audio"];
 $_IMAGES["mp4"] = $_IMAGES["audio"];
+$_IMAGES["mp4a"] = $_IMAGES["audio"];
+$_IMAGES["ogg"] = $_IMAGES["audio"];
+$_IMAGES["flac"] = $_IMAGES["audio"];
 $_IMAGES["mpeg"] = $_IMAGES["video"];
 $_IMAGES["mpg"] = $_IMAGES["video"];
 $_IMAGES["odg"] = $_IMAGES["vectorgraphics"];

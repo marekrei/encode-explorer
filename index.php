@@ -458,15 +458,15 @@ $_TRANSLATIONS["nl"] = array(
 $_TRANSLATIONS["en"] = array(
 	"file_name" => "File name",
 	"size" => "Size",
-	"last_changed" => "Last changed",
-	"total_used_space" => "Total used space",
+	"last_changed" => "Last updated",
+	"total_used_space" => "Total space used",
 	"free_space" => "Free space",
 	"password" => "Password",
 	"upload" => "Upload",
 	"failed_upload" => "Failed to upload the file!",
 	"failed_move" => "Failed to move the file into the right directory!",
 	"wrong_password" => "Wrong password",
-	"make_directory" => "New dir",
+	"make_directory" => "New directory",
 	"new_dir_failed" => "Failed to create directory",
 	"chmod_dir_failed" => "Failed to change directory rights",
 	"unable_to_read_dir" => "Unable to read directory",
@@ -482,7 +482,7 @@ $_TRANSLATIONS["en"] = array(
 	"username" => "Username",
 	"log_in" => "Log in",
 	"upload_type_not_allowed" => "This file type is not allowed for uploading.",
-	"del" => "Del", // short for Delete
+	"del" => "Delete",
 	"log_out" => "Log out"
 );
 

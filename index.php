@@ -241,7 +241,7 @@ $_CONFIG['require_login'] = true;
 // For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
-$_CONFIG['users'] = array(array('alswl', '- -#', 'admin'));
+$_CONFIG['users'] = array(array('admin', 'admin', 'admin'));
 
 //
 // Seaded uploadimiseks, uute kaustade loomiseks ja kustutamiseks.

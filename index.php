@@ -256,7 +256,7 @@ $_CONFIG['users'] = array(array('admin', 'admin', 'admin'));
 //
 $_CONFIG['upload_enable'] = true;
 $_CONFIG['newdir_enable'] = true;
-$_CONFIG['delete_enable'] = false;
+$_CONFIG['delete_enable'] = true;
 
 /*
  * UPLOADING

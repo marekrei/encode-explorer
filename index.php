@@ -529,8 +529,8 @@ $_TRANSLATIONS["fr"] = array(
 // German
 $_TRANSLATIONS["de"] = array(
 	"file_name" => "Dateiname",
-	"size" => "Größe",
-	"last_changed" => "Letzte Änderung",
+	"size" => "Gr&ouml;&szlig;e",
+	"last_changed" => "Letzte &Auml;nderung",
 	"total_used_space" => "Benutzter Speicher",
 	"free_space" => "Freier Speicher",
 	"password" => "Passwort",
@@ -540,10 +540,22 @@ $_TRANSLATIONS["de"] = array(
 	"wrong_password" => "Falsches Passwort",
 	"make_directory" => "Neuer Ordner",
 	"new_dir_failed" => "Erstellen des Ordners fehlgeschlagen",
-	"chmod_dir_failed" => "Veränderung der Zugriffsrechte des Ordners fehlgeschlagen",
-	"unable_to_read_dir" => "Unable to read directory",
-	"location" => "Location",
-	"root" => "Root"
+	"chmod_dir_failed" => "Ver&auml;nderung der Zugriffsrechte des Ordners fehlgeschlagen",
+	"unable_to_read_dir" => "Ordner konnte nicht gelesen werden",
+	"location" => "Ort",
+	"root" => "Wurzelverzeichni&szlig;"
+	"log_file_permission_error" => "Der Script kann wegen fehlende Berechtigungen, keine Log Datei schreiben.",
+	"upload_not_allowed" => "Die Script Konfiguration erlaubt kein Hochladen in dieses Verzeichni&szlig;.",
+	"upload_dir_not_writable" => "Dieser Ordner besitzt keine Schreibrechte.",
+	"mobile_version" => "Mobile Ansicht",
+	"standard_version" => "Normale Ansicht",
+	"page_load_time" => "Die Seite wurde geladen in %.2f ms",
+	"wrong_pass" => "Falscher Benutzername oder Kennwort",
+	"username" => "Benutzername",
+	"log_in" => "Log in",
+	"upload_type_not_allowed" => "Dieser Dateityp darf nicht hochgeladen werden.",
+	"del" => "Entf.", // short for Delete
+	"log_out" => "Log out"
 );
 
 // Greek

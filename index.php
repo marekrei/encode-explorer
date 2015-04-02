@@ -543,7 +543,7 @@ $_TRANSLATIONS["de"] = array(
 	"chmod_dir_failed" => "Ver&auml;nderung der Zugriffsrechte des Ordners fehlgeschlagen",
 	"unable_to_read_dir" => "Ordner konnte nicht gelesen werden",
 	"location" => "Ort",
-	"root" => "Wurzelverzeichni&szlig;"
+	"root" => "Wurzelverzeichni&szlig;",
 	"log_file_permission_error" => "Der Script kann wegen fehlende Berechtigungen, keine Log Datei schreiben.",
 	"upload_not_allowed" => "Die Script Konfiguration erlaubt kein Hochladen in dieses Verzeichni&szlig;.",
 	"upload_dir_not_writable" => "Dieser Ordner besitzt keine Schreibrechte.",
@@ -706,6 +706,38 @@ $_TRANSLATIONS["pt_BR"] = array(
 	"username" => "Nome de Usuário",
 	"log_in" => "Log in",
 	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo."
+);
+
+// Portuguese (Portugal)
+$_TRANSLATIONS["pt_PT"] = array(
+	"file_name" => "Nome do ficheiro",
+	"size" => "Tamanho",
+	"last_changed" => "Modificado em",
+	"total_used_space" => "Total de espaço utilizado",
+	"free_space" => "Espaço livre",
+	"password" => "Palavra-passe",
+	"upload" => "Enviar",
+	"failed_upload" => "Falha ao enviar o ficheiro!",
+	"failed_move" => "Falha ao mover o ficheiro para a pasta correcta!",
+	"wrong_password" => "Palavra-passe errada",
+	"make_directory" => "Nova pasta",
+	"new_dir_failed" => "Falha ao criar pasta",
+	"chmod_dir_failed" => "Falha ao mudar os privilégios da pasta",
+	"unable_to_read_dir" => "Não foi possível ler a pasta",
+	"location" => "Localização",
+	"root" => "Raíz",
+	"log_file_permission_error" => "O script não tem permissão para escrever o ficheiro de log.",
+	"upload_not_allowed" => "A configuração do script não permite envios para esta pasta.",
+	"upload_dir_not_writable" => "Não há permissão para escrita nesta pasta.",
+	"mobile_version" => "Versão Móvel",
+	"standard_version" => "Versão Padrão",
+	"page_load_time" => "Página carregada em %.2f ms",
+	"wrong_pass" => "Nome de utilizador ou palavra-passe incorrectos",
+	"username" => "Nome de utilizador",
+	"log_in" => "Entrar",
+	"upload_type_not_allowed" => "Não é permitido o envio de ficheiros deste tipo.",
+	"del" => "Apagar",
+	"log_out" => "Sair"
 );
 
 // Romanian
@@ -1540,26 +1572,23 @@ class ImageServer
 		global $_IMAGES;
 		if(isset($_GET['img']))
 		{
-			if(strlen($_GET['img']) > 0)
+			$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
+			$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
+
+			if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
+				|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag)) 
 			{
-				$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
-				$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
-				
-				if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
-					|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag)) 
-				{
-					header('HTTP/1.1 304 Not Modified');
-					return true;
-				}
-				else {
-					header('ETag: "'.$etag.'"');
-					header('Last-Modified: '.$mtime);
-					header('Content-type: image/gif');
-					if(isset($_IMAGES[$_GET['img']]))
-						print base64_decode($_IMAGES[$_GET['img']]);
-					else
-						print base64_decode($_IMAGES["unknown"]);
-				}
+				header('HTTP/1.1 304 Not Modified');
+				return true;
+			}
+			else {
+				header('ETag: "'.$etag.'"');
+				header('Last-Modified: '.$mtime);
+				header('Content-type: image/gif');
+				if(strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
+					print base64_decode($_IMAGES[$_GET['img']]);
+				else
+					print base64_decode($_IMAGES["unknown"]);
 			}
 			return true;
 		}

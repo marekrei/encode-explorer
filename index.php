@@ -822,12 +822,12 @@ $_TRANSLATIONS["es"] = array(
 	"failed_upload" => "Error al subir el archivo!",
 	"failed_move" => "Error al mover el archivo al directorio seleccionado!",
 	"wrong_password" => "Contraseña incorrecta",
-	"make_directory" => "New dir",
-	"new_dir_failed" => "Failed to create directory",
-	"chmod_dir_failed" => "Failed to change directory rights",
-	"unable_to_read_dir" => "Unable to read directory",
-	"location" => "Location",
-	"root" => "Root"
+	"make_directory" => "Crear directorio",
+	"new_dir_failed" => "Error al crear el directorio",
+	"chmod_dir_failed" => "Error al cambiar los derechos de directorio",
+	"unable_to_read_dir" => "No es posible leer el directorio",
+	"location" => "Localización",
+	"root" => "Raíz"
 );
 
 // Swedish

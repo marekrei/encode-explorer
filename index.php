@@ -1540,26 +1540,23 @@ class ImageServer
 		global $_IMAGES;
 		if(isset($_GET['img']))
 		{
-			if(strlen($_GET['img']) > 0)
+			$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
+			$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
+
+			if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
+				|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag)) 
 			{
-				$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
-				$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
-				
-				if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
-					|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag)) 
-				{
-					header('HTTP/1.1 304 Not Modified');
-					return true;
-				}
-				else {
-					header('ETag: "'.$etag.'"');
-					header('Last-Modified: '.$mtime);
-					header('Content-type: image/gif');
-					if(isset($_IMAGES[$_GET['img']]))
-						print base64_decode($_IMAGES[$_GET['img']]);
-					else
-						print base64_decode($_IMAGES["unknown"]);
-				}
+				header('HTTP/1.1 304 Not Modified');
+				return true;
+			}
+			else {
+				header('ETag: "'.$etag.'"');
+				header('Last-Modified: '.$mtime);
+				header('Content-type: image/gif');
+				if(strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
+					print base64_decode($_IMAGES[$_GET['img']]);
+				else
+					print base64_decode($_IMAGES["unknown"]);
 			}
 			return true;
 		}

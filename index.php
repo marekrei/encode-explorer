@@ -793,19 +793,19 @@ $_TRANSLATIONS["ru"] = array(
 // Slovensky
 $_TRANSLATIONS["sk"] = array(
 	"file_name" => "Meno súboru",
-	"size" => "Ve?kos?",
+	"size" => "Veľkosť",
 	"last_changed" => "Posledná zmena",
 	"total_used_space" => "Použité miesto celkom",
-	"free_space" => "Vo?né miesto",
+	"free_space" => "Voľné miesto",
 	"password" => "Heslo",
 	"upload" => "Nahranie súborov",
 	"failed_upload" => "Chyba nahrávania súboru!",
 	"failed_move" => "Nepodarilo sa presunú? súbor do vybraného adresára!",
 	"wrong_password" => "Neplatné heslo!",
-	"make_directory" => "Nový prie?inok",
-	"new_dir_failed" => "Nepodarilo sa vytvori? adresár!",
-	"chmod_dir_failed" => "Nepodarilo sa zmeni? práva adresára!",
-	"unable_to_read_dir" => "Nemôžem ?íta? adresár",
+	"make_directory" => "Nový priečinok",
+	"new_dir_failed" => "Nepodarilo sa vytvoriť adresár!",
+	"chmod_dir_failed" => "Nepodarilo sa zmeniť práva adresára!",
+	"unable_to_read_dir" => "Nemôžem čítať adresár",
 	"location" => "Umiestnenie",
 	"root" => "Domov"
 );

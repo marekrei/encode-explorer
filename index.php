@@ -2791,6 +2791,7 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
+	$('#user_name').focus();
 <?php
 	if(GateKeeper::isDeleteAllowed()){
 ?>

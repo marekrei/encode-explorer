@@ -63,7 +63,7 @@ $_START_TIME = microtime(TRUE);
 // Choose a language. See below in the language section for options.
 // Default: $_CONFIG['lang'] = "en";
 //
-$_CONFIG['lang'] = "en";
+$_CONFIG['lang'] = "zh_CN";
 
 //
 // Kuva pildifailidele eelvaated. Vaikimisi: true
@@ -94,7 +94,7 @@ $_CONFIG['thumbnails_height'] = 300;
 // Mobile interface enabled. true/false
 // Default: $_CONFIG['mobile_enabled'] = true;
 //
-$_CONFIG['mobile_enabled'] = true;
+$_CONFIG['mobile_enabled'] = false;
 
 //
 // Mobiilidele mõeldud kasutajaliides avaneb automaatselt. true/false
@@ -223,7 +223,7 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // They will still be able to access the files with a direct link.
 // Default: $_CONFIG['require_login'] = false;
 //
-$_CONFIG['require_login'] = false;
+$_CONFIG['require_login'] = true;
 
 //
 // Kasutajanimed ja paroolid, lehele ligipääsu piiramiseks.
@@ -241,7 +241,7 @@ $_CONFIG['require_login'] = false;
 // For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
-$_CONFIG['users'] = array();
+$_CONFIG['users'] = array(array('admin', 'admin', 'admin'));
 
 //
 // Seaded uploadimiseks, uute kaustade loomiseks ja kustutamiseks.
@@ -256,7 +256,7 @@ $_CONFIG['users'] = array();
 //
 $_CONFIG['upload_enable'] = true;
 $_CONFIG['newdir_enable'] = true;
-$_CONFIG['delete_enable'] = false;
+$_CONFIG['delete_enable'] = true;
 
 /*
  * UPLOADING
@@ -287,7 +287,8 @@ $_CONFIG['upload_dirs'] = array();
 // $_CONFIG['upload_allow_type'] = array("image/png", "image/gif", "image/jpeg");
 // Default: $_CONFIG['upload_allow_type'] = array();
 //
-$_CONFIG['upload_allow_type'] = array();
+$_CONFIG['upload_allow_type'] = array("image/png", "image/gif", "image/jpeg",
+	"application/zip", "application/rar", "application/x-gzip", "text/plain");
 
 //
 // Uploadimiseks keelatud faililaiendid
@@ -297,6 +298,9 @@ $_CONFIG['upload_allow_type'] = array();
 // Default: $_CONFIG['upload_reject_extension'] = array();
 //
 $_CONFIG['upload_reject_extension'] = array("php");
+
+$_CONFIG['new_dir_mode'] = 0755;
+$_CONFIG['upload_file_mode'] = 0644;
 
 /*
  * LOGGING
@@ -880,6 +884,37 @@ $_TRANSLATIONS["tr"] = array(
 	"unable_to_read_dir" => "Unable to read directory",
 	"location" => "Location",
 	"root" => "Root"
+);
+
+$_TRANSLATIONS["zh_CN"] = array(
+	"file_name" => "文件名",
+	"size" => "大小",
+	"last_changed" => "最后修改",
+	"total_used_space" => "总计使用空间",
+	"free_space" => "剩余空间",
+	"password" => "密码",
+	"upload" => "上传",
+	"failed_upload" => "上传失败",
+	"failed_move" => "移动失败",
+	"wrong_password" => "密码错误",
+	"make_directory" => "创建目录",
+	"new_dir_failed" => "创建目录失败",
+	"chmod_dir_failed" => "修改目录权限失败",
+	"unable_to_read_dir" => "无法读取目录",
+	"location" => "路径",
+	"root" => "根目录",
+	"log_file_permission_error" => "日志文件权限错误",
+	"upload_not_allowed" => "禁止上传",
+	"upload_dir_not_writable" => "上传目录不可写",
+	"mobile_version" => "移动版本",
+	"standard_version" => "标准版本",
+	"page_load_time" => "页面载入时间",
+	"wrong_pass" => "密码错误",
+	"username" => "用户名",
+	"log_in" => "登录",
+	"log_out" => "注销",
+	"upload_type_not_allowed" => "上传文件类型被禁止",
+	"del" => "删除"
 );
 
 /***************************************************************************/
@@ -1968,12 +2003,12 @@ class FileManager
 				// The target directory is not writable
 				$encodeExplorer->setErrorString("upload_dir_not_writable");
 			}
-			else if(!mkdir($location->getDir(true, false, false, 0).$dirname, 0777))
+			else if(!mkdir($location->getDir(true, false, false, 0).$dirname, EncodeExplorer::getConfig("new_dir_mode")))
 			{
 				// Error creating a new directory
 				$encodeExplorer->setErrorString("new_dir_failed");
 			}
-			else if(!chmod($location->getDir(true, false, false, 0).$dirname, 0777))
+			else if(!chmod($location->getDir(true, false, false, 0).$dirname, EncodeExplorer::getConfig("new_dir_mode")))
 			{
 				// Error applying chmod 777
 				$encodeExplorer->setErrorString("chmod_dir_failed");
@@ -2030,7 +2065,7 @@ class FileManager
 		}
 		else
 		{
-			chmod($upload_file, 0755);
+			chmod($upload_file, EncodeExplorer::getConfig("upload_file_mode"));
 			Logger::logCreation($location->getDir(true, false, false, 0).$name, false);
 			Logger::emailNotification($location->getDir(true, false, false, 0).$name, true);
 		}

@@ -420,6 +420,18 @@ $_TRANSLATIONS["cz"] = array(
 	"unable_to_read_dir" => "Chyba při čtení adresáře",
 	"location" => "Umístění",
 	"root" => "Kořenový adresář"
+	"log_file_permission_error" => "Skript nemá oprávnění k zápisu do souboru protokolu.",
+	"upload_not_allowed" => "Konfigurační skript neumožňuje nahrávání v tomto adresáři.",
+	"upload_dir_not_writable" => "Tento adresář nemá oprávnění k zápisu.",
+	"mobile_version" => "Zobrazení pro mobil",
+	"standard_version" => "Standardní zobrazení",
+	"page_load_time" => "Stránka nahrána za %.2f ms",
+	"wrong_pass" => "Špatné uživatelské jméno nebo heslo",
+	"username" => "Uživatelské jméno",
+	"log_in" => "Přihlásit se",
+	"upload_type_not_allowed" => "Tento typ souboru není povolen pro nahrávání.",
+	"del" => "Smazat",
+	"log_out" => "Odhlásit se"
 );
 
 // Dutch

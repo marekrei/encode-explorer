@@ -402,6 +402,26 @@ $_TRANSLATIONS["al"] = array(
 	"root" => "Root"
 );
 
+// Czech
+$_TRANSLATIONS["cz"] = array(
+	"file_name" => "Název souboru",
+	"size" => "Velikost",
+	"last_changed" => "Změněno",
+	"total_used_space" => "Obsazený prostor",
+	"free_space" => "Volný prostor",
+	"password" => "Heslo",
+	"upload" => "Nahrát",
+	"failed_upload" => "Nahrávání se nezdařilo!",
+	"failed_move" => "Přesun souboru do určeného adresáře se nezdařil!",
+	"wrong_password" => "Chybné heslo",
+	"make_directory" => "Nový adresář",
+	"new_dir_failed" => "Vytvoření adresáře se nezdařilo",
+	"chmod_dir_failed" => "Změna práv adresáře se nezdařila",
+	"unable_to_read_dir" => "Chyba při čtení adresáře",
+	"location" => "Umístění",
+	"root" => "Kořenový adresář"
+);
+
 // Dutch
 $_TRANSLATIONS["nl"] = array(
 	"file_name" => "Bestandsnaam",
@@ -812,7 +832,7 @@ $_TRANSLATIONS["sk"] = array(
 	"password" => "Heslo",
 	"upload" => "Nahranie súborov",
 	"failed_upload" => "Chyba nahrávania súboru!",
-	"failed_move" => "Nepodarilo sa presunú? súbor do vybraného adresára!",
+	"failed_move" => "Nepodarilo sa presunúť súbor do vybraného adresára!",
 	"wrong_password" => "Neplatné heslo!",
 	"make_directory" => "Nový priečinok",
 	"new_dir_failed" => "Nepodarilo sa vytvoriť adresár!",

@@ -1880,7 +1880,7 @@ class GateKeeper
 
 				if(isset($_GET['dir']) && strlen($_GET['dir']) > 0)
 				{
-					$param .= (strlen($param) == 0 ? '?' : '&');
+					$param .= (strlen($param) == 0 ? '?dir=' : '&dir=');
 					$param .= urlencode($_GET['dir']);
 				}
 				header( "Location: ".$addr.$param);

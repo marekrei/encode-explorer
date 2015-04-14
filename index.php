@@ -566,7 +566,7 @@ $_TRANSLATIONS["fr"] = array(
 	"username" => "Identifiant",
 	"log_in" => "Connexion",
 	"upload_type_not_allowed" => "Ce format de fichier n'est pas autorisé.",
-	"del" => "Eff.", 
+	"del" => "Effacer", 
 	"log_out" => "Déconnexion"
 );
 
@@ -598,7 +598,7 @@ $_TRANSLATIONS["de"] = array(
 	"username" => "Benutzername",
 	"log_in" => "Log in",
 	"upload_type_not_allowed" => "Dieser Dateityp darf nicht hochgeladen werden.",
-	"del" => "Entf.", // short for Delete
+	"del" => "Entfernen",
 	"log_out" => "Log out"
 );
 
@@ -750,7 +750,7 @@ $_TRANSLATIONS["pt_BR"] = array(
 	"username" => "Nome de Usuário",
 	"log_in" => "Log in",
 	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo.",
-	"del" => "Del",
+	"del" => "Deletar",
 	"log_out" => "Log out"
 );
 

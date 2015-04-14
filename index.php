@@ -749,7 +749,9 @@ $_TRANSLATIONS["pt_BR"] = array(
 	"wrong_pass" => "Nome de usuário ou senha errados",
 	"username" => "Nome de Usuário",
 	"log_in" => "Log in",
-	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo."
+	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo.",
+	"del" => "Del",
+	"log_out" => "Log out"
 );
 
 // Portuguese (Portugal)
@@ -831,7 +833,9 @@ $_TRANSLATIONS["ru"] = array(
     "wrong_pass" => "Неверное имя пользователя или пароль",
     "username" => "Имя пользователя",
     "log_in" => "Войти",
-    "upload_type_not_allowed" => "Этот тип файла запрещено загружать"
+    "upload_type_not_allowed" => "Этот тип файла запрещено загружать",
+    "del" => "удалить",
+    "log_out" => "выйти"
 );
 
 // Slovensky

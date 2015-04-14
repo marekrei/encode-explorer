@@ -1906,7 +1906,7 @@ class GateKeeper
 	
 	public static function isUserLoggedIn()
 	{
-		if(isset($_SESSION['ee_user_name']) && isset($_SESSION['ee_user_pass']))
+		if(isset($_SESSION['ee_user_name'], $_SESSION['ee_user_pass']))
 		{
 			if(GateKeeper::isUser($_SESSION['ee_user_name'], $_SESSION['ee_user_pass']))
 				return true;
@@ -2477,7 +2477,7 @@ class EncodeExplorer
 	{
 		$this->sort_by = "";
 		$this->sort_as = "";
-		if(isset($_GET["sort_by"]) && isset($_GET["sort_as"]))
+		if(isset($_GET["sort_by"], $_GET["sort_as"]))
 		{
 			if($_GET["sort_by"] == "name" || $_GET["sort_by"] == "size" || $_GET["sort_by"] == "mod")
 				if($_GET["sort_as"] == "asc" || $_GET["sort_as"] == "desc")
@@ -2494,7 +2494,7 @@ class EncodeExplorer
 		
 		
 		global $_TRANSLATIONS;
-		if(isset($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
+		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else
 			$this->lang = EncodeExplorer::getConfig("lang");
@@ -2743,7 +2743,7 @@ class EncodeExplorer
 	public static function getConfig($name)
 	{
 		global $_CONFIG;
-		if(isset($_CONFIG) && isset($_CONFIG[$name]))
+		if(isset($_CONFIG, $_CONFIG[$name]))
 			return $_CONFIG[$name];
 		return null;
 	}

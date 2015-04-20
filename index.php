@@ -458,15 +458,15 @@ $_TRANSLATIONS["nl"] = array(
 $_TRANSLATIONS["en"] = array(
 	"file_name" => "File name",
 	"size" => "Size",
-	"last_changed" => "Last changed",
-	"total_used_space" => "Total used space",
+	"last_changed" => "Last updated",
+	"total_used_space" => "Total space used",
 	"free_space" => "Free space",
 	"password" => "Password",
 	"upload" => "Upload",
 	"failed_upload" => "Failed to upload the file!",
 	"failed_move" => "Failed to move the file into the right directory!",
 	"wrong_password" => "Wrong password",
-	"make_directory" => "New dir",
+	"make_directory" => "New directory",
 	"new_dir_failed" => "Failed to create directory",
 	"chmod_dir_failed" => "Failed to change directory rights",
 	"unable_to_read_dir" => "Unable to read directory",
@@ -482,7 +482,7 @@ $_TRANSLATIONS["en"] = array(
 	"username" => "Username",
 	"log_in" => "Log in",
 	"upload_type_not_allowed" => "This file type is not allowed for uploading.",
-	"del" => "Del", // short for Delete
+	"del" => "Delete",
 	"log_out" => "Log out"
 );
 
@@ -566,7 +566,7 @@ $_TRANSLATIONS["fr"] = array(
 	"username" => "Identifiant",
 	"log_in" => "Connexion",
 	"upload_type_not_allowed" => "Ce format de fichier n'est pas autorisé.",
-	"del" => "Eff.", 
+	"del" => "Effacer", 
 	"log_out" => "Déconnexion"
 );
 
@@ -598,7 +598,7 @@ $_TRANSLATIONS["de"] = array(
 	"username" => "Benutzername",
 	"log_in" => "Log in",
 	"upload_type_not_allowed" => "Dieser Dateityp darf nicht hochgeladen werden.",
-	"del" => "Entf.", // short for Delete
+	"del" => "Entfernen",
 	"log_out" => "Log out"
 );
 
@@ -749,7 +749,9 @@ $_TRANSLATIONS["pt_BR"] = array(
 	"wrong_pass" => "Nome de usuário ou senha errados",
 	"username" => "Nome de Usuário",
 	"log_in" => "Log in",
-	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo."
+	"upload_type_not_allowed" => "Não é permitido envio de arquivos deste tipo.",
+	"del" => "Deletar",
+	"log_out" => "Log out"
 );
 
 // Portuguese (Portugal)
@@ -831,7 +833,9 @@ $_TRANSLATIONS["ru"] = array(
     "wrong_pass" => "Неверное имя пользователя или пароль",
     "username" => "Имя пользователя",
     "log_in" => "Войти",
-    "upload_type_not_allowed" => "Этот тип файла запрещено загружать"
+    "upload_type_not_allowed" => "Этот тип файла запрещено загружать",
+    "del" => "удалить",
+    "log_out" => "выйти"
 );
 
 // Slovensky
@@ -1518,8 +1522,12 @@ EfzLR91cOg8TPTgr3MudFx+d9owK7KMNVfQOtyQ1OO9qiHsWkiRRUHhKQLuwfH9+1XpfhVVfU0V3
 //k4zFwdzjIlSA/Sv8jTOZObBL9uugczuNaCP5K8bFBIhduE5bdC3d6MYIkkt7jOKXT1l34DkIu9
 e0agZjoAAAAASUVORK5CYII=";
 $_IMAGES["mov"] = $_IMAGES["video"];
+$_IMAGES["mp2"] = $_IMAGES["audio"];
 $_IMAGES["mp3"] = $_IMAGES["audio"];
-$_IMAGES["mp4"] = $_IMAGES["audio"];
+$_IMAGES["mp4"] = $_IMAGES["video"];
+$_IMAGES["mp4a"] = $_IMAGES["audio"];
+$_IMAGES["ogg"] = $_IMAGES["audio"];
+$_IMAGES["flac"] = $_IMAGES["audio"];
 $_IMAGES["mpeg"] = $_IMAGES["video"];
 $_IMAGES["mpg"] = $_IMAGES["video"];
 $_IMAGES["odg"] = $_IMAGES["vectorgraphics"];
@@ -1860,13 +1868,22 @@ class GateKeeper
 			{
 				$_SESSION['ee_user_name'] = isset($_POST['user_name'])?$_POST['user_name']:"";
 				$_SESSION['ee_user_pass'] = $_POST['user_pass'];
-				
-				$addr = $_SERVER['PHP_SELF'];
+
+				$addr  = $_SERVER['PHP_SELF'];
+				$param = '';
+
 				if(isset($_GET['m']))
-					$addr .= "?m";
-				else if(isset($_GET['s']))
-					$addr .= "?s";
-				header( "Location: ".$addr);
+					$param .= (strlen($param) == 0 ? '?m' : '&m');
+
+				if(isset($_GET['s']))
+					$param .= (strlen($param) == 0 ? '?s' : '&s');
+
+				if(isset($_GET['dir']) && strlen($_GET['dir']) > 0)
+				{
+					$param .= (strlen($param) == 0 ? '?dir=' : '&dir=');
+					$param .= urlencode($_GET['dir']);
+				}
+				header( "Location: ".$addr.$param);
 			}
 			else
 				$encodeExplorer->setErrorString("wrong_pass");
@@ -1898,7 +1915,7 @@ class GateKeeper
 	
 	public static function isUserLoggedIn()
 	{
-		if(isset($_SESSION['ee_user_name']) && isset($_SESSION['ee_user_pass']))
+		if(isset($_SESSION['ee_user_name'], $_SESSION['ee_user_pass']))
 		{
 			if(GateKeeper::isUser($_SESSION['ee_user_name'], $_SESSION['ee_user_pass']))
 				return true;
@@ -2469,7 +2486,7 @@ class EncodeExplorer
 	{
 		$this->sort_by = "";
 		$this->sort_as = "";
-		if(isset($_GET["sort_by"]) && isset($_GET["sort_as"]))
+		if(isset($_GET["sort_by"], $_GET["sort_as"]))
 		{
 			if($_GET["sort_by"] == "name" || $_GET["sort_by"] == "size" || $_GET["sort_by"] == "mod")
 				if($_GET["sort_as"] == "asc" || $_GET["sort_as"] == "desc")
@@ -2486,7 +2503,7 @@ class EncodeExplorer
 		
 		
 		global $_TRANSLATIONS;
-		if(isset($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
+		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else
 			$this->lang = EncodeExplorer::getConfig("lang");
@@ -2735,7 +2752,7 @@ class EncodeExplorer
 	public static function getConfig($name)
 	{
 		global $_CONFIG;
-		if(isset($_CONFIG) && isset($_CONFIG[$name]))
+		if(isset($_CONFIG, $_CONFIG[$name]))
 			return $_CONFIG[$name];
 		return null;
 	}

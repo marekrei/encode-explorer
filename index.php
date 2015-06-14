@@ -298,6 +298,32 @@ $_CONFIG['upload_allow_type'] = array();
 //
 $_CONFIG['upload_reject_extension'] = array("php");
 
+//
+// By default, apply 0755 permissions to new directories
+//
+// The mode parameter consists of three octal number components specifying
+// access restrictions for the owner, the user group in which the owner is
+// in, and to everybody else in this order.
+//
+// See: https://php.net/manual/en/function.chmod.php
+//
+// Default: $_CONFIG['new_dir_mode'] = 0755;
+//
+$_CONFIG['new_dir_mode'] = 0755;
+
+//
+// By default, apply 0644 permissions to uploaded files
+//
+// The mode parameter consists of three octal number components specifying
+// access restrictions for the owner, the user group in which the owner is
+// in, and to everybody else in this order.
+//
+// See: https://php.net/manual/en/function.chmod.php
+//
+// Default: $_CONFIG['upload_file_mode'] = 0644;
+//
+$_CONFIG['upload_file_mode'] = 0644;
+
 /*
  * LOGGING
  */
@@ -2017,14 +2043,14 @@ class FileManager
 				// The target directory is not writable
 				$encodeExplorer->setErrorString("upload_dir_not_writable");
 			}
-			else if(!mkdir($location->getDir(true, false, false, 0).$dirname, 0777))
+			else if(!mkdir($location->getDir(true, false, false, 0).$dirname, EncodeExplorer::getConfig("new_dir_mode")))
 			{
 				// Error creating a new directory
 				$encodeExplorer->setErrorString("new_dir_failed");
 			}
-			else if(!chmod($location->getDir(true, false, false, 0).$dirname, 0777))
+			else if(!chmod($location->getDir(true, false, false, 0).$dirname, EncodeExplorer::getConfig("new_dir_mode")))
 			{
-				// Error applying chmod 777
+				// Error applying chmod
 				$encodeExplorer->setErrorString("chmod_dir_failed");
 			}
 			else
@@ -2079,7 +2105,7 @@ class FileManager
 		}
 		else
 		{
-			chmod($upload_file, 0755);
+			chmod($upload_file, EncodeExplorer::getConfig("upload_file_mode"));
 			Logger::logCreation($location->getDir(true, false, false, 0).$name, false);
 			Logger::emailNotification($location->getDir(true, false, false, 0).$name, true);
 		}

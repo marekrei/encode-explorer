@@ -296,7 +296,7 @@ $_CONFIG['upload_allow_type'] = array();
 // For example: $_CONFIG['upload_reject_extension'] = array("php", "html", "htm");
 // Default: $_CONFIG['upload_reject_extension'] = array();
 //
-$_CONFIG['upload_reject_extension'] = array("php");
+$_CONFIG['upload_reject_extension'] = array("php", "php2", "php3", "php4", "php5", "phtml");
 
 //
 // By default, apply 0755 permissions to new directories

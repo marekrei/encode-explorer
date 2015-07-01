@@ -4,7 +4,7 @@
  * Encode Explorer
  *
  * Author / Autor : Marek Rei (marek ät marekrei dot com)
- * Version / Versioon : 6.3
+ * Version / Versioon : 6.4
  * Homepage / Koduleht: encode-explorer.siineiolekala.net
  *
  *

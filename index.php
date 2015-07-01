@@ -601,8 +601,8 @@ $_TRANSLATIONS["de"] = array(
 	"file_name" => "Dateiname",
 	"size" => "Gr&ouml;&szlig;e",
 	"last_changed" => "Letzte &Auml;nderung",
-	"total_used_space" => "Benutzter Speicher",
-	"free_space" => "Freier Speicher",
+	"total_used_space" => "Benutzter Speicherplatz",
+	"free_space" => "Freier Speicherplatz",
 	"password" => "Passwort",
 	"upload" => "Upload",
 	"failed_upload" => "Upload ist fehlgeschlagen!",
@@ -613,19 +613,19 @@ $_TRANSLATIONS["de"] = array(
 	"chmod_dir_failed" => "Ver&auml;nderung der Zugriffsrechte des Ordners fehlgeschlagen",
 	"unable_to_read_dir" => "Ordner konnte nicht gelesen werden",
 	"location" => "Ort",
-	"root" => "Wurzelverzeichni&szlig;",
-	"log_file_permission_error" => "Der Script kann wegen fehlende Berechtigungen, keine Log Datei schreiben.",
-	"upload_not_allowed" => "Die Script Konfiguration erlaubt kein Hochladen in dieses Verzeichni&szlig;.",
+	"root" => "Wurzelverzeichnis",
+	"log_file_permission_error" => "Das Script kann wegen fehlenden Berechtigungen keine Log Datei schreiben.",
+	"upload_not_allowed" => "Die Scriptkonfiguration erlaubt kein Hochladen in dieses Verzeichnis.",
 	"upload_dir_not_writable" => "Dieser Ordner besitzt keine Schreibrechte.",
 	"mobile_version" => "Mobile Ansicht",
 	"standard_version" => "Normale Ansicht",
-	"page_load_time" => "Die Seite wurde geladen in %.2f ms",
-	"wrong_pass" => "Falscher Benutzername oder Kennwort",
+	"page_load_time" => "Die Seite wurde in %.2f ms geladen",
+	"wrong_pass" => "Benutzername oder Kennwort falsch",
 	"username" => "Benutzername",
-	"log_in" => "Log in",
+	"log_in" => "Einloggen",
 	"upload_type_not_allowed" => "Dieser Dateityp darf nicht hochgeladen werden.",
 	"del" => "Entfernen",
-	"log_out" => "Log out"
+	"log_out" => "Ausloggen"
 );
 
 // Greek

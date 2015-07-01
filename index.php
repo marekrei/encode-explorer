@@ -973,6 +973,8 @@ input {
 table.table {
 	width:100%;
 	border-collapse: collapse;
+	table-layout: fixed;
+	word-wrap: break-word;
 }
 
 table.table td{
@@ -2107,6 +2109,7 @@ class Dir
 {
 	var $name;
 	var $location;
+	var $modTime;
 
 	//
 	// Constructor
@@ -2115,6 +2118,8 @@ class Dir
 	{
 		$this->name = $name;
 		$this->location = $location;
+
+		$this->modTime = filemtime($this->location->getDir(true, false, false, 0).$this->getName());
 	}
 
 	function getName()
@@ -2132,6 +2137,11 @@ class Dir
 		return rawurlencode($this->name);
 	}
 
+	function getModTime()
+	{
+		return $this->modTime;
+	}
+
 	//
 	// Debugging output
 	//
@@ -2139,6 +2149,7 @@ class Dir
 	{
 		print("Dir name (htmlspecialchars): ".$this->getName()."\n");
 		print("Dir location: ".$this->location->getDir(true, false, false, 0)."\n");
+		print("Dir modTime: ".$this->modTime."\n");
 	}
 }
 
@@ -2439,23 +2450,9 @@ class EncodeExplorer
 	//
 	function init()
 	{
-		$this->sort_by = "";
-		$this->sort_as = "";
-		if(isset($_GET["sort_by"], $_GET["sort_as"]))
-		{
-			if($_GET["sort_by"] == "name" || $_GET["sort_by"] == "size" || $_GET["sort_by"] == "mod")
-				if($_GET["sort_as"] == "asc" || $_GET["sort_as"] == "desc")
-				{
-					$this->sort_by = $_GET["sort_by"];
-					$this->sort_as = $_GET["sort_as"];
-				}
-		}
-		if(strlen($this->sort_by) <= 0 || strlen($this->sort_as) <= 0)
-		{
-			$this->sort_by = "name";
-			$this->sort_as = "desc";
-		}
-
+		// Here we filter the comparison function ("sort by") and comparison order ("sort as") chosen by user
+		$this->sort_by = (isset($_GET['sort_by']) && in_array($_GET['sort_by'], array('name', 'size', 'mod'))) ? $_GET['sort_by'] : 'name';
+		$this->sort_as = (isset($_GET['sort_as']) && in_array($_GET['sort_as'], array('asc', 'desc'))) ? $_GET['sort_as'] : 'asc';
 
 		global $_TRANSLATIONS;
 		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
@@ -2549,31 +2546,35 @@ class EncodeExplorer
 
 	function sort()
 	{
-		if(is_array($this->files)){
+		// Here we filter the comparison functions supported by our directory object
+		if(is_array($this->dirs) && in_array($this->sort_by, array('name', 'mod'))) {
+			usort($this->dirs, "EncodeExplorer::cmp_".$this->sort_by);
+			if($this->sort_as == "desc")
+				$this->dirs = array_reverse($this->dirs);
+		} else {
+			usort($this->dirs, "EncodeExplorer::cmp_name");
+		}
+
+		// Here we filter the comparison functions supported by our file object
+		if(is_array($this->files) && in_array($this->sort_by, array('name', 'size', 'mod'))) {
 			usort($this->files, "EncodeExplorer::cmp_".$this->sort_by);
 			if($this->sort_as == "desc")
 				$this->files = array_reverse($this->files);
-		}
-
-		if(is_array($this->dirs)){
-			usort($this->dirs, "EncodeExplorer::cmp_name");
-			if($this->sort_by == "name" && $this->sort_as == "desc")
-				$this->dirs = array_reverse($this->dirs);
+		} else {
+			usort($this->files, "EncodeExplorer::cmp_name");
 		}
 	}
 
 	function makeArrow($sort_by)
 	{
-		if($this->sort_by == $sort_by && $this->sort_as == "asc")
-		{
-			$sort_as = "desc";
-			$img = "arrow_up";
-		}
-		else
-		{
-			$sort_as = "asc";
-			$img = "arrow_down";
-		}
+		// Ability to reverse the 'sort as' selected for the current field
+		// And propagate the current selected 'sort as' to the other fields
+		$sort_as = ($this->sort_as == "asc") ? "desc" : "asc";
+		$sort_as = ($this->sort_by == $sort_by) ? $sort_as : $this->sort_as;
+
+		// Only show image for the currently selected 'sort as' field
+		$img = ($this->sort_as == "asc") ? "arrow_up" : "arrow_down";
+		$img = ($this->sort_by == $sort_by) ? "<img style=\"border:0;\" alt=\"".$sort_as."\" src=\"?img=".$img."\" />" : "&nbsp;";
 
 		if($sort_by == "name")
 			$text = $this->getString("file_name");
@@ -2582,8 +2583,7 @@ class EncodeExplorer
 		else if($sort_by == "mod")
 			$text = $this->getString("last_changed");
 
-		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, null, $this->location->getDir(false, true, false, 0))."\">
-			$text <img style=\"border:0;\" alt=\"".$sort_as."\" src=\"?img=".$img."\" /></a>";
+		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, null, $this->location->getDir(false, true, false, 0))."\">{$text}{$img}</a>";
 	}
 
 	function makeLink($switchVersion, $logout, $sort_by, $sort_as, $delete, $dir)
@@ -2664,7 +2664,7 @@ class EncodeExplorer
 	// Comparison functions for sorting.
 	//
 
-	public static function cmp_name($b, $a)
+	public static function cmp_name($a, $b)
 	{
 		return strcasecmp($a->name, $b->name);
 	}
@@ -2674,7 +2674,7 @@ class EncodeExplorer
 		return ($a->size - $b->size);
 	}
 
-	public static function cmp_mod($b, $a)
+	public static function cmp_mod($a, $b)
 	{
 		return ($a->modTime - $b->modTime);
 	}
@@ -2939,7 +2939,7 @@ if($this->mobile == false)
 ?>
 <tr class="row two">
 	<td class="icon"><img alt="dir" src="?img=directory" /></td>
-	<td colspan="<?php print (($this->mobile == true?2:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
+	<td colspan="<?php print (($this->mobile == true?1:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
 		<a class="item" href="<?php print $this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
 	</td>
 </tr>
@@ -2959,12 +2959,17 @@ if($this->dirs)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style."\">\n";
 		print "<td class=\"icon\"><img alt=\"dir\" src=\"?img=directory\" /></td>\n";
-		print "<td class=\"name\" colspan=\"".($this->mobile == true?2:3)."\">\n";
+		print "<td class=\"name\" colspan=\"".($this->mobile == true ? 1:2)."\">\n";
 		print "<a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded())."\" class=\"item dir\">";
 		print $dir->getNameHtml();
 		print "</a>\n";
 		print "</td>\n";
-		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
+		if($this->mobile != true)
+		{
+			print "<td class=\"changed\">".$this->formatModTime($dir->getModTime())."</td>\n";
+		}
+		if($this->mobile == false && GateKeeper::isDeleteAllowed())
+		{
 			print "<td class=\"del\"><a data-name=\"".htmlentities($dir->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
 		}
 		print "</tr>\n";
@@ -2983,7 +2988,7 @@ if($this->files)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style.(++$count == count($this->files)?" last":"")."\">\n";
 		print "<td class=\"icon\"><img alt=\"".$file->getType()."\" src=\"".$this->makeIcon($file->getType())."\" /></td>\n";
-		print "<td class=\"name\">\n";
+		print "<td class=\"name\" colspan=\"1\">\n";
 		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
 		if(EncodeExplorer::getConfig('open_in_new_window') == true)
 			print "target=\"_blank\"";
@@ -3003,7 +3008,8 @@ if($this->files)
 			print "<td class=\"size\">".$this->formatSize($file->getSize())."</td>\n";
 			print "<td class=\"changed\">".$this->formatModTime($file->getModTime())."</td>\n";
 		}
-		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
+		if($this->mobile == false && GateKeeper::isDeleteAllowed())
+		{
 			print "<td class=\"del\">
 				<a data-name=\"".htmlentities($file->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$file->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\">
 					<img src=\"?img=del\" alt=\"Delete\" />

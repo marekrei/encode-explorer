@@ -2636,8 +2636,8 @@ class EncodeExplorer
 
 	function makeArrow($sort_by)
 	{
-		// Ability to switch the 'sort as' to reverse it
-		$sort_as = ($this->sort_as == "asc") ? "desc" : "asc";
+		// Ability to reverse the 'sort as' selected for the current field
+		$sort_as = ($this->sort_as == "asc" && $this->sort_by == $sort_by) ? "desc" : "asc";
 
 		// Only show image for the currently selected 'sort as' field
 		$img = ($this->sort_as == "asc") ? "arrow_up" : "arrow_down";

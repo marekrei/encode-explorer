@@ -1,50 +1,22 @@
 <?php
 /***************************************************************************
  *
- *             Encode Explorer
+ * Encode Explorer
  *
- *             Author / Autor : Marek Rei (marek ät siineiolekala dot net)
- *
- *             Version / Versioon : 6.3
- *
- *             Last change / Viimati muudetud: 23.09.2011
- *
- *             Homepage / Koduleht: encode-explorer.siineiolekala.net
+ * Author / Autor : Marek Rei (marek ät marekrei dot com)
+ * Version / Versioon : 6.3
+ * Homepage / Koduleht: encode-explorer.siineiolekala.net
  *
  *
- *             NB!: Comments are in english.
- *                  Comments needed for configuring are in both estonian and english.
- *                  If you change anything, save with UTF-8! Otherwise you may
- *                  encounter problems, especially when displaying images.
- *
- *             NB!: Kommentaarid on inglise keeles.
- *                  Seadistamiseks vajalikud kommentaarid on eesti ja inglise keeles.
- *                  Kui midagi muudate, salvestage UTF-8 formaati! Vastasel juhul
- *                  võivad probleemid tekkida, eriti piltide kuvamisega.
- *
- ***************************************************************************/
-
-/***************************************************************************
- *
- *   This is free software and it's distributed under GPL Licence.
- *
- *   Encode Explorer is written in the hopes that it can be useful to people.
- *   It has NO WARRANTY and when you use it, the author is not responsible
- *   for how it works (or doesn't).
- *
- *   The icon images are designed by Mark James (http://www.famfamfam.com)
- *   and distributed under the Creative Commons Attribution 3.0 License.
+ * NB!:If you change anything, save with UTF-8! Otherwise you may
+ *     encounter problems, especially when displaying images.
  *
  ***************************************************************************/
 
 /***************************************************************************/
-/*   SIIN ON SEADED                                                        */
-/*                                                                         */
 /*   HERE ARE THE SETTINGS FOR CONFIGURATION                               */
 /***************************************************************************/
 
-//
-// Algväärtustame muutujad. Ära muuda.
 //
 // Initialising variables. Don't change these.
 //
@@ -58,17 +30,11 @@ $_START_TIME = microtime(TRUE);
  */
 
 //
-// Vali sobiv keel. Allpool on näha võimalikud valikud. Vaikimisi: en
-//
 // Choose a language. See below in the language section for options.
 // Default: $_CONFIG['lang'] = "en";
 //
 $_CONFIG['lang'] = "en";
 
-//
-// Kuva pildifailidele eelvaated. Vaikimisi: true
-// Levinumad pildifailide tüübid on toetatud (jpeg, png, gif).
-// Pdf failid on samuti toetatud kuid ImageMagick peab olema paigaldatud.
 //
 // Display thumbnails when hovering over image entries in the list.
 // Common image types are supported (jpeg, png, gif).
@@ -78,8 +44,6 @@ $_CONFIG['lang'] = "en";
 $_CONFIG['thumbnails'] = true;
 
 //
-// Eelvaadete maksimumsuurused pikslites. Vaikimisi: 200, 200
-//
 // Maximum sizes of the thumbnails.
 // Default: $_CONFIG['thumbnails_width'] = 200;
 // Default: $_CONFIG['thumbnails_height'] = 200;
@@ -88,17 +52,11 @@ $_CONFIG['thumbnails_width'] = 300;
 $_CONFIG['thumbnails_height'] = 300;
 
 //
-// Mobillidele mõeldud kasutajaliides. true/false
-// Vaikimisi: true
-//
 // Mobile interface enabled. true/false
 // Default: $_CONFIG['mobile_enabled'] = true;
 //
 $_CONFIG['mobile_enabled'] = true;
 
-//
-// Mobiilidele mõeldud kasutajaliides avaneb automaatselt. true/false
-// Vaikimisi: false
 //
 // Mobile interface as the default setting. true/false
 // Default: $_CONFIG['mobile_default'] = false;
@@ -110,17 +68,11 @@ $_CONFIG['mobile_default'] = false;
  */
 
 //
-// Kas failid avatakse uues aknas? true/false
-//
 // Will the files be opened in a new window? true/false
 // Default: $_CONFIG['open_in_new_window'] = false;
 //
 $_CONFIG['open_in_new_window'] = false;
 
-//
-// Kui sügavalt alamkataloogidest suurust näitav script faile otsib?
-// Määra see nullist suuremaks, kui soovid kogu kasutatud ruumi suurust kuvada.
-// Vaikimisi: 0
 //
 // How deep in subfolders will the script search for files?
 // Set it larger than 0 to display the total used space.
@@ -129,24 +81,17 @@ $_CONFIG['open_in_new_window'] = false;
 $_CONFIG['calculate_space_level'] = 0;
 
 //
-// Kas kuvatakse lehe päis? true/false
-// Vaikimisi: true;
-//
 // Will the page header be displayed? 0=no, 1=yes.
 // Default: $_CONFIG['show_top'] = true;
 //
 $_CONFIG['show_top'] = true;
 
 //
-// Veebilehe pealkiri
-//
 // The title for the page
 // Default: $_CONFIG['main_title'] = "Encode Explorer";
 //
 $_CONFIG['main_title'] = "Encode Explorer";
 
-//
-// Pealkirjad, mida kuvatakse lehe päises, suvalises järjekorras.
 //
 // The secondary page titles, randomly selected and displayed under the main header.
 // For example: $_CONFIG['secondary_titles'] = array("Secondary title", "&ldquo;Secondary title with quotes&rdquo;");
@@ -155,17 +100,11 @@ $_CONFIG['main_title'] = "Encode Explorer";
 $_CONFIG['secondary_titles'] = array();
 
 //
-// Kuva asukoht kataloogipuus. true/false
-// Vaikimisi: true
-//
 // Display breadcrumbs (relative path of the location).
 // Default: $_CONFIG['show_path'] = true;
 //
 $_CONFIG['show_path'] = true;
 
-//
-// Kuva lehe laadimise aega. true/false
-// Vaikimisi: false
 //
 // Display the time it took to load the page.
 // Default: $_CONFIG['show_load_time'] = true;
@@ -173,16 +112,11 @@ $_CONFIG['show_path'] = true;
 $_CONFIG['show_load_time'] = true;
 
 //
-// Formaat faili muutmise aja kuvamiseks.
-//
 // The time format for the "last changed" column.
 // Default: $_CONFIG['time_format'] = "d.m.y H:i:s";
 //
 $_CONFIG['time_format'] = "d.m.y H:i:s";
 
-//
-// Kodeering, mida lehel kasutatakse.
-// Tuleb panna sobivaks, kui täpitähtedega tekib probleeme. Vaikimisi: UTF-8
 //
 // Charset. Use the one that suits for you.
 // Default: $_CONFIG['charset'] = "UTF-8";
@@ -194,27 +128,17 @@ $_CONFIG['charset'] = "UTF-8";
 */
 
 //
-// Kaustade varjamine. Kaustade nimed mida lehel ei kuvata.
-// Näiteks: CONFIG['hidden_dirs'] = array("ikoonid", "kaustanimi", "teinekaust");
-//
 // The array of folder names that will be hidden from the list.
 // Default: $_CONFIG['hidden_dirs'] = array();
 //
 $_CONFIG['hidden_dirs'] = array();
 
 //
-// Failide varjamine. Failide nimed mida lehel ei kuvata.
-// NB! Märgitud nimega failid ja kaustad varjatakse kõigis alamkaustades.
-//
 // Filenames that will be hidden from the list.
 // Default: $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
 //
 $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
 
-//
-// Määra kas lehe nägemiseks peab sisse logima.
-// 'false' tähendab, et leht on avalik
-// 'true' tähendab, et kasutaja peab sisestama parooli (vaata allpool).
 //
 // Whether authentication is required to see the contents of the page.
 // If set to false, the page is public.
@@ -225,12 +149,6 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 //
 $_CONFIG['require_login'] = false;
 
-//
-// Kasutajanimed ja paroolid, lehele ligipääsu piiramiseks.
-// Näiteks: $_CONFIG['users'] = array(array("user1", "pass1"), array("user2", "pass2"));
-// Võimalik lehte kaitsta ka ainult üldise parooliga.
-// Näiteks: $_CONFIG['users'] = array(array(null, "pass"));
-// Kui ühtegi kasutajat märgitud ei ole, siis parooli ei küsita.
 //
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
@@ -243,9 +161,6 @@ $_CONFIG['require_login'] = false;
 //
 $_CONFIG['users'] = array();
 
-//
-// Seaded uploadimiseks, uute kaustade loomiseks ja kustutamiseks.
-// Valikud kehtivad ainult andmin kontode jaoks, tavakasutajatel pole need kunagi lubatud.
 //
 // Permissions for uploading, creating new directories and deleting.
 // They only apply to admin accounts, regular users can never perform these operations.
@@ -263,12 +178,6 @@ $_CONFIG['delete_enable'] = false;
  */
 
 //
-// Nimekiri kaustadest kuhu on lubatud uploadida ja uusi kaustu luua.
-// Näiteks: $_CONFIG['upload_dirs'] = array("./myuploaddir1/", "./mydir/upload2/");
-// Kausta asukoht peab olema määratud põhikausta suhtes, algama "./" ja lõppema "/" märgiga.
-// Kõik kaustad märgitute all on automaatselt kaasa arvatud.
-// Kui nimekiri on tühi (vaikimisi), siis on kõikidesse kaustadesse failide lisamine lubatud.
-//
 // List of directories where users are allowed to upload.
 // For example: $_CONFIG['upload_dirs'] = array("./myuploaddir1/", "./mydir/upload2/");
 // The path should be relative to the main directory, start with "./" and end with "/".
@@ -279,9 +188,6 @@ $_CONFIG['delete_enable'] = false;
 $_CONFIG['upload_dirs'] = array();
 
 //
-// MIME failitüübid mis on uploadimiseks lubatud.
-// Näiteks: $_CONFIG['upload_allow_type'] = array("image/png", "image/gif", "image/jpeg");
-//
 // MIME type that are allowed to be uploaded.
 // For example, to only allow uploading of common image types, you could use:
 // $_CONFIG['upload_allow_type'] = array("image/png", "image/gif", "image/jpeg");
@@ -289,8 +195,6 @@ $_CONFIG['upload_dirs'] = array();
 //
 $_CONFIG['upload_allow_type'] = array();
 
-//
-// Uploadimiseks keelatud faililaiendid
 //
 // File extensions that are not allowed for uploading.
 // For example: $_CONFIG['upload_reject_extension'] = array("php", "html", "htm");
@@ -329,18 +233,12 @@ $_CONFIG['upload_file_mode'] = 0644;
  */
 
 //
-// Failide lisamisest teatamise e-maili aadress.
-// Kui määratud, siis saadetakse sellele aadressile e-mail iga kord kui keegi lisab uue faili või kausta.
-//
 // Upload notification e-mail.
 // If set, an e-mail will be sent every time someone uploads a file or creates a new dirctory.
 // Default: $_CONFIG['upload_email'] = "";
 //
 $_CONFIG['upload_email'] = "";
 
-//
-// Logifail. Kui määratud, siis kirjutatakse kaustade ja failide avamise kohta logi faili.
-// Näiteks: $_CONFIG['log_file'] = ".log.txt";
 //
 // Logfile name. If set, a log line will be written there whenever a directory or file is accessed.
 // For example: $_CONFIG['log_file'] = ".log.txt";
@@ -352,10 +250,7 @@ $_CONFIG['log_file'] = "";
  * SYSTEM
  */
 
-//
-// Algkataloogi suhteline aadress. Reeglina ei ole vaja muuta.
-// Kasutage ainult suhtelisi alamkatalooge!
-// Vaikimisi: .
+
 //
 // The starting directory. Normally no need to change this.
 // Use only relative subdirectories!
@@ -365,19 +260,11 @@ $_CONFIG['log_file'] = "";
 $_CONFIG['starting_dir'] = ".";
 
 //
-// Asukoht serveris. Tavaliselt ei ole vaja siia midagi panna kuna script leiab ise õige asukoha.
-// Mõnes serveris tuleb piirangute tõttu see aadress ise teistsuguseks määrata.
-// See fail peaks asuma serveris aadressil [AADRESS]/index.php
-// Aadress võib olla näiteks "/www/data/www.minudomeen.ee/minunimi"
-//
 // Location in the server. Usually this does not have to be set manually.
 // Default: $_CONFIG['basedir'] = "";
 //
 $_CONFIG['basedir'] = "";
 
-//
-// Suured failid. Kui sul on failiruumis väga suured failid (>4GB), siis on see vajalik
-// faili suuruse õigeks määramiseks. Vaikimisi: false
 //
 // Big files. If you have some very big files (>4GB), enable this for correct
 // file size calculation.
@@ -385,11 +272,6 @@ $_CONFIG['basedir'] = "";
 //
 $_CONFIG['large_files'] = false;
 
-//
-// Küpsise/sessiooni nimi.
-// Anna sellele originaalne väärtus kui soovid samas ruumis kasutada mitut koopiat
-// ning ei taha, et toimuks andmete jagamist nende vahel.
-// Väärtus tohib sisaldada ainult tähti ja numbreid. Näiteks: MYSESSION1
 //
 // The session name, which is used as a cookie name.
 // Change this to something original if you have multiple copies in the same space
@@ -945,8 +827,6 @@ $_TRANSLATIONS["tr"] = array(
 );
 
 /***************************************************************************/
-/*   CSS KUJUNDUSE MUUTMISEKS                                              */
-/*                                                                         */
 /*   CSS FOR TWEAKING THE DESIGN                                           */
 /***************************************************************************/
 
@@ -1236,12 +1116,6 @@ body.mobile #upload {
 }
 
 /***************************************************************************/
-/*   PILTIDE KOODID                                                        */
-/*   Saad neid ise oma piltidest juurde genereerida base64 konverteriga    */
-/*   Näiteks siin: http://www.motobit.com/util/base64-decoder-encoder.asp  */
-/*   Või siin: http://www.greywyvern.com/code/php/binary2base64            */
-/*   Või kasuta lihtsalt PHP base64_encode() funktsiooni                   */
-/*                                                                         */
 /*   IMAGE CODES IN BASE64                                                 */
 /*   You can generate your own with a converter                            */
 /*   Like here: http://www.motobit.com/util/base64-decoder-encoder.asp     */
@@ -1631,8 +1505,6 @@ $_IMAGES["xml"] = $_IMAGES["code"];
 $_IMAGES["zip"] = $_IMAGES["archive"];
 
 /***************************************************************************/
-/*   EDASIST KOODI EI OLE TARVIS MUUTA                                     */
-/*                                                                         */
 /*   HERE COMES THE CODE.                                                  */
 /*   DON'T CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING ;)                    */
 /***************************************************************************/

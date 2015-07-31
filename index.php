@@ -3,9 +3,9 @@
  *
  * Encode Explorer
  *
- * Author / Autor : Marek Rei (marek ät marekrei dot com)
- * Version / Versioon : 6.4
- * Homepage / Koduleht: encode-explorer.siineiolekala.net
+ * Author : Marek Rei (marek ät marekrei dot com)
+ * Version : 6.4.1
+ * Homepage : encode-explorer.siineiolekala.net
  *
  *
  * NB!:If you change anything, save with UTF-8! Otherwise you may
@@ -2795,7 +2795,6 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-	$('#user_name').focus();
 <?php
 	if(GateKeeper::isDeleteAllowed()){
 ?>

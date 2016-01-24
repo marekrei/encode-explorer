@@ -147,19 +147,32 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // They will still be able to access the files with a direct link.
 // Default: $_CONFIG['require_login'] = false;
 //
-$_CONFIG['require_login'] = false;
+$_CONFIG['require_login'] = true;
+
+// Bad practice to store passwords in plain text
+// Store as sha256-hashes.
+// $_CONFIG['hash_psw'] = true;
+
+//$_CONFIG['hash_psw'] = false;
+$_CONFIG['hash_psw'] = true;
 
 //
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
+
+// Bad practice to store passwords in plain text
+// Store as sha256-hashes.
+
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
 // For example: $_CONFIG['users'] = array(array("username1", "password1", "user"), array("username2", "password2", "admin"));
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
-// For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+// For example: $_CONFIG['users'] = array(array("username", "sha256 of password", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
-$_CONFIG['users'] = array();
+//$_CONFIG['users'] = array();
+//$_CONFIG['users'] = array(array("admin", "secret", "admin"), array("test", "password", "user"));
+$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
 
 //
 // Permissions for uploading, creating new directories and deleting.
@@ -1931,8 +1944,7 @@ class GateKeeper
 				}
 				header( "Location: ".$addr.$param);
 			}
-			else
-				$encodeExplorer->setErrorString("wrong_pass");
+			else $encodeExplorer->setErrorString("wrong_pass");
 		}
 	}
 
@@ -1940,7 +1952,16 @@ class GateKeeper
 	{
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
-			if($user[1] == $userPass)
+			
+			if (EncodeExplorer::getConfig('hash_psw') == true)
+			{
+			$key = hash(sha256, $userPass, $raw_output = false);
+			}
+			else
+			$key = $userPass;
+			
+			//if($user[1] == $userPass)
+			if($user[1] == $key)
 			{
 				if(strlen($userName) == 0 || $userName == $user[0])
 				{
@@ -1948,6 +1969,7 @@ class GateKeeper
 				}
 			}
 		}
+		
 		return false;
 	}
 

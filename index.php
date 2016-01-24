@@ -938,6 +938,18 @@ $_TRANSLATIONS["sv"] = array(
 	"unable_to_read_dir" => "Kan inte lasa den filen",
 	"location" => "Plats",
 	"root" => "Hem"
+	"log_file_permission_error" => "Scriptet har inte behörighet att skriva till loggfilen.",
+	"upload_not_allowed" => "Skriptets konfiguration tillåter inte uppladdning till denna katalog.",
+	"upload_dir_not_writable" => "Denna katalog har inte behörigheter för att skriva.",
+	"mobile_version" => "Mobilvisning",
+	"standard_version" => "Standardvisning",
+	"page_load_time" => "Sidan laddades på %.2f ms",
+	"wrong_pass" => "Fel användarnamn eller lösenord",
+	"username" => "Användarnamn",
+	"log_in" => "Logga in",
+	"upload_type_not_allowed" => "Denna filtyp är det inte tillåtet att ladda upp.",
+	"del" => "Ta bort",
+	"log_out" => "Logga ut"
 );
 
 // Turkish

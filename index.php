@@ -147,32 +147,40 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // They will still be able to access the files with a direct link.
 // Default: $_CONFIG['require_login'] = false;
 //
-$_CONFIG['require_login'] = true;
+$_CONFIG['require_login'] = false;
 
-// Bad practice to store passwords in plain text
-// Store as sha256-hashes.
-// $_CONFIG['hash_psw'] = true;
-
+// Whether store the passwords as sha256-hashes or not.
+// It's bad practice to store passwords in plain text.
+// If set to true, you shuld add the passwords-hashes instead of the passwords,
+// in 'users' below.
 //$_CONFIG['hash_psw'] = false;
-$_CONFIG['hash_psw'] = true;
+//$_CONFIG['hash_psw'] = true;
+
+// Default: $_CONFIG['hash_psw'] = false;
+
+$_CONFIG['hash_psw'] = false;
 
 //
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
-
-// Bad practice to store passwords in plain text
-// Store as sha256-hashes.
 
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
 // For example: $_CONFIG['users'] = array(array("username1", "password1", "user"), array("username2", "password2", "admin"));
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
 // For example: $_CONFIG['users'] = array(array("username", "sha256 of password", "admin"));
+
+// It's bad practice to store passwords in plain text.
+// You'd better use sha256-hashes for example:
+//$_CONFIG['users'] = array(array("admin", "secret", "admin"), 
+//		array("test", "password", "user")); // may be replaced by:
+//$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), 
+//		array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
+// N.B. set hash_psw = true above
+
 // Default: $_CONFIG['users'] = array();
 //
-//$_CONFIG['users'] = array();
-//$_CONFIG['users'] = array(array("admin", "secret", "admin"), array("test", "password", "user"));
-$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
+$_CONFIG['users'] = array();
 
 //
 // Permissions for uploading, creating new directories and deleting.

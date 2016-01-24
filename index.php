@@ -924,20 +924,20 @@ $_TRANSLATIONS["sk"] = array(
 $_TRANSLATIONS["sv"] = array(
 	"file_name" => "Filnamn",
 	"size" => "Storlek",
-	"last_changed" => "Senast andrad",
+	"last_changed" => "Senast ändrad",
 	"total_used_space" => "Totalt upptaget utrymme",
 	"free_space" => "Ledigt utrymme",
-	"password" => "Losenord",
+	"password" => "Lösenord",
 	"upload" => "Ladda upp",
 	"failed_upload" => "Fel vid uppladdning av fil!",
 	"failed_move" => "Fel vid flytt av fil till mapp!",
-	"wrong_password" => "Fel losenord",
+	"wrong_password" => "Fel lösenord",
 	"make_directory" => "Ny mapp",
 	"new_dir_failed" => "Fel vid skapande av mapp",
-	"chmod_dir_failed" => "Fel vid andring av mappens egenskaper",
+	"chmod_dir_failed" => "Fel vid ändring av mappens egenskaper",
 	"unable_to_read_dir" => "Kan inte lasa den filen",
 	"location" => "Plats",
-	"root" => "Hem"
+	"root" => "Hem",
 	"log_file_permission_error" => "Scriptet har inte behörighet att skriva till loggfilen.",
 	"upload_not_allowed" => "Skriptets konfiguration tillåter inte uppladdning till denna katalog.",
 	"upload_dir_not_writable" => "Denna katalog har inte behörigheter för att skriva.",
@@ -951,6 +951,7 @@ $_TRANSLATIONS["sv"] = array(
 	"del" => "Ta bort",
 	"log_out" => "Logga ut"
 );
+
 
 // Turkish
 $_TRANSLATIONS["tr"] = array(

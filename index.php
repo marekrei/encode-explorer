@@ -158,7 +158,7 @@ $_CONFIG['require_login'] = false;
 
 // Default: $_CONFIG['hash_psw'] = false;
 
-$_CONFIG['hash_psw'] = true;
+$_CONFIG['hash_psw'] = false;
 
 //
 // Usernames and passwords for restricting access to the page.
@@ -171,16 +171,14 @@ $_CONFIG['hash_psw'] = true;
 // For example: $_CONFIG['users'] = array(array("username", "sha256 of password", "admin"));
 
 // It's bad practice to store passwords in plain text.
-// You'd better use sha256-hashes.
-// The username is prepended as a salt to the password before hashing, 
-// eg. user=test, password=password
-// The stored password should be the hash of: testpassword.
-// for example:
+// You'd better use sha256-hashes for example:
 //$_CONFIG['users'] = array(array("admin", "secret", "admin"), 
 //		array("test", "password", "user")); // may be replaced by:
-//$_CONFIG['users'] = array(array("admin", "xxx", "admin"), 
-//		array("test", "yyy", "user"));
-// N.B. set hash_psw = true above
+//$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), 
+//		array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
+
+// If the password contains national characters, make sure it's utf-8 encoded when you hash it!
+// N.B. set hash_psw = true above.
 
 // Default: $_CONFIG['users'] = array();
 //
@@ -1596,6 +1594,7 @@ yWSSgxOn9Bx/CWggPv761z24gBNZcCq5JQKSaOIyxeK/I769a4JNklziOq+gq7/5Gx172kZga+XW
 AAAAAElFTkSuQmCC";
 $_IMAGES["jpg"] = $_IMAGES["image"];
 $_IMAGES["jpeg"] = $_IMAGES["image"];
+$_IMAGES["tif"] = $_IMAGES["image"];
 $_IMAGES["js"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHdSURBVDjLjZNPaxNBGIdrLwURLznWgkcv
 IrQhRw9FGgy01IY0TVsQ0q6GFkT0kwjJId9AP4AHP4Q9FO2hJ7El2+yf7OzMbja7Sf0578QdNybF
@@ -1980,8 +1979,7 @@ class GateKeeper
 			
 			if (EncodeExplorer::getConfig('hash_psw') == true)
 			{
-				// The username is used as a salt
-				$key = hash(sha256, $userName.$userPass, $raw_output = false);
+			$key = hash(sha256, $userPass, $raw_output = false);
 			}
 			else
 			$key = $userPass;
@@ -2401,7 +2399,7 @@ class File
 	function isImage()
 	{
 		$type = $this->getType();
-		if($type == "png" || $type == "jpg" || $type == "gif" || $type == "jpeg")
+		if($type == "png" || $type == "jpg" || $type == "gif" || $type == "jpeg" || $type == "tif")
 			return true;
 		return false;
 	}
@@ -2919,6 +2917,7 @@ class EncodeExplorer
 <head>
 <meta name="viewport" content="width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php print $this->getConfig('charset'); ?>">
+<meta name=“robots” content=“noindex, nofollow”> 
 <?php css(); ?>
 <!-- <meta charset="<?php print $this->getConfig('charset'); ?>" /> -->
 <?php
@@ -2927,9 +2926,9 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 	|| (GateKeeper::isDeleteAllowed()))
 {
 ?>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="./javascript/jquery.min.js"></script>
 <script type="text/javascript">
-//<![CDATA[
+
 $(document).ready(function() {
 <?php
 	if(GateKeeper::isDeleteAllowed()){
@@ -2994,7 +2993,7 @@ $(document).ready(function() {
 	}
 ?>
 	});
-//]]>
+
 </script>
 <?php
 }

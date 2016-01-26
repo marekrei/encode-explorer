@@ -149,14 +149,37 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 //
 $_CONFIG['require_login'] = false;
 
+// Whether store the passwords as sha256-hashes or not.
+// It's bad practice to store passwords in plain text.
+// If set to true, you shuld add the passwords-hashes instead of the passwords,
+// in 'users' below.
+//$_CONFIG['hash_psw'] = false;
+//$_CONFIG['hash_psw'] = true;
+
+// Default: $_CONFIG['hash_psw'] = false;
+
+$_CONFIG['hash_psw'] = false;
+
 //
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
+
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
 // For example: $_CONFIG['users'] = array(array("username1", "password1", "user"), array("username2", "password2", "admin"));
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
-// For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+// For example: $_CONFIG['users'] = array(array("username", "sha256 of password", "admin"));
+
+// It's bad practice to store passwords in plain text.
+// You'd better use sha256-hashes for example:
+//$_CONFIG['users'] = array(array("admin", "secret", "admin"), 
+//		array("test", "password", "user")); // may be replaced by:
+//$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), 
+//		array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
+
+// If the password contains national characters, make sure it's utf-8 encoded when you hash it!
+// N.B. set hash_psw = true above.
+
 // Default: $_CONFIG['users'] = array();
 //
 $_CONFIG['users'] = array();
@@ -860,21 +883,34 @@ $_TRANSLATIONS["es"] = array(
 $_TRANSLATIONS["sv"] = array(
 	"file_name" => "Filnamn",
 	"size" => "Storlek",
-	"last_changed" => "Senast andrad",
+	"last_changed" => "Senast ändrad",
 	"total_used_space" => "Totalt upptaget utrymme",
 	"free_space" => "Ledigt utrymme",
-	"password" => "Losenord",
+	"password" => "Lösenord",
 	"upload" => "Ladda upp",
 	"failed_upload" => "Fel vid uppladdning av fil!",
 	"failed_move" => "Fel vid flytt av fil till mapp!",
-	"wrong_password" => "Fel losenord",
+	"wrong_password" => "Fel lösenord",
 	"make_directory" => "Ny mapp",
 	"new_dir_failed" => "Fel vid skapande av mapp",
-	"chmod_dir_failed" => "Fel vid andring av mappens egenskaper",
+	"chmod_dir_failed" => "Fel vid ändring av mappens egenskaper",
 	"unable_to_read_dir" => "Kan inte lasa den filen",
 	"location" => "Plats",
-	"root" => "Hem"
+	"root" => "Hem",
+	"log_file_permission_error" => "Scriptet har inte behörighet att skriva till loggfilen.",
+	"upload_not_allowed" => "Skriptets konfiguration tillåter inte uppladdning till denna katalog.",
+	"upload_dir_not_writable" => "Denna katalog har inte behörigheter för att skriva.",
+	"mobile_version" => "Mobilvisning",
+	"standard_version" => "Standardvisning",
+	"page_load_time" => "Sidan laddades på %.2f ms",
+	"wrong_pass" => "Fel användarnamn eller lösenord",
+	"username" => "Användarnamn",
+	"log_in" => "Logga in",
+	"upload_type_not_allowed" => "Denna filtyp är det inte tillåtet att ladda upp.",
+	"del" => "Ta bort",
+	"log_out" => "Logga ut"
 );
+
 
 // Turkish
 $_TRANSLATIONS["tr"] = array(
@@ -1558,6 +1594,7 @@ yWSSgxOn9Bx/CWggPv761z24gBNZcCq5JQKSaOIyxeK/I769a4JNklziOq+gq7/5Gx172kZga+XW
 AAAAAElFTkSuQmCC";
 $_IMAGES["jpg"] = $_IMAGES["image"];
 $_IMAGES["jpeg"] = $_IMAGES["image"];
+$_IMAGES["tif"] = $_IMAGES["image"];
 $_IMAGES["js"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHdSURBVDjLjZNPaxNBGIdrLwURLznWgkcv
 IrQhRw9FGgy01IY0TVsQ0q6GFkT0kwjJId9AP4AHP4Q9FO2hJ7El2+yf7OzMbja7Sf0578QdNybF
@@ -1931,8 +1968,7 @@ class GateKeeper
 				}
 				header( "Location: ".$addr.$param);
 			}
-			else
-				$encodeExplorer->setErrorString("wrong_pass");
+			else $encodeExplorer->setErrorString("wrong_pass");
 		}
 	}
 
@@ -1940,7 +1976,15 @@ class GateKeeper
 	{
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
-			if($user[1] == $userPass)
+			
+			if (EncodeExplorer::getConfig('hash_psw') == true)
+			{
+			$key = hash(sha256, $userPass, $raw_output = false);
+			}
+			else
+			$key = $userPass;
+			
+			if($user[1] == $key)
 			{
 				if(strlen($userName) == 0 || $userName == $user[0])
 				{
@@ -1948,6 +1992,7 @@ class GateKeeper
 				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -2354,7 +2399,7 @@ class File
 	function isImage()
 	{
 		$type = $this->getType();
-		if($type == "png" || $type == "jpg" || $type == "gif" || $type == "jpeg")
+		if($type == "png" || $type == "jpg" || $type == "gif" || $type == "jpeg" || $type == "tif")
 			return true;
 		return false;
 	}
@@ -2872,6 +2917,7 @@ class EncodeExplorer
 <head>
 <meta name="viewport" content="width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php print $this->getConfig('charset'); ?>">
+<meta name=“robots” content=“noindex, nofollow”> 
 <?php css(); ?>
 <!-- <meta charset="<?php print $this->getConfig('charset'); ?>" /> -->
 <?php
@@ -2880,9 +2926,9 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 	|| (GateKeeper::isDeleteAllowed()))
 {
 ?>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="./javascript/jquery.min.js"></script>
 <script type="text/javascript">
-//<![CDATA[
+
 $(document).ready(function() {
 <?php
 	if(GateKeeper::isDeleteAllowed()){
@@ -2947,7 +2993,7 @@ $(document).ready(function() {
 	}
 ?>
 	});
-//]]>
+
 </script>
 <?php
 }

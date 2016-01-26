@@ -158,7 +158,7 @@ $_CONFIG['require_login'] = false;
 
 // Default: $_CONFIG['hash_psw'] = false;
 
-$_CONFIG['hash_psw'] = false;
+$_CONFIG['hash_psw'] = true;
 
 //
 // Usernames and passwords for restricting access to the page.
@@ -171,11 +171,15 @@ $_CONFIG['hash_psw'] = false;
 // For example: $_CONFIG['users'] = array(array("username", "sha256 of password", "admin"));
 
 // It's bad practice to store passwords in plain text.
-// You'd better use sha256-hashes for example:
+// You'd better use sha256-hashes.
+// The username is prepended as a salt to the password before hashing, 
+// eg. user=test, password=password
+// The stored password should be the hash of: testpassword.
+// for example:
 //$_CONFIG['users'] = array(array("admin", "secret", "admin"), 
 //		array("test", "password", "user")); // may be replaced by:
-//$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), 
-//		array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
+//$_CONFIG['users'] = array(array("admin", "xxx", "admin"), 
+//		array("test", "yyy", "user"));
 // N.B. set hash_psw = true above
 
 // Default: $_CONFIG['users'] = array();
@@ -1976,12 +1980,12 @@ class GateKeeper
 			
 			if (EncodeExplorer::getConfig('hash_psw') == true)
 			{
-			$key = hash(sha256, $userPass, $raw_output = false);
+				// The username is used as a salt
+				$key = hash(sha256, $userName.$userPass, $raw_output = false);
 			}
 			else
 			$key = $userPass;
 			
-			//if($user[1] == $userPass)
 			if($user[1] == $key)
 			{
 				if(strlen($userName) == 0 || $userName == $user[0])

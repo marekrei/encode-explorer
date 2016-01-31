@@ -2636,21 +2636,23 @@ class EncodeExplorer
 	function sort()
 	{
 		// Here we filter the comparison functions supported by our directory object
-		if(is_array($this->dirs) && in_array($this->sort_by, array('name', 'mod'))) {
-			usort($this->dirs, "EncodeExplorer::cmp_".$this->sort_by);
-			if($this->sort_as == "desc")
+		$sort_by = in_array($this->sort_by, array('name', 'mod')) ? $this->sort_by : 'name';
+
+		if(is_array($this->dirs)) {
+			usort($this->dirs, "EncodeExplorer::cmp_".$sort_by);
+			if($this->sort_as == "desc") {
 				$this->dirs = array_reverse($this->dirs);
-		} else {
-			usort($this->dirs, "EncodeExplorer::cmp_name");
+			}
 		}
 
 		// Here we filter the comparison functions supported by our file object
-		if(is_array($this->files) && in_array($this->sort_by, array('name', 'size', 'mod'))) {
-			usort($this->files, "EncodeExplorer::cmp_".$this->sort_by);
-			if($this->sort_as == "desc")
+		$sort_by = in_array($this->sort_by, array('name', 'size', 'mod')) ? $this->sort_by : 'name';
+
+		if(is_array($this->files)) {
+			usort($this->files, "EncodeExplorer::cmp_".$sort_by);
+			if($this->sort_as == "desc") {
 				$this->files = array_reverse($this->files);
-		} else {
-			usort($this->files, "EncodeExplorer::cmp_name");
+			}
 		}
 	}
 

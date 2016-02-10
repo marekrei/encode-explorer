@@ -2574,7 +2574,7 @@ class EncodeExplorer
 		{
 			$this->dirs = array();
 			$this->files = array();
-			while ($object = readdir($open_dir))
+			while (false !== ($object = readdir($open_dir)))
 			{
 				if($object != "." && $object != "..")
 				{
@@ -2603,7 +2603,7 @@ class EncodeExplorer
 		if ($dir = opendir($start_dir))
 		{
 			$total = 0;
-			while ((($file = readdir($dir)) !== false))
+			while (false !== ($file = readdir($dir)))
 			{
 				if (!in_array($file, $ignore_files))
 				{

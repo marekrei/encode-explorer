@@ -1683,7 +1683,7 @@ class ImageServer
 				header('ETag: "'.$etag.'"');
 				header('Last-Modified: '.$mtime);
 				header('Content-type: image/gif');
-				if(strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
+				if(is_scalar($_GET['img']) && strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
 					print base64_decode($_IMAGES[$_GET['img']]);
 				else
 					print base64_decode($_IMAGES["unknown"]);
@@ -1692,7 +1692,7 @@ class ImageServer
 		}
 		else if(isset($_GET['thumb']))
 		{
-			if(strlen($_GET['thumb']) > 0 && EncodeExplorer::getConfig('thumbnails') == true)
+			if(is_scalar($_GET['thumb']) && strlen($_GET['thumb']) > 0 && EncodeExplorer::getConfig('thumbnails') == true)
 			{
 				ImageServer::showThumbnail($_GET['thumb']);
 			}
@@ -2454,7 +2454,7 @@ class Location
 	//
 	function init()
 	{
-		if(!isset($_GET['dir']) || strlen($_GET['dir']) == 0)
+		if(!isset($_GET['dir']) || !is_scalar($_GET['dir']) || strlen($_GET['dir']) == 0)
 		{
 			$this->path = $this->splitPath(EncodeExplorer::getConfig('starting_dir'));
 		}
@@ -2551,7 +2551,7 @@ class EncodeExplorer
 			@date_default_timezone_set(date_default_timezone_get());
 		}
 
-		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
+		if(isset($_GET['lang']) && is_scalar($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else
 			$this->lang = EncodeExplorer::getConfig("lang");

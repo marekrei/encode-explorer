@@ -2539,11 +2539,18 @@ class EncodeExplorer
 	//
 	function init()
 	{
-		// Here we filter the comparison function ("sort by") and comparison order ("sort as") chosen by user
+		global $_TRANSLATIONS;
+
+		// Here we filter the comparison function (sort by) and comparison order (sort as) chosen by user
 		$this->sort_by = (isset($_GET['sort_by']) && in_array($_GET['sort_by'], array('name', 'size', 'mod'))) ? $_GET['sort_by'] : 'name';
 		$this->sort_as = (isset($_GET['sort_as']) && in_array($_GET['sort_as'], array('asc', 'desc'))) ? $_GET['sort_as'] : 'asc';
 
-		global $_TRANSLATIONS;
+		// Mitigate date.timezone warning
+		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set'))
+		{
+			@date_default_timezone_set(date_default_timezone_get());
+		}
+
 		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else

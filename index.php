@@ -2639,7 +2639,7 @@ class EncodeExplorer
 		$sort_by = in_array($this->sort_by, array('name', 'mod')) ? $this->sort_by : 'name';
 
 		if(is_array($this->dirs)) {
-			usort($this->dirs, "EncodeExplorer::cmp_".$sort_by);
+			usort($this->dirs, array('EncodeExplorer', 'cmp_'.$sort_by));
 			if($this->sort_as == "desc") {
 				$this->dirs = array_reverse($this->dirs);
 			}
@@ -2649,7 +2649,7 @@ class EncodeExplorer
 		$sort_by = in_array($this->sort_by, array('name', 'size', 'mod')) ? $this->sort_by : 'name';
 
 		if(is_array($this->files)) {
-			usort($this->files, "EncodeExplorer::cmp_".$sort_by);
+			usort($this->files, array('EncodeExplorer', 'cmp_'.$sort_by));
 			if($this->sort_as == "desc") {
 				$this->files = array_reverse($this->files);
 			}

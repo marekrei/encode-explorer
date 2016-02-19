@@ -1683,7 +1683,7 @@ class ImageServer
 				header('ETag: "'.$etag.'"');
 				header('Last-Modified: '.$mtime);
 				header('Content-type: image/gif');
-				if(strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
+				if(is_scalar($_GET['img']) && strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
 					print base64_decode($_IMAGES[$_GET['img']]);
 				else
 					print base64_decode($_IMAGES["unknown"]);
@@ -1692,7 +1692,7 @@ class ImageServer
 		}
 		else if(isset($_GET['thumb']))
 		{
-			if(strlen($_GET['thumb']) > 0 && EncodeExplorer::getConfig('thumbnails') == true)
+			if(is_scalar($_GET['thumb']) && strlen($_GET['thumb']) > 0 && EncodeExplorer::getConfig('thumbnails') == true)
 			{
 				ImageServer::showThumbnail($_GET['thumb']);
 			}
@@ -2454,7 +2454,7 @@ class Location
 	//
 	function init()
 	{
-		if(!isset($_GET['dir']) || strlen($_GET['dir']) == 0)
+		if(!isset($_GET['dir']) || !is_scalar($_GET['dir']) || strlen($_GET['dir']) == 0)
 		{
 			$this->path = $this->splitPath(EncodeExplorer::getConfig('starting_dir'));
 		}
@@ -2539,12 +2539,19 @@ class EncodeExplorer
 	//
 	function init()
 	{
-		// Here we filter the comparison function ("sort by") and comparison order ("sort as") chosen by user
+		global $_TRANSLATIONS;
+
+		// Here we filter the comparison function (sort by) and comparison order (sort as) chosen by user
 		$this->sort_by = (isset($_GET['sort_by']) && in_array($_GET['sort_by'], array('name', 'size', 'mod'))) ? $_GET['sort_by'] : 'name';
 		$this->sort_as = (isset($_GET['sort_as']) && in_array($_GET['sort_as'], array('asc', 'desc'))) ? $_GET['sort_as'] : 'asc';
 
-		global $_TRANSLATIONS;
-		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
+		// Mitigate date.timezone warning
+		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set'))
+		{
+			@date_default_timezone_set(date_default_timezone_get());
+		}
+
+		if(isset($_GET['lang']) && is_scalar($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else
 			$this->lang = EncodeExplorer::getConfig("lang");
@@ -2574,7 +2581,7 @@ class EncodeExplorer
 		{
 			$this->dirs = array();
 			$this->files = array();
-			while ($object = readdir($open_dir))
+			while (false !== ($object = readdir($open_dir)))
 			{
 				if($object != "." && $object != "..")
 				{
@@ -2603,7 +2610,7 @@ class EncodeExplorer
 		if ($dir = opendir($start_dir))
 		{
 			$total = 0;
-			while ((($file = readdir($dir)) !== false))
+			while (false !== ($file = readdir($dir)))
 			{
 				if (!in_array($file, $ignore_files))
 				{
@@ -2636,21 +2643,23 @@ class EncodeExplorer
 	function sort()
 	{
 		// Here we filter the comparison functions supported by our directory object
-		if(is_array($this->dirs) && in_array($this->sort_by, array('name', 'mod'))) {
-			usort($this->dirs, "EncodeExplorer::cmp_".$this->sort_by);
-			if($this->sort_as == "desc")
+		$sort_by = in_array($this->sort_by, array('name', 'mod')) ? $this->sort_by : 'name';
+
+		if(is_array($this->dirs)) {
+			usort($this->dirs, array('EncodeExplorer', 'cmp_'.$sort_by));
+			if($this->sort_as == "desc") {
 				$this->dirs = array_reverse($this->dirs);
-		} else {
-			usort($this->dirs, "EncodeExplorer::cmp_name");
+			}
 		}
 
 		// Here we filter the comparison functions supported by our file object
-		if(is_array($this->files) && in_array($this->sort_by, array('name', 'size', 'mod'))) {
-			usort($this->files, "EncodeExplorer::cmp_".$this->sort_by);
-			if($this->sort_as == "desc")
+		$sort_by = in_array($this->sort_by, array('name', 'size', 'mod')) ? $this->sort_by : 'name';
+
+		if(is_array($this->files)) {
+			usort($this->files, array('EncodeExplorer', 'cmp_'.$sort_by));
+			if($this->sort_as == "desc") {
 				$this->files = array_reverse($this->files);
-		} else {
-			usort($this->files, "EncodeExplorer::cmp_name");
+			}
 		}
 	}
 
@@ -2727,7 +2736,7 @@ class EncodeExplorer
 
 	function formatSize($size)
 	{
-		$sizes = Array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
+		$sizes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB');
 		$y = $sizes[0];
 		for ($i = 1; (($i < count($sizes)) && ($size >= 1024)); $i++)
 		{
@@ -2880,7 +2889,7 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 	|| (GateKeeper::isDeleteAllowed()))
 {
 ?>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {

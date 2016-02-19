@@ -604,6 +604,38 @@ $_TRANSLATIONS["it"] = array(
 	"log_out" => "Esci"
 );
 
+// Korean
+$_TRANSLATIONS["ko"] = array(
+	"file_name" => "이름",
+	"size" => "크기",
+	"last_changed" => "마지막 수정",
+	"total_used_space" => "사용한 공간",
+	"free_space" => "남은 공간",
+	"password" => "비밀번호",
+	"upload" => "올리기",
+	"failed_upload" => "파일을 올릴 수 없습니다.",
+	"failed_move" => "파일을 옮길 수 없습니다.",
+	"wrong_password" => "비밀번호가 올바르지 않습니다.",
+	"make_directory" => "만들기",
+	"new_dir_failed" => "폴더를 만들 수 없습니다.",
+	"chmod_dir_failed" => "권한 설정을 할 수 없습니다.",
+	"unable_to_read_dir" => "폴더를 읽을 수 없습니다.",
+	"location" => "위치",
+	"root" => "최상위 폴더",
+	"log_file_permission_error" => "로그 파일의 위치에 쓰기 권한을 가지고 있지 않습니다.",
+	"upload_not_allowed" => "이 위치에 올릴 수 없습니다.",
+	"upload_dir_not_writable" => "이 위치에 쓰기 권한을 가지고 있지 않습니다.",
+	"mobile_version" => "모바일 버전으로 보기",
+	"standard_version" => "표준 화면으로 보기",
+	"page_load_time" => "페이지 로드 %.2f ms",
+	"wrong_pass" => "사용자 이름 또는 비밀번호가 올바르지 않습니다.",
+	"username" => "사용자 이름",
+	"log_in" => "로그인",
+	"upload_type_not_allowed" => "이 종류의 파일은 올릴 수 없습니다.",
+	"del" => "삭제",
+	"log_out" => "로그아웃"
+); 
+
 // Norwegian
 $_TRANSLATIONS["no"] = array(
 	"file_name" => "Navn",
@@ -626,32 +658,34 @@ $_TRANSLATIONS["no"] = array(
 
 //Polish
 $_TRANSLATIONS["pl"] = array(
-	"file_name" => "Nazwa Pliku",
-	"size" => "Rozmiar",
-	"last_changed" => "Data Zmiany",
-	"total_used_space" => "Total used space",
-	"free_space" => "Wolnego obszaru",
-	"password" => "Haslo",
-	"upload" => "Przeslij",
-	"failed_upload" => "Przeslanie pliku nie powiodlo sie",
-	"failed_move" => "Przenosienie pliku nie powidlo sie!",
-	"wrong_password" => "Niepoprawne haslo",
-	"make_directory" => "Nowy folder",
-	"new_dir_failed" => "Blad podczas tworzenia nowego foldera",
-	"chmod_dir_failed" => "Blad podczas zmiany uprawnienia foldera",
-	"unable_to_read_dir" => "Odczytanie foldera nie powiodlo sie",
-	"location" => "Miejsce",
-	"root" => "Root",
-	"log_file_permission_error" => "Brak uprawnien aby utowrzyc dziennik dzialan.",
-	"upload_not_allowed" => "Konfiguracja zabrania przeslanie pliku do tego foldera.",
-	"upload_dir_not_writable" => "Nie mozna zapisac pliku do tego foldera.",
-	"mobile_version" => "Wersja Mobile",
-	"standard_version" => "Widok standardowy",
-	"page_load_time" => "Zaladowano w %.2f ms",
-	"wrong_pass" => "Nie poprawna nazwa uzytkownika lub hasla",
-	"username" => "Uzytkownik",
-	"log_in" => "Zaloguj sie",
-	"upload_type_not_allowed" => "Ten rodazaj pliku jest zabrioniony."
+  "file_name" => "Nazwa pliku",
+  "size" => "Rozmiar",
+  "last_changed" => "Data zmiany",
+  "total_used_space" => "Cała przestrzeń",
+  "free_space" => "Wolna przestrzeń",
+  "password" => "Hasło",
+  "upload" => "Prześlij",
+  "failed_upload" => "Przesłanie pliku nie powiodło się",
+  "failed_move" => "Przenoszenie pliku nie powiodło się!",
+  "wrong_password" => "Niepoprawne hasło",
+  "make_directory" => "Nowy folder",
+  "new_dir_failed" => "Błąd podczas tworzenia nowego folderu",
+  "chmod_dir_failed" => "Błąd podczas zmiany uprawnień folderu",
+  "unable_to_read_dir" => "Odczytanie folderu nie powiodło się",
+  "location" => "Miejsce",
+  "root" => "Start",
+  "log_file_permission_error" => "Brak uprawnień aby utworzyć dziennik działań.",
+  "upload_not_allowed" => "Konfiguracja zabrania przesłania pliku do tego folderu.",
+  "upload_dir_not_writable" => "Nie można zapisać pliku do tego folderu.",
+  "mobile_version" => "Wersja mobilna",
+  "standard_version" => "Widok standardowy",
+  "page_load_time" => "Załadowano w %.2f ms",
+  "wrong_pass" => "Niepoprawna nazwa użytkownika lub złe hasło",
+  "username" => "Użytkownik",
+  "log_in" => "Zaloguj się",
+  "upload_type_not_allowed" => "Ten rodzaj pliku jest zabroniony.",
+  "del" => "Kasuj",
+  "log_out" => "Wyloguj się"
 );
 
 // Portuguese (Brazil)
@@ -792,22 +826,34 @@ $_TRANSLATIONS["sk"] = array(
 
 // Spanish
 $_TRANSLATIONS["es"] = array(
-	"file_name" => "Nombre de archivo",
-	"size" => "Medida",
-	"last_changed" => "Ultima modificación",
-	"total_used_space" => "Total espacio usado",
+	"file_name" => "Nombre del archivo",
+	"size" => "Tamaño",
+	"last_changed" => "Último cambio",
+	"total_used_space" => "Espacio total usado",
 	"free_space" => "Espacio libre",
 	"password" => "Contraseña",
 	"upload" => "Subir el archivo",
-	"failed_upload" => "Error al subir el archivo!",
-	"failed_move" => "Error al mover el archivo al directorio seleccionado!",
+	"failed_upload" => "¡Error al subir el archivo!",
+	"failed_move" => "¡Error al mover el archivo al directorio seleccionado!",
 	"wrong_password" => "Contraseña incorrecta",
 	"make_directory" => "Crear directorio",
 	"new_dir_failed" => "Error al crear el directorio",
-	"chmod_dir_failed" => "Error al cambiar los derechos de directorio",
+	"chmod_dir_failed" => "Error al cambiar los permisos del directorio",
 	"unable_to_read_dir" => "No es posible leer el directorio",
 	"location" => "Localización",
-	"root" => "Raíz"
+	"root" => "Raíz",
+	"log_file_permission_error" => "El script no tiene permisos para escribir en el archivo de registro.",
+	"upload_not_allowed" => "La configuración del script no permite subir archivos en este directorio.",
+	"upload_dir_not_writable" => "Este directorio no tiene permisos de escritura.",
+	"mobile_version" => "Vista móvil",
+	"standard_version" => "Vista estándar",
+	"page_load_time" => "Página cargada en %.2f ms",
+	"wrong_pass" => "Nombre de usuario o contraseña incorrectos",
+	"username" => "Usuario",
+	"log_in" => "Iniciar sesión",
+	"upload_type_not_allowed" => "Este tipo de archivo no está permitido para la subida.",
+	"del" => "Eliminar",
+	"log_out" => "Cerrar sesión"
 );
 
 // Swedish
@@ -832,24 +878,35 @@ $_TRANSLATIONS["sv"] = array(
 
 // Turkish
 $_TRANSLATIONS["tr"] = array(
-	"file_name" => "Dosya ismi",
+	"file_name" => "Dosya Adı",
 	"size" => "Boyut",
-	"last_changed" => "gecmis",
-	"total_used_space" => "Toplam dosya boyutu",
-	"free_space" => "Bos alan",
-	"password" => "Sifre",
-	"upload" => "Yükleyen",
-	"failed_upload" => "Hatali dosya yüklemesi!",
-	"failed_move" => "Hatali dosya tasimasi!",
-	"wrong_password" => "Yeniden sifre",
-	"make_directory" => "Yeni dosya",
-	"new_dir_failed" => "Dosya olusturalamadi",
-	"chmod_dir_failed" => "Dosya ayari deqistirelemedi",
-	"unable_to_read_dir" => "Unable to read directory",
-	"location" => "Location",
-	"root" => "Root"
+	"last_changed" => "Son Değişiklik",
+	"total_used_space" => "Toplam Kullanılan Alan",
+	"free_space" => "Boş Alan",
+	"password" => "Parola",
+	"upload" => "Yükle",
+	"failed_upload" => "Dosya yüklemesi başarısız!",
+	"failed_move" => "Dosyanın doğru klasöre taşınması başarısız!",
+	"wrong_password" => "Hatalı Parola",
+	"make_directory" => "Yeni Klasör",
+	"new_dir_failed" => "Klasör oluşturma başarısız",
+	"chmod_dir_failed" => "Klasör izinleri değiştirme başarısız",
+	"unable_to_read_dir" => "Klasör okunamadı",
+	"location" => "Konum",
+	"root" => "Ana Klasör",
+	"log_file_permission_error" => "Log dosyası oluşturulurken yetersiz izin hatası.",
+	"upload_not_allowed" => "Konfigürasyon bu klasöre dosya yüklemeye izin vermiyor.",
+	"upload_dir_not_writable" => "Bu klasör yazma izinlerine sahip değil.",
+	"mobile_version" => "Mobil Görünüm",
+	"standard_version" => "Standart Görünüm",
+	"page_load_time" => "Sayfa yükleme süresi %.2f ms",
+	"wrong_pass" => "Hatalı kullanıcı adı veya parola",
+	"username" => "Kullanıcı Adı",
+	"log_in" => "Giriş Yap",
+	"upload_type_not_allowed" => "Bu dosya türünün yüklenmesine izin verilmiyor.",
+	"del" => "Sil",
+	"log_out" => "Çıkış Yap"
 );
-
 
 // Esperanto
 $_TRANSLATIONS["eo"] = array(
@@ -881,6 +938,38 @@ $_TRANSLATIONS["eo"] = array(
 	"upload_type_not_allowed" => "Alŝuto estas malpermesita por ĉi tiu dosiertipo.",
 	"del" => "For", // short for Delete
 	"log_out" => "Adiaŭo"
+);
+
+// 简体中文(Simplified Chinese)
+$_TRANSLATIONS["zh_CN"] = array(
+	"file_name" => "文件名",
+	"size" => "大小",
+	"last_changed" => "最后修改",
+	"total_used_space" => "总计使用空间",
+	"free_space" => "剩余空间",
+	"password" => "密码",
+	"upload" => "上传",
+	"failed_upload" => "上传失败",
+	"failed_move" => "移动失败",
+	"wrong_password" => "密码错误",
+	"make_directory" => "创建目录",
+	"new_dir_failed" => "创建目录失败",
+	"chmod_dir_failed" => "修改目录权限失败",
+	"unable_to_read_dir" => "无法读取目录",
+	"location" => "路径",
+	"root" => "根目录",
+	"log_file_permission_error" => "日志文件权限错误",
+	"upload_not_allowed" => "禁止上传",
+	"upload_dir_not_writable" => "上传目录不可写",
+	"mobile_version" => "移动版本",
+	"standard_version" => "标准版本",
+	"page_load_time" => "页面载入时间：%.2f ms",
+	"wrong_pass" => "密码错误",
+	"username" => "用户名",
+	"log_in" => "登录",
+	"log_out" => "注销",
+	"upload_type_not_allowed" => "禁止上传该文件类型",
+	"del" => "删除"
 );
 
 /***************************************************************************/
@@ -973,6 +1062,8 @@ input {
 table.table {
 	width:100%;
 	border-collapse: collapse;
+	table-layout: fixed;
+	word-wrap: break-word;
 }
 
 table.table td{
@@ -1592,7 +1683,7 @@ class ImageServer
 				header('ETag: "'.$etag.'"');
 				header('Last-Modified: '.$mtime);
 				header('Content-type: image/gif');
-				if(strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
+				if(is_scalar($_GET['img']) && strlen($_GET['img']) > 0 && isset($_IMAGES[$_GET['img']]))
 					print base64_decode($_IMAGES[$_GET['img']]);
 				else
 					print base64_decode($_IMAGES["unknown"]);
@@ -1601,7 +1692,7 @@ class ImageServer
 		}
 		else if(isset($_GET['thumb']))
 		{
-			if(strlen($_GET['thumb']) > 0 && EncodeExplorer::getConfig('thumbnails') == true)
+			if(is_scalar($_GET['thumb']) && strlen($_GET['thumb']) > 0 && EncodeExplorer::getConfig('thumbnails') == true)
 			{
 				ImageServer::showThumbnail($_GET['thumb']);
 			}
@@ -2107,6 +2198,7 @@ class Dir
 {
 	var $name;
 	var $location;
+	var $modTime;
 
 	//
 	// Constructor
@@ -2115,6 +2207,8 @@ class Dir
 	{
 		$this->name = $name;
 		$this->location = $location;
+
+		$this->modTime = filemtime($this->location->getDir(true, false, false, 0).$this->getName());
 	}
 
 	function getName()
@@ -2132,6 +2226,11 @@ class Dir
 		return rawurlencode($this->name);
 	}
 
+	function getModTime()
+	{
+		return $this->modTime;
+	}
+
 	//
 	// Debugging output
 	//
@@ -2139,6 +2238,7 @@ class Dir
 	{
 		print("Dir name (htmlspecialchars): ".$this->getName()."\n");
 		print("Dir location: ".$this->location->getDir(true, false, false, 0)."\n");
+		print("Dir modTime: ".$this->modTime."\n");
 	}
 }
 
@@ -2354,7 +2454,7 @@ class Location
 	//
 	function init()
 	{
-		if(!isset($_GET['dir']) || strlen($_GET['dir']) == 0)
+		if(!isset($_GET['dir']) || !is_scalar($_GET['dir']) || strlen($_GET['dir']) == 0)
 		{
 			$this->path = $this->splitPath(EncodeExplorer::getConfig('starting_dir'));
 		}
@@ -2439,26 +2539,19 @@ class EncodeExplorer
 	//
 	function init()
 	{
-		$this->sort_by = "";
-		$this->sort_as = "";
-		if(isset($_GET["sort_by"], $_GET["sort_as"]))
-		{
-			if($_GET["sort_by"] == "name" || $_GET["sort_by"] == "size" || $_GET["sort_by"] == "mod")
-				if($_GET["sort_as"] == "asc" || $_GET["sort_as"] == "desc")
-				{
-					$this->sort_by = $_GET["sort_by"];
-					$this->sort_as = $_GET["sort_as"];
-				}
-		}
-		if(strlen($this->sort_by) <= 0 || strlen($this->sort_as) <= 0)
-		{
-			$this->sort_by = "name";
-			$this->sort_as = "desc";
-		}
-
-
 		global $_TRANSLATIONS;
-		if(isset($_GET['lang'], $_TRANSLATIONS[$_GET['lang']]))
+
+		// Here we filter the comparison function (sort by) and comparison order (sort as) chosen by user
+		$this->sort_by = (isset($_GET['sort_by']) && in_array($_GET['sort_by'], array('name', 'size', 'mod'))) ? $_GET['sort_by'] : 'name';
+		$this->sort_as = (isset($_GET['sort_as']) && in_array($_GET['sort_as'], array('asc', 'desc'))) ? $_GET['sort_as'] : 'asc';
+
+		// Mitigate date.timezone warning
+		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set'))
+		{
+			@date_default_timezone_set(date_default_timezone_get());
+		}
+
+		if(isset($_GET['lang']) && is_scalar($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
 		else
 			$this->lang = EncodeExplorer::getConfig("lang");
@@ -2488,7 +2581,7 @@ class EncodeExplorer
 		{
 			$this->dirs = array();
 			$this->files = array();
-			while ($object = readdir($open_dir))
+			while (false !== ($object = readdir($open_dir)))
 			{
 				if($object != "." && $object != "..")
 				{
@@ -2517,7 +2610,7 @@ class EncodeExplorer
 		if ($dir = opendir($start_dir))
 		{
 			$total = 0;
-			while ((($file = readdir($dir)) !== false))
+			while (false !== ($file = readdir($dir)))
 			{
 				if (!in_array($file, $ignore_files))
 				{
@@ -2549,31 +2642,37 @@ class EncodeExplorer
 
 	function sort()
 	{
-		if(is_array($this->files)){
-			usort($this->files, "EncodeExplorer::cmp_".$this->sort_by);
-			if($this->sort_as == "desc")
-				$this->files = array_reverse($this->files);
+		// Here we filter the comparison functions supported by our directory object
+		$sort_by = in_array($this->sort_by, array('name', 'mod')) ? $this->sort_by : 'name';
+
+		if(is_array($this->dirs)) {
+			usort($this->dirs, array('EncodeExplorer', 'cmp_'.$sort_by));
+			if($this->sort_as == "desc") {
+				$this->dirs = array_reverse($this->dirs);
+			}
 		}
 
-		if(is_array($this->dirs)){
-			usort($this->dirs, "EncodeExplorer::cmp_name");
-			if($this->sort_by == "name" && $this->sort_as == "desc")
-				$this->dirs = array_reverse($this->dirs);
+		// Here we filter the comparison functions supported by our file object
+		$sort_by = in_array($this->sort_by, array('name', 'size', 'mod')) ? $this->sort_by : 'name';
+
+		if(is_array($this->files)) {
+			usort($this->files, array('EncodeExplorer', 'cmp_'.$sort_by));
+			if($this->sort_as == "desc") {
+				$this->files = array_reverse($this->files);
+			}
 		}
 	}
 
 	function makeArrow($sort_by)
 	{
-		if($this->sort_by == $sort_by && $this->sort_as == "asc")
-		{
-			$sort_as = "desc";
-			$img = "arrow_up";
-		}
-		else
-		{
-			$sort_as = "asc";
-			$img = "arrow_down";
-		}
+		// Ability to reverse the 'sort as' selected for the current field
+		// And propagate the current selected 'sort as' to the other fields
+		$sort_as = ($this->sort_as == "asc") ? "desc" : "asc";
+		$sort_as = ($this->sort_by == $sort_by) ? $sort_as : $this->sort_as;
+
+		// Only show image for the currently selected 'sort as' field
+		$img = ($this->sort_as == "asc") ? "arrow_up" : "arrow_down";
+		$img = ($this->sort_by == $sort_by) ? "<img style=\"border:0;\" alt=\"".$sort_as."\" src=\"?img=".$img."\" />" : "&nbsp;";
 
 		if($sort_by == "name")
 			$text = $this->getString("file_name");
@@ -2582,8 +2681,7 @@ class EncodeExplorer
 		else if($sort_by == "mod")
 			$text = $this->getString("last_changed");
 
-		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, null, $this->location->getDir(false, true, false, 0))."\">
-			$text <img style=\"border:0;\" alt=\"".$sort_as."\" src=\"?img=".$img."\" /></a>";
+		return "<a href=\"".$this->makeLink(false, false, $sort_by, $sort_as, null, $this->location->getDir(false, true, false, 0))."\">{$text}{$img}</a>";
 	}
 
 	function makeLink($switchVersion, $logout, $sort_by, $sort_as, $delete, $dir)
@@ -2638,7 +2736,7 @@ class EncodeExplorer
 
 	function formatSize($size)
 	{
-		$sizes = Array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
+		$sizes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB');
 		$y = $sizes[0];
 		for ($i = 1; (($i < count($sizes)) && ($size >= 1024)); $i++)
 		{
@@ -2664,7 +2762,7 @@ class EncodeExplorer
 	// Comparison functions for sorting.
 	//
 
-	public static function cmp_name($b, $a)
+	public static function cmp_name($a, $b)
 	{
 		return strcasecmp($a->name, $b->name);
 	}
@@ -2674,7 +2772,7 @@ class EncodeExplorer
 		return ($a->size - $b->size);
 	}
 
-	public static function cmp_mod($b, $a)
+	public static function cmp_mod($a, $b)
 	{
 		return ($a->modTime - $b->modTime);
 	}
@@ -2791,7 +2889,7 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 	|| (GateKeeper::isDeleteAllowed()))
 {
 ?>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -2938,7 +3036,7 @@ if($this->mobile == false)
 ?>
 <tr class="row two">
 	<td class="icon"><img alt="dir" src="?img=directory" /></td>
-	<td colspan="<?php print (($this->mobile == true?2:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
+	<td colspan="<?php print (($this->mobile == true?1:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
 		<a class="item" href="<?php print $this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
 	</td>
 </tr>
@@ -2958,12 +3056,17 @@ if($this->dirs)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style."\">\n";
 		print "<td class=\"icon\"><img alt=\"dir\" src=\"?img=directory\" /></td>\n";
-		print "<td class=\"name\" colspan=\"".($this->mobile == true?2:3)."\">\n";
+		print "<td class=\"name\" colspan=\"".($this->mobile == true ? 1:2)."\">\n";
 		print "<a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded())."\" class=\"item dir\">";
 		print $dir->getNameHtml();
 		print "</a>\n";
 		print "</td>\n";
-		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
+		if($this->mobile != true)
+		{
+			print "<td class=\"changed\">".$this->formatModTime($dir->getModTime())."</td>\n";
+		}
+		if($this->mobile == false && GateKeeper::isDeleteAllowed())
+		{
 			print "<td class=\"del\"><a data-name=\"".htmlentities($dir->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
 		}
 		print "</tr>\n";
@@ -2982,7 +3085,7 @@ if($this->files)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style.(++$count == count($this->files)?" last":"")."\">\n";
 		print "<td class=\"icon\"><img alt=\"".$file->getType()."\" src=\"".$this->makeIcon($file->getType())."\" /></td>\n";
-		print "<td class=\"name\">\n";
+		print "<td class=\"name\" colspan=\"1\">\n";
 		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
 		if(EncodeExplorer::getConfig('open_in_new_window') == true)
 			print "target=\"_blank\"";
@@ -3002,7 +3105,8 @@ if($this->files)
 			print "<td class=\"size\">".$this->formatSize($file->getSize())."</td>\n";
 			print "<td class=\"changed\">".$this->formatModTime($file->getModTime())."</td>\n";
 		}
-		if($this->mobile == false && GateKeeper::isDeleteAllowed()){
+		if($this->mobile == false && GateKeeper::isDeleteAllowed())
+		{
 			print "<td class=\"del\">
 				<a data-name=\"".htmlentities($file->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$file->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\">
 					<img src=\"?img=del\" alt=\"Delete\" />

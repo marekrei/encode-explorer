@@ -310,6 +310,38 @@ $_TRANSLATIONS["al"] = array(
 	"root" => "Root"
 );
 
+// Bulgarian
+$_TRANSLATIONS["bg"] = array(
+	"file_name" => "Име",
+	"size" => "Размер",
+	"last_changed" => "Последна промяна",
+	"total_used_space" => "Общо използвано",
+	"free_space" => "Свободно място",
+	"password" => "Парола",
+	"upload" => "Качване",
+	"failed_upload" => "Неуспешно качване на файла!",
+	"failed_move" => "Неуспешно преместване на файла в правилната директория!",
+	"wrong_password" => "Грешна парола",
+	"make_directory" => "Нова директория",
+	"new_dir_failed" => "Грешка при създаване на директорията",
+	"chmod_dir_failed" => "Грешка при смяна на правата до директорията",
+	"unable_to_read_dir" => "Директорията не може да бъде прочетена",
+	"location" => "Път",
+	"root" => "Корен",
+	"log_file_permission_error" => "Скриптът няма права за запис в лог файла.",
+	"upload_not_allowed" => "Настройките на скрипта не позволяват качване в тази директория.",
+	"upload_dir_not_writable" => "Нямате право за запис в тази директория.",
+	"mobile_version" => "Мобилна версия",
+	"standard_version" => "Стандартен изглед",
+	"page_load_time" => "Страницата е генерирана за %.2f мс",
+	"wrong_pass" => "Грешен потребител или парола",
+	"username" => "Потребител",
+	"log_in" => "Вход",
+	"upload_type_not_allowed" => "Този файлов формат е забранен за качване.",
+	"del" => "Изтриване",
+	"log_out" => "Изход"
+);
+
 // Czech
 $_TRANSLATIONS["cz"] = array(
 	"file_name" => "Název souboru",
@@ -540,6 +572,70 @@ $_TRANSLATIONS["el"] = array(
 	"unable_to_read_dir" => "Unable to read directory",
 	"location" => "Location",
 	"root" => "Root"
+);
+
+// Spanish
+$_TRANSLATIONS["es"] = array(
+	"file_name" => "Nombre del archivo",
+	"size" => "Tamaño",
+	"last_changed" => "Último cambio",
+	"total_used_space" => "Espacio total usado",
+	"free_space" => "Espacio libre",
+	"password" => "Contraseña",
+	"upload" => "Subir el archivo",
+	"failed_upload" => "¡Error al subir el archivo!",
+	"failed_move" => "¡Error al mover el archivo al directorio seleccionado!",
+	"wrong_password" => "Contraseña incorrecta",
+	"make_directory" => "Crear directorio",
+	"new_dir_failed" => "Error al crear el directorio",
+	"chmod_dir_failed" => "Error al cambiar los permisos del directorio",
+	"unable_to_read_dir" => "No es posible leer el directorio",
+	"location" => "Localización",
+	"root" => "Raíz",
+	"log_file_permission_error" => "El script no tiene permisos para escribir en el archivo de registro.",
+	"upload_not_allowed" => "La configuración del script no permite subir archivos en este directorio.",
+	"upload_dir_not_writable" => "Este directorio no tiene permisos de escritura.",
+	"mobile_version" => "Vista móvil",
+	"standard_version" => "Vista estándar",
+	"page_load_time" => "Página cargada en %.2f ms",
+	"wrong_pass" => "Nombre de usuario o contraseña incorrectos",
+	"username" => "Usuario",
+	"log_in" => "Iniciar sesión",
+	"upload_type_not_allowed" => "Este tipo de archivo no está permitido para la subida.",
+	"del" => "Eliminar",
+	"log_out" => "Cerrar sesión"
+);
+
+// Esperanto
+$_TRANSLATIONS["eo"] = array(
+	"file_name" => "Dosiernomo",
+	"size" => "Grando",
+	"last_changed" => "Lasta ŝanĝo",
+	"total_used_space" => "Uzata spaco",
+	"free_space" => "Disponebla spaco",
+	"password" => "pasvorto",
+	"upload" => "Alŝuto",
+	"failed_upload" => "Alŝuto malsukcesis!",
+	"failed_move" => "Movo de la dosiero malsukcesis!",
+	"wrong_password" => "Malĝusta pasvorto",
+	"make_directory" => "Nova dosierujo",
+	"new_dir_failed" => "Kreado de dosierujo malsukcesis",
+	"chmod_dir_failed" => "Ŝanĝo de dosierujaj rajtoj malsukcesis",
+	"unable_to_read_dir" => "Dosierujo ne estas legebla",
+	"location" => "Loko",
+	"root" => "Radiko",
+	"log_file_permission_error" => "La skripto ne rajtas skribi la protokolan dosieron.",
+	"upload_not_allowed" => "La skripto malpermesas alŝuti en ĉi tiun dosierujon.",
+	"upload_dir_not_writable" => "Ĉi tiu dosierujo ne rajtigas skribadon.",
+	"mobile_version" => "Vido por mobilaj iloj",
+	"standard_version" => "Defaŭlta vido",
+	"page_load_time" => "Paĝo ŝarĝita en %.2f ms",
+	"wrong_pass" => "Malĝusta salutnomo aŭ pasvorto",
+	"username" => "Salutnomo",
+	"log_in" => "Ensaluto",
+	"upload_type_not_allowed" => "Alŝuto estas malpermesita por ĉi tiu dosiertipo.",
+	"del" => "For", // short for Delete
+	"log_out" => "Adiaŭo"
 );
 
 // Hungarian
@@ -824,38 +920,6 @@ $_TRANSLATIONS["sk"] = array(
 	"root" => "Domov"
 );
 
-// Spanish
-$_TRANSLATIONS["es"] = array(
-	"file_name" => "Nombre del archivo",
-	"size" => "Tamaño",
-	"last_changed" => "Último cambio",
-	"total_used_space" => "Espacio total usado",
-	"free_space" => "Espacio libre",
-	"password" => "Contraseña",
-	"upload" => "Subir el archivo",
-	"failed_upload" => "¡Error al subir el archivo!",
-	"failed_move" => "¡Error al mover el archivo al directorio seleccionado!",
-	"wrong_password" => "Contraseña incorrecta",
-	"make_directory" => "Crear directorio",
-	"new_dir_failed" => "Error al crear el directorio",
-	"chmod_dir_failed" => "Error al cambiar los permisos del directorio",
-	"unable_to_read_dir" => "No es posible leer el directorio",
-	"location" => "Localización",
-	"root" => "Raíz",
-	"log_file_permission_error" => "El script no tiene permisos para escribir en el archivo de registro.",
-	"upload_not_allowed" => "La configuración del script no permite subir archivos en este directorio.",
-	"upload_dir_not_writable" => "Este directorio no tiene permisos de escritura.",
-	"mobile_version" => "Vista móvil",
-	"standard_version" => "Vista estándar",
-	"page_load_time" => "Página cargada en %.2f ms",
-	"wrong_pass" => "Nombre de usuario o contraseña incorrectos",
-	"username" => "Usuario",
-	"log_in" => "Iniciar sesión",
-	"upload_type_not_allowed" => "Este tipo de archivo no está permitido para la subida.",
-	"del" => "Eliminar",
-	"log_out" => "Cerrar sesión"
-);
-
 // Swedish
 $_TRANSLATIONS["sv"] = array(
 	"file_name" => "Filnamn",
@@ -906,38 +970,6 @@ $_TRANSLATIONS["tr"] = array(
 	"upload_type_not_allowed" => "Bu dosya türünün yüklenmesine izin verilmiyor.",
 	"del" => "Sil",
 	"log_out" => "Çıkış Yap"
-);
-
-// Esperanto
-$_TRANSLATIONS["eo"] = array(
-	"file_name" => "Dosiernomo",
-	"size" => "Grando",
-	"last_changed" => "Lasta ŝanĝo",
-	"total_used_space" => "Uzata spaco",
-	"free_space" => "Disponebla spaco",
-	"password" => "pasvorto",
-	"upload" => "Alŝuto",
-	"failed_upload" => "Alŝuto malsukcesis!",
-	"failed_move" => "Movo de la dosiero malsukcesis!",
-	"wrong_password" => "Malĝusta pasvorto",
-	"make_directory" => "Nova dosierujo",
-	"new_dir_failed" => "Kreado de dosierujo malsukcesis",
-	"chmod_dir_failed" => "Ŝanĝo de dosierujaj rajtoj malsukcesis",
-	"unable_to_read_dir" => "Dosierujo ne estas legebla",
-	"location" => "Loko",
-	"root" => "Radiko",
-	"log_file_permission_error" => "La skripto ne rajtas skribi la protokolan dosieron.",
-	"upload_not_allowed" => "La skripto malpermesas alŝuti en ĉi tiun dosierujon.",
-	"upload_dir_not_writable" => "Ĉi tiu dosierujo ne rajtigas skribadon.",
-	"mobile_version" => "Vido por mobilaj iloj",
-	"standard_version" => "Defaŭlta vido",
-	"page_load_time" => "Paĝo ŝarĝita en %.2f ms",
-	"wrong_pass" => "Malĝusta salutnomo aŭ pasvorto",
-	"username" => "Salutnomo",
-	"log_in" => "Ensaluto",
-	"upload_type_not_allowed" => "Alŝuto estas malpermesita por ĉi tiu dosiertipo.",
-	"del" => "For", // short for Delete
-	"log_out" => "Adiaŭo"
 );
 
 // 简体中文(Simplified Chinese)

@@ -2819,20 +2819,30 @@ class EncodeExplorer
 	}
 
 	//
-	// Encode HTML output in correct encoding
+	// Encode output in correct encoding
 	//
-	public static function translate_encoding($string)
+	public static function translate_encoding($string, $undo = false)
 	{
 		if(!is_string($string) || EncodeExplorer::getConfig('charset') == EncodeExplorer::getConfig('os_charset'))
 			return $string;
 
+		if(!$undo) {
+			// From system encoding to output
+			$in  = EncodeExplorer::getConfig('os_charset');
+			$out = EncodeExplorer::getConfig('charset');
+		} else {
+			// From input to system encoding
+			$in  = EncodeExplorer::getConfig('charset');
+			$out = EncodeExplorer::getConfig('os_charset');
+		}
+
 		// Attempt using mb_convert_encoding
 		if(function_exists('mb_convert_encoding'))
-			$tmp = @mb_convert_encoding($string, EncodeExplorer::getConfig('charset'), EncodeExplorer::getConfig('os_charset'));
+			$tmp = @mb_convert_encoding($string, $out, $in);
 
 		// Attempt using iconv
 		if(empty($tmp) && function_exists('iconv'))
-			$tmp = @iconv(EncodeExplorer::getConfig('os_charset'), EncodeExplorer::getConfig('charset'), $string);
+			$tmp = @iconv($in, $out, $string);
 
 		// If any of them succeeds, return converted one
 		if(!empty($tmp) && is_string($tmp))

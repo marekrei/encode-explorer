@@ -2274,9 +2274,10 @@ class Dir
 		return $this->name;
 	}
 
-	function getNameHtml()
+	function getNameHtml($translate_encoding = false)
 	{
-		return EncodeExplorer::htmlEncode($this->name);
+		$name = ($translate_encoding ? EncodeExplorer::translate_encoding($this->name) : $this->name);
+		return htmlspecialchars($name);
 	}
 
 	function getNameEncoded()
@@ -2335,9 +2336,10 @@ class File
 		return rawurlencode($this->name);
 	}
 
-	function getNameHtml()
+	function getNameHtml($translate_encoding = false)
 	{
-		return EncodeExplorer::htmlEncode($this->name);
+		$name = ($translate_encoding ? EncodeExplorer::translate_encoding($this->name) : $this->name);
+		return htmlspecialchars($name);
 	}
 
 	function getSize()
@@ -2464,14 +2466,15 @@ class Location
 	// Get the current directory.
 	// Options: Include the prefix ("./"); URL-encode the string; HTML-encode the string; return directory n-levels up
 	//
-	function getDir($prefix, $encoded, $html, $up)
+	function getDir($prefix, $encoded, $html, $up, $translate_encoding = false)
 	{
 		$dir = "";
 		if($prefix == true)
 			$dir .= "./";
 		for($i = 0; $i < ((count($this->path) >= $up && $up > 0)?count($this->path)-$up:count($this->path)); $i++)
 		{
-			$temp = $this->path[$i];
+			$temp = ($translate_encoding ? EncodeExplorer::translate_encoding($this->path[$i]) : $this->path[$i]);
+
 			if($encoded)
 				$temp = rawurlencode($temp);
 			if($html)
@@ -2481,12 +2484,11 @@ class Location
 		return $dir;
 	}
 
-	function getPathLink($i, $html)
+	function getPathLink($i, $html, $translate_encoding = false)
 	{
-		if($html)
-			return EncodeExplorer::htmlEncode($this->path[$i]);
-		else
-			return $this->path[$i];
+		$path = ($translate_encoding ? EncodeExplorer::translate_encoding($this->path[$i]) : $this->path[$i]);
+
+		return ($html ? htmlspecialchars($path) : $path);
 	}
 
 	function getFullPath()
@@ -2819,41 +2821,25 @@ class EncodeExplorer
 	//
 	// Encode HTML output in correct encoding
 	//
-	public static function htmlEncode($string)
+	public static function translate_encoding($string)
 	{
-		// Only perform charset convertion if output configured to be in UTF-8 and input isn't already UTF-8
-		if( EncodeExplorer::getConfig('charset') == 'UTF-8' &&
-		    EncodeExplorer::getConfig('os_charset') != 'UTF-8' &&
-		    // From http://w3.org/International/questions/qa-forms-utf-8.html
-		    !preg_match('%^(?:
-		      [\x09\x0A\x0D\x20-\x7E]            # ASCII
-		    | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-		    | \xE0[\xA0-\xBF][\x80-\xBF]         # excluding overlongs
-		    | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-		    | \xED[\x80-\x9F][\x80-\xBF]         # excluding surrogates
-		    | \xF0[\x90-\xBF][\x80-\xBF]{2}      # planes 1-3
-		    | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-		    | \xF4[\x80-\x8F][\x80-\xBF]{2}      # plane 16
-		    )*$%xs', $string)) {
+		if(!is_string($string) || EncodeExplorer::getConfig('charset') == EncodeExplorer::getConfig('os_charset'))
+			return $string;
 
-			// Attempt using mb_convert_encoding
-			if(function_exists('mb_convert_encoding')) {
-				$tmp = @mb_convert_encoding($string, 'UTF-8', EncodeExplorer::getConfig('os_charset'));
-			}
+		// Attempt using mb_convert_encoding
+		if(function_exists('mb_convert_encoding'))
+			$tmp = @mb_convert_encoding($string, EncodeExplorer::getConfig('charset'), EncodeExplorer::getConfig('os_charset'));
 
-			// Attempt using iconv
-			if(empty($tmp) && function_exists('iconv')) {
-				$tmp = @iconv(EncodeExplorer::getConfig('os_charset'), 'UTF-8', $string);
-			}
+		// Attempt using iconv
+		if(empty($tmp) && function_exists('iconv'))
+			$tmp = @iconv(EncodeExplorer::getConfig('os_charset'), EncodeExplorer::getConfig('charset'), $string);
 
-			// If any of them succeeds, overwrite string with converted one
-			if(!empty($tmp) && is_string($tmp)) {
-				$string = $tmp;
-			}
-		}
+		// If any of them succeeds, return converted one
+		if(!empty($tmp) && is_string($tmp))
+			return $tmp;
 
-		// Convert special characters to HTML entities
-		return htmlspecialchars($string);
+		// Otherwise return as is
+		return $string;
 	}
 
 	//
@@ -3105,7 +3091,7 @@ if($this->mobile == false && EncodeExplorer::getConfig("show_path") == true)
 	for($i = 0; $i < count($this->location->path); $i++)
 	{
 		print "&gt; <a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, count($this->location->path) - $i - 1))."\">";
-		print $this->location->getPathLink($i, true);
+		print $this->location->getPathLink($i, true, true);
 		print "</a>\n";
 	}
 ?>
@@ -3156,7 +3142,7 @@ if($this->dirs)
 		print "<td class=\"icon\"><img alt=\"dir\" src=\"?img=directory\" /></td>\n";
 		print "<td class=\"name\" colspan=\"".($this->mobile == true ? 1:2)."\">\n";
 		print "<a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded())."\" class=\"item dir\">";
-		print $dir->getNameHtml();
+		print $dir->getNameHtml(true);
 		print "</a>\n";
 		print "</td>\n";
 		if($this->mobile != true)
@@ -3191,7 +3177,7 @@ if($this->files)
 		if($file->isValidForThumb())
 			print " thumb";
 		print "\">";
-		print $file->getNameHtml();
+		print $file->getNameHtml(true);
 		if($this->mobile == true)
 		{
 			print "<span class =\"size\">".$this->formatSize($file->getSize())."</span>";

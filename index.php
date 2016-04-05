@@ -2475,7 +2475,7 @@ class Location
 			if($encoded)
 				$temp = rawurlencode($temp);
 			if($html)
-				$temp = EncodeExplorer::htmlEncode($temp);
+				$temp = htmlspecialchars($temp);
 			$dir .= $temp."/";
 		}
 		return $dir;

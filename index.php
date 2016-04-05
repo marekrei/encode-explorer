@@ -132,6 +132,9 @@ $_CONFIG['charset'] = "UTF-8";
 // CP1251 if your OS uses cyrillic encoding
 // CP1252 if your OS uses latin encoding
 //
+// Technical details about this:
+// https://github.com/marekrei/encode-explorer/issues/42
+//
 // Default: $_CONFIG['os_charset'] = "UTF-8";
 //
 $_CONFIG['os_charset'] = "UTF-8";
@@ -3180,7 +3183,7 @@ if($this->files)
 		print "<tr class=\"row ".$row_style.(++$count == count($this->files)?" last":"")."\">\n";
 		print "<td class=\"icon\"><img alt=\"".$file->getType()."\" src=\"".$this->makeIcon($file->getType())."\" /></td>\n";
 		print "<td class=\"name\" colspan=\"1\">\n";
-		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
+		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0, true).$file->getNameEncoded(true)."\"";
 		if(EncodeExplorer::getConfig('open_in_new_window') == true)
 			print "target=\"_blank\"";
 		print " class=\"item file";

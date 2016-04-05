@@ -8,8 +8,8 @@
  * Homepage : encode-explorer.siineiolekala.net
  *
  *
- * NB!:If you change anything, save with UTF-8! Otherwise you may
- *     encounter problems, especially when displaying images.
+ * NB!:If you change anything, save with UTF-8 without BOM! Otherwise you
+ *     may encounter problems, especially when displaying images.
  *
  ***************************************************************************/
 

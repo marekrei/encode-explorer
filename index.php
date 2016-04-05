@@ -123,6 +123,19 @@ $_CONFIG['time_format'] = "d.m.y H:i:s";
 //
 $_CONFIG['charset'] = "UTF-8";
 
+//
+// OS Charset.
+//
+// Recommended setting for Linux is UTF-8.
+//
+// Recommended setting for Windows is:
+// CP1251 if your OS uses cyrillic encoding
+// CP1252 if your OS uses latin encoding
+//
+// Default: $_CONFIG['os_charset'] = "UTF-8";
+//
+$_CONFIG['os_charset'] = "UTF-8";
+
 /*
 * PERMISSIONS
 */
@@ -730,7 +743,7 @@ $_TRANSLATIONS["ko"] = array(
 	"upload_type_not_allowed" => "이 종류의 파일은 올릴 수 없습니다.",
 	"del" => "삭제",
 	"log_out" => "로그아웃"
-); 
+);
 
 // Norwegian
 $_TRANSLATIONS["no"] = array(
@@ -2263,7 +2276,7 @@ class Dir
 
 	function getNameHtml()
 	{
-		return htmlspecialchars($this->name);
+		return EncodeExplorer::htmlEncode($this->name);
 	}
 
 	function getNameEncoded()
@@ -2324,7 +2337,7 @@ class File
 
 	function getNameHtml()
 	{
-		return htmlspecialchars($this->name);
+		return EncodeExplorer::htmlEncode($this->name);
 	}
 
 	function getSize()
@@ -2462,7 +2475,7 @@ class Location
 			if($encoded)
 				$temp = rawurlencode($temp);
 			if($html)
-				$temp = htmlspecialchars($temp);
+				$temp = EncodeExplorer::htmlEncode($temp);
 			$dir .= $temp."/";
 		}
 		return $dir;
@@ -2471,7 +2484,7 @@ class Location
 	function getPathLink($i, $html)
 	{
 		if($html)
-			return htmlspecialchars($this->path[$i]);
+			return EncodeExplorer::htmlEncode($this->path[$i]);
 		else
 			return $this->path[$i];
 	}
@@ -2801,6 +2814,46 @@ class EncodeExplorer
 			$this->dirs[$i]->output();
 		for($i = 0; $i < count($this->files); $i++)
 			$this->files[$i]->output();
+	}
+
+	//
+	// Encode HTML output in correct encoding
+	//
+	public static function htmlEncode($string)
+	{
+		// Only perform charset convertion if output configured to be in UTF-8 and input isn't already UTF-8
+		if( EncodeExplorer::getConfig('charset') == 'UTF-8' &&
+			EncodeExplorer::getConfig('os_charset') != 'UTF-8' &&
+			// From http://w3.org/International/questions/qa-forms-utf-8.html
+			!preg_match('%^(?:
+			  [\x09\x0A\x0D\x20-\x7E]            # ASCII
+			| [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+			| \xE0[\xA0-\xBF][\x80-\xBF]         # excluding overlongs
+			| [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+			| \xED[\x80-\x9F][\x80-\xBF]         # excluding surrogates
+			| \xF0[\x90-\xBF][\x80-\xBF]{2}      # planes 1-3
+			| [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+			| \xF4[\x80-\x8F][\x80-\xBF]{2}      # plane 16
+			)*$%xs', $string)) {
+
+			// Attempt using mb_convert_encoding
+			if(function_exists('mb_convert_encoding')) {
+				$tmp = @mb_convert_encoding($string, 'UTF-8', EncodeExplorer::getConfig('os_charset'));
+			}
+
+			// Attempt using iconv
+			if(empty($tmp) && function_exists('iconv')) {
+				$tmp = @iconv(EncodeExplorer::getConfig('os_charset'), 'UTF-8', $string);
+			}
+
+			// If any of them succeeds, overwrite string with converted one
+			if(!empty($tmp) && is_string($tmp)) {
+				$string = $tmp;
+			}
+		}
+
+		// Convert special characters to HTML entities
+		return htmlspecialchars($string);
 	}
 
 	//

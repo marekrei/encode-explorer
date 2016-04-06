@@ -2146,7 +2146,11 @@ class FileManager
 	function uploadFile($location, $userfile)
 	{
 		global $encodeExplorer;
-		$name = basename($userfile['name']);
+
+		// XXX: basename alone is buggy under certain situations. Workaround.
+		$name = str_replace('/', ' / ', str_replace('\\', '/', $userfile['name']));
+		$name = trim(basename($name));
+
 		if(get_magic_quotes_gpc())
 			$name = stripslashes($name);
 

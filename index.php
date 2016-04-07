@@ -150,6 +150,14 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 $_CONFIG['require_login'] = false;
 
 //
+// Whether use md5 to store passwords both in session and this script.
+// If set to false, the password will be stored as is.
+// If set to true, script will use md5 to store and check passwords.
+// Default: $_CONFIG['md5_passwords'] = false;
+//
+$_CONFIG['md5_passwords'] = false;
+
+//
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
@@ -157,6 +165,8 @@ $_CONFIG['require_login'] = false;
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
 // For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+// IF md5_passwords config is set, than password should be md5 encrypted
+// For example: $_CONFIG['users'] = array(array("username", "5f4dcc3b5aa765d61d8327deb882cf99", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
 $_CONFIG['users'] = array();
@@ -1987,10 +1997,15 @@ class GateKeeper
 
 		if(isset($_POST['user_pass']) && strlen($_POST['user_pass']) > 0)
 		{
-			if(GateKeeper::isUser((isset($_POST['user_name'])?$_POST['user_name']:""), $_POST['user_pass']))
+			if (EncodeExplorer::getConfig("md5_passwords") == false)
+			{
+				$password = $_POST['user_pass'];
+			} else $password = md5($_POST['user_pass']);
+		
+			if(GateKeeper::isUser((isset($_POST['user_name'])?$_POST['user_name']:""), $password))
 			{
 				$_SESSION['ee_user_name'] = isset($_POST['user_name'])?$_POST['user_name']:"";
-				$_SESSION['ee_user_pass'] = $_POST['user_pass'];
+				$_SESSION['ee_user_pass'] = $password;
 
 				$addr  = $_SERVER['PHP_SELF'];
 				$param = '';

@@ -2155,7 +2155,7 @@ class FileManager
 			$name = stripslashes($name);
 
 		$upload_dir = $location->getFullPath();
-		$upload_file = $upload_dir . $name;
+		$upload_file = $upload_dir . EncodeExplorer::translate_encoding($name, true);
 
 		if(function_exists("finfo_open") && function_exists("finfo_file"))
 			$mime_type = File::getFileMime($userfile['tmp_name']);

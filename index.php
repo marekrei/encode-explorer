@@ -2147,9 +2147,10 @@ class FileManager
 	{
 		global $encodeExplorer;
 
-		// XXX: basename alone is buggy under certain situations. Workaround.
+		// XXX: basename alone is buggy under certain situations
+		// Workaround by normalizing slashes and adding leading spaces
 		$name = str_replace('/', ' / ', str_replace('\\', '/', $userfile['name']));
-		$name = trim(basename($name));
+		$name = trim(basename(' '.$name));
 
 		if(get_magic_quotes_gpc())
 			$name = stripslashes($name);

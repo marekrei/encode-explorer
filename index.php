@@ -172,7 +172,7 @@ $_CONFIG['users'] = array();
 $_CONFIG['upload_enable'] = true;
 $_CONFIG['newdir_enable'] = true;
 $_CONFIG['delete_enable'] = false;
-
+$_CONFIG['rename_enable'] = true;
 /*
  * UPLOADING
  */
@@ -2045,6 +2045,12 @@ class GateKeeper
 			return true;
 		return false;
 	}
+	
+	public static function isRenameAllowed(){
+		if(EncodeExplorer::getConfig("rename_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
+			return true;
+		return false;
+	}
 
 	public static function isNewdirAllowed(){
 		if(EncodeExplorer::getConfig("newdir_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
@@ -3270,8 +3276,10 @@ if($this->mobile == false && $this->getConfig("show_load_time") == true)
 </div>
 <!-- END: Info area -->
 
+<?php 
+if(GateKeeper::isAccessAllowed() && GateKeeper::isRenameAllowed()){
+?>
 <script type="text/javascript">// <![CDATA[
-	////////////////////////// renaming folder/file
 	$(function () {
 		$("td.name").dblclick(function (e) {
 			e.stopPropagation();
@@ -3324,6 +3332,9 @@ if($this->mobile == false && $this->getConfig("show_load_time") == true)
 		});
 	}
 // ]]></script>
+<?php
+}
+?>
 
 </body>
 </html>

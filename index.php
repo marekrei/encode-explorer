@@ -1979,21 +1979,8 @@ class GateKeeper
 				$_SESSION['ee_user_name'] = isset($_POST['user_name'])?$_POST['user_name']:"";
 				$_SESSION['ee_user_pass'] = $_POST['user_pass'];
 
-				$addr  = $_SERVER['PHP_SELF'];
-				$param = '';
-
-				if(isset($_GET['m']))
-					$param .= (strlen($param) == 0 ? '?m' : '&m');
-
-				if(isset($_GET['s']))
-					$param .= (strlen($param) == 0 ? '?s' : '&s');
-
-				if(isset($_GET['dir']) && strlen($_GET['dir']) > 0)
-				{
-					$param .= (strlen($param) == 0 ? '?dir=' : '&dir=');
-					$param .= urlencode($_GET['dir']);
-				}
-				header( "Location: ".$addr.$param);
+				// Refresh page
+				EncodeExplorer::refresh();
 			}
 			else
 				$encodeExplorer->setErrorString("wrong_pass");
@@ -2250,6 +2237,9 @@ class FileManager
 					FileManager::delete_dir($path);
 				else if(is_file($path))
 					FileManager::delete_file($path);
+				
+				// Refresh so 'del' param is not in address anymore
+				EncodeExplorer::refresh();
 			}
 		}
 	}
@@ -2898,6 +2888,28 @@ class EncodeExplorer
 		$this->readDir();
 		$this->sort();
 		$this->outputHtml();
+	}
+
+	//
+	// Refresh current page
+	//
+	public static function refresh()
+	{
+		$addr  = $_SERVER['PHP_SELF'];
+		$param = '';
+
+		if(isset($_GET['m']))
+			$param .= (strlen($param) == 0 ? '?m' : '&m');
+
+		if(isset($_GET['s']))
+			$param .= (strlen($param) == 0 ? '?s' : '&s');
+
+		if(isset($_GET['dir']) && strlen($_GET['dir']) > 0)
+		{
+			$param .= (strlen($param) == 0 ? '?dir=' : '&dir=');
+			$param .= urlencode($_GET['dir']);
+		}
+		header( "Location: ".$addr.$param);
 	}
 
 	public function printLoginBox()

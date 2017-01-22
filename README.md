@@ -16,7 +16,7 @@ it is kept simple and functional. Free for everyone.
 Black Interface
 ==================================
 * Delete the "index.php" file / Change the "index.php" file name.
-* Rename the file "index-black-tweak.php" to "index.php".
+* Rename the file "index-black.php" to "index.php".
 
 Manual
 ----------------------------------

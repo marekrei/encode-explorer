@@ -8,8 +8,8 @@
  * Homepage : encode-explorer.siineiolekala.net
  *
  *
- * NB!:If you change anything, save with UTF-8! Otherwise you may
- *     encounter problems, especially when displaying images.
+ * NB!:If you change anything, save with UTF-8 without BOM! Otherwise you
+ *     may encounter problems, especially when displaying images.
  *
  ***************************************************************************/
 
@@ -122,6 +122,22 @@ $_CONFIG['time_format'] = "d.m.y H:i:s";
 // Default: $_CONFIG['charset'] = "UTF-8";
 //
 $_CONFIG['charset'] = "UTF-8";
+
+//
+// OS Charset.
+//
+// Recommended setting for Linux is UTF-8.
+//
+// Recommended setting for Windows is:
+// CP1251 if your OS uses cyrillic encoding
+// CP1252 if your OS uses latin encoding
+//
+// Technical details about this:
+// https://github.com/marekrei/encode-explorer/issues/42
+//
+// Default: $_CONFIG['os_charset'] = "UTF-8";
+//
+$_CONFIG['os_charset'] = "UTF-8";
 
 /*
 * PERMISSIONS
@@ -762,7 +778,7 @@ $_TRANSLATIONS["ko"] = array(
 	"upload_type_not_allowed" => "이 종류의 파일은 올릴 수 없습니다.",
 	"del" => "삭제",
 	"log_out" => "로그아웃"
-); 
+);
 
 // Norwegian
 $_TRANSLATIONS["no"] = array(
@@ -1915,7 +1931,7 @@ class Logger
 		{
 			if(Location::isFileWritable(EncodeExplorer::getConfig('log_file')))
 			{
-				$message = "[" . date("Y-m-d h:i:s", mktime()) . "] ".$message." (".$_SERVER["HTTP_USER_AGENT"].")\n";
+				$message = "[" . date("Y-m-d H:i:s", mktime()) . "] ".$message." (".$_SERVER["HTTP_USER_AGENT"].")\n";
 				error_log($message, 3, EncodeExplorer::getConfig('log_file'));
 			}
 			else
@@ -2162,12 +2178,17 @@ class FileManager
 	function uploadFile($location, $userfile)
 	{
 		global $encodeExplorer;
-		$name = basename($userfile['name']);
+
+		// XXX: basename alone is buggy under certain situations
+		// Workaround by normalizing slashes and adding leading spaces
+		$name = str_replace('/', ' / ', str_replace('\\', '/', $userfile['name']));
+		$name = trim(basename(' '.$name));
+
 		if(get_magic_quotes_gpc())
 			$name = stripslashes($name);
 
 		$upload_dir = $location->getFullPath();
-		$upload_file = $upload_dir . $name;
+		$upload_file = $upload_dir . EncodeExplorer::translate_encoding($name, true);
 
 		if(function_exists("finfo_open") && function_exists("finfo_file"))
 			$mime_type = File::getFileMime($userfile['tmp_name']);
@@ -2293,9 +2314,10 @@ class Dir
 		return $this->name;
 	}
 
-	function getNameHtml()
+	function getNameHtml($translate_encoding = false)
 	{
-		return htmlspecialchars($this->name);
+		$name = ($translate_encoding ? EncodeExplorer::translate_encoding($this->name) : $this->name);
+		return htmlspecialchars($name);
 	}
 
 	function getNameEncoded()
@@ -2354,9 +2376,10 @@ class File
 		return rawurlencode($this->name);
 	}
 
-	function getNameHtml()
+	function getNameHtml($translate_encoding = false)
 	{
-		return htmlspecialchars($this->name);
+		$name = ($translate_encoding ? EncodeExplorer::translate_encoding($this->name) : $this->name);
+		return htmlspecialchars($name);
 	}
 
 	function getSize()
@@ -2483,14 +2506,15 @@ class Location
 	// Get the current directory.
 	// Options: Include the prefix ("./"); URL-encode the string; HTML-encode the string; return directory n-levels up
 	//
-	function getDir($prefix, $encoded, $html, $up)
+	function getDir($prefix, $encoded, $html, $up, $translate_encoding = false)
 	{
 		$dir = "";
 		if($prefix == true)
 			$dir .= "./";
 		for($i = 0; $i < ((count($this->path) >= $up && $up > 0)?count($this->path)-$up:count($this->path)); $i++)
 		{
-			$temp = $this->path[$i];
+			$temp = ($translate_encoding ? EncodeExplorer::translate_encoding($this->path[$i]) : $this->path[$i]);
+
 			if($encoded)
 				$temp = rawurlencode($temp);
 			if($html)
@@ -2500,12 +2524,11 @@ class Location
 		return $dir;
 	}
 
-	function getPathLink($i, $html)
+	function getPathLink($i, $html, $translate_encoding = false)
 	{
-		if($html)
-			return htmlspecialchars($this->path[$i]);
-		else
-			return $this->path[$i];
+		$path = ($translate_encoding ? EncodeExplorer::translate_encoding($this->path[$i]) : $this->path[$i]);
+
+		return ($html ? htmlspecialchars($path) : $path);
 	}
 
 	function getFullPath()
@@ -2836,6 +2859,40 @@ class EncodeExplorer
 	}
 
 	//
+	// Encode output in correct encoding
+	//
+	public static function translate_encoding($string, $undo = false)
+	{
+		if(!is_string($string) || EncodeExplorer::getConfig('charset') == EncodeExplorer::getConfig('os_charset'))
+			return $string;
+
+		if(!$undo) {
+			// From system encoding to output
+			$in  = EncodeExplorer::getConfig('os_charset');
+			$out = EncodeExplorer::getConfig('charset');
+		} else {
+			// From input to system encoding
+			$in  = EncodeExplorer::getConfig('charset');
+			$out = EncodeExplorer::getConfig('os_charset');
+		}
+
+		// Attempt using mb_convert_encoding
+		if(function_exists('mb_convert_encoding'))
+			$tmp = @mb_convert_encoding($string, $out, $in);
+
+		// Attempt using iconv
+		if(empty($tmp) && function_exists('iconv'))
+			$tmp = @iconv($in, $out, $string);
+
+		// If any of them succeeds, return converted one
+		if(!empty($tmp) && is_string($tmp))
+			return $tmp;
+
+		// Otherwise return as is
+		return $string;
+	}
+
+	//
 	// Comparison functions for sorting.
 	//
 
@@ -3084,7 +3141,7 @@ if($this->mobile == false && EncodeExplorer::getConfig("show_path") == true)
 	for($i = 0; $i < count($this->location->path); $i++)
 	{
 		print "&gt; <a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, count($this->location->path) - $i - 1))."\">";
-		print $this->location->getPathLink($i, true);
+		print $this->location->getPathLink($i, true, true);
 		print "</a>\n";
 	}
 ?>
@@ -3135,7 +3192,7 @@ if($this->dirs)
 		print "<td class=\"icon\"><img alt=\"dir\" src=\"?img=directory\" /></td>\n";
 		print "<td class=\"name\" colspan=\"".($this->mobile == true ? 1:2)."\">\n";
 		print "<a href=\"".$this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded())."\" class=\"item dir\">";
-		print $dir->getNameHtml();
+		print $dir->getNameHtml(true);
 		print "</a>\n";
 		print "</td>\n";
 		if($this->mobile != true)
@@ -3163,14 +3220,14 @@ if($this->files)
 		print "<tr class=\"row ".$row_style.(++$count == count($this->files)?" last":"")."\">\n";
 		print "<td class=\"icon\"><img alt=\"".$file->getType()."\" src=\"".$this->makeIcon($file->getType())."\" /></td>\n";
 		print "<td class=\"name\" colspan=\"1\">\n";
-		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
+		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0, true).$file->getNameEncoded(true)."\"";
 		if(EncodeExplorer::getConfig('open_in_new_window') == true)
 			print "target=\"_blank\"";
 		print " class=\"item file";
 		if($file->isValidForThumb())
 			print " thumb";
 		print "\">";
-		print $file->getNameHtml();
+		print $file->getNameHtml(true);
 		if($this->mobile == true)
 		{
 			print "<span class =\"size\">".$this->formatSize($file->getSize())."</span>";

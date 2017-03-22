@@ -1950,6 +1950,14 @@ class Logger
 		Logger::log($message);
 	}
 
+	public static function logDeletion($path, $isDir)
+	{
+		$message = $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." deleted ";
+		$message .= $isDir?"dir":"file";
+		$message .= " ".$path;
+		Logger::log($message);
+	}
+
 	public static function emailNotification($path, $isFile)
 	{
 		if(strlen(EncodeExplorer::getConfig('upload_email')) > 0)
@@ -1961,7 +1969,19 @@ class Logger
 			mail(EncodeExplorer::getConfig('upload_email'), "Upload notification", $message);
 		}
 	}
+	
+	public static function emailNotificationDeletion($path, $isFile)
+	{
+		if(strlen(EncodeExplorer::getConfig('upload_email')) > 0)
+		{
+			$message = "This is a message to let you know that ".GateKeeper::getUserName()." ";
+			$message .= ($isFile?"deleted a file":"deleted a directory")." in Encode Explorer.\n\n";
+			$message .= "Path : ".$path."\n";
+			$message .= "IP : ".$_SERVER['REMOTE_ADDR']."\n";
+			mail(EncodeExplorer::getConfig('delete_email'), "Deletion notification", $message);
 		}
+	}
+}
 
 //
 // The class controls logging in and authentication
@@ -2221,12 +2241,16 @@ class FileManager
 			}
 			reset($objects);
 			rmdir($dir);
+			Logger::logDeletion("./".$dir, true);
+			Logger::emailNotificationDeletion("./".$dir, false);
 		}
 	}
 
 	public static function delete_file($file){
 		if(is_file($file)){
 			unlink($file);
+			Logger::logDeletion("./".$file, false);
+			Logger::emailNotificationDeletion("./".$file, true);
 		}
 	}
 

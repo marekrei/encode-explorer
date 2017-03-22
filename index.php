@@ -787,7 +787,7 @@ $_TRANSLATIONS["no"] = array(
 //Polish
 $_TRANSLATIONS["pl"] = array(
   "file_name" => "Nazwa pliku",
-  "size" => "Rozmiar",
+	"size" => "Rozmiar",
   "last_changed" => "Data zmiany",
   "total_used_space" => "Cała przestrzeń",
   "free_space" => "Wolna przestrzeń",
@@ -796,17 +796,17 @@ $_TRANSLATIONS["pl"] = array(
   "failed_upload" => "Przesłanie pliku nie powiodło się",
   "failed_move" => "Przenoszenie pliku nie powiodło się!",
   "wrong_password" => "Niepoprawne hasło",
-  "make_directory" => "Nowy folder",
+	"make_directory" => "Nowy folder",
   "new_dir_failed" => "Błąd podczas tworzenia nowego folderu",
   "chmod_dir_failed" => "Błąd podczas zmiany uprawnień folderu",
   "unable_to_read_dir" => "Odczytanie folderu nie powiodło się",
-  "location" => "Miejsce",
+	"location" => "Miejsce",
   "root" => "Start",
   "log_file_permission_error" => "Brak uprawnień aby utworzyć dziennik działań.",
   "upload_not_allowed" => "Konfiguracja zabrania przesłania pliku do tego folderu.",
   "upload_dir_not_writable" => "Nie można zapisać pliku do tego folderu.",
   "mobile_version" => "Wersja mobilna",
-  "standard_version" => "Widok standardowy",
+	"standard_version" => "Widok standardowy",
   "page_load_time" => "Załadowano w %.2f ms",
   "wrong_pass" => "Niepoprawna nazwa użytkownika lub złe hasło",
   "username" => "Użytkownik",
@@ -1961,7 +1961,7 @@ class Logger
 			mail(EncodeExplorer::getConfig('upload_email'), "Upload notification", $message);
 		}
 	}
-}
+		}
 
 //
 // The class controls logging in and authentication
@@ -2265,8 +2265,8 @@ class FileManager
 					FileManager::delete_file($path);
 			}
 		}
-	}
-}
+			}
+		}
 
 //
 // Dir class holds the information about one directory in the list
@@ -2626,7 +2626,7 @@ class EncodeExplorer
 		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set'))
 		{
 			@date_default_timezone_set(date_default_timezone_get());
-		}
+				}
 
 		if(isset($_GET['lang']) && is_scalar($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
@@ -2726,8 +2726,8 @@ class EncodeExplorer
 			usort($this->dirs, array('EncodeExplorer', 'cmp_'.$sort_by));
 			if($this->sort_as == "desc") {
 				$this->dirs = array_reverse($this->dirs);
-			}
 		}
+	}
 
 		// Here we filter the comparison functions supported by our file object
 		$sort_by = in_array($this->sort_by, array('name', 'size', 'mod')) ? $this->sort_by : 'name';
@@ -2736,7 +2736,7 @@ class EncodeExplorer
 			usort($this->files, array('EncodeExplorer', 'cmp_'.$sort_by));
 			if($this->sort_as == "desc") {
 				$this->files = array_reverse($this->files);
-			}
+		}
 		}
 	}
 
@@ -3230,7 +3230,7 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKee
 {
 ?>
 <!-- START: Upload area -->
-<form enctype="multipart/form-data" method="post">
+<form enctype="multipart/form-data" method="post" <?=isset($_GET['dir'])? 'action="?dir='.$_GET['dir'].'">' : ''?>>
 	<div id="upload">
 		<?php
 		if(GateKeeper::isNewdirAllowed()){

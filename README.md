@@ -20,6 +20,15 @@ You have to upload index.php into your server.
 If you open index.php you can edit several settings.
 You should make sure the edited file will be saved in UTF-8!
 
+An example of how to protect direct Access through .htaccess (apache):
+IndexIgnore *
+Order Deny,Allow
+Deny from all
+
+<Files "index.php">
+	Allow from all
+</Files>
+
 
 License
 ----------------------------------

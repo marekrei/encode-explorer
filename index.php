@@ -145,6 +145,10 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // If set to true, you should specify some users as well (see below).
 // Important: This only prevents people from seeing the list.
 // They will still be able to access the files with a direct link.
+// Addition: Combine htaccess and require_login to disallow
+// direct access to file. File access gets logged more precisely.
+// Attention: Be advised, the file is processed by PHP,
+// large/slow downloads might break due to php_script_timeout
 // Default: $_CONFIG['require_login'] = false;
 //
 $_CONFIG['require_login'] = false;
@@ -1930,8 +1934,12 @@ class Logger
 	public static function logAccess($path, $isDir)
 	{
 		$message = $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." accessed ";
-		$message .= $isDir?"dir":"file";
+		$message .= $isDir && !(isset($_GET['file']) || isset($_GET['dl'])) ? "dir" : "file";
 		$message .= " ".$path;
+		if (isset($_GET['file']))
+			$message.= $_GET['file'];
+		if (isset($_GET['dl']))
+			$message.= $_GET['dl'];
 		Logger::log($message);
 	}
 
@@ -2232,6 +2240,53 @@ class FileManager
 		}
 	}
 
+	function downloadFile($filepath)
+	{
+		$filepath = EncodeExplorer::getConfig('basedir').$filepath;
+		if( file_exists( $filepath ) )
+		{
+		  header( 'Cache-Control: public' );
+		  header( 'Content-Description: File Transfer' );
+		  header( 'Content-Disposition: attachment; filename='.basename($filepath) );
+		  header( 'Content-Type: '.File::getFileMime($filepath) );	// application/octet-stream
+		  header( 'Content-Length: '.filesize($filepath));
+		  header( 'Content-Transfer-Encoding: binary' );
+		  readfile( $filepath );
+		  exit;
+		}
+	}
+
+	function provideFile($filepath)
+	{
+		$filepath = EncodeExplorer::getConfig('basedir').$filepath;
+		if( file_exists( $filepath ) )
+		{
+
+			$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
+			$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
+
+			if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
+				|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag))
+			{
+				header('HTTP/1.1 304 Not Modified');
+				return true;
+			}
+			else {
+				header( 'ETag: "'.$etag.'"' );
+				header( 'Last-Modified: '.$mtime );
+				header( 'Cache-Control: public' );
+				//header( 'Content-Description: File Transfer' );
+				header( 'Content-Disposition: filename='.basename($filepath) );
+				header( 'Content-type: '.File::getFileMime($filepath) );
+				header( 'Content-Length: '.filesize($filepath));
+				header( 'Content-Transfer-Encoding: binary' );
+				readfile( $filepath );
+				exit;
+			}
+			return true;
+		}
+	}
+	
 	public static function delete_dir($dir) {
 		if (is_dir($dir)) {
 			$objects = scandir($dir);
@@ -2293,8 +2348,21 @@ class FileManager
 					FileManager::delete_file($path);
 			}
 		}
+		
+		if (isset($_GET['dl'])) {
+			if( (!GateKeeper::isLoginRequired()) || (GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed())) {
+				if (!empty($_GET['dl']))
+					$this->downloadFile($_GET['dl']);
 			}
 		}
+		if (isset($_GET['file'])) {
+			if( (!GateKeeper::isLoginRequired()) || (GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed())) {
+				if (!empty($_GET['file']))
+					$this->provideFile($_GET['file']);
+			}
+		}
+	}
+}
 
 //
 // Dir class holds the information about one directory in the list
@@ -3007,7 +3075,7 @@ $(document).ready(function() {
 	});
 <?php
 	}
-	if($this->logging == true)
+	if($this->logging == true && !GateKeeper::isLoginRequired())
 	{
 ?>
 		function logFileClick(path)
@@ -3022,7 +3090,7 @@ $(document).ready(function() {
 		}
 
 		$("a.file").click(function(){
-			logFileClick("<?php print $this->location->getDir(true, true, false, 0);?>" + $(this).html());
+			logFileClick("./" + $(this).attr('href').replace("?dl=","").replace("?file=",""));
 			return true;
 		});
 <?php
@@ -3044,7 +3112,7 @@ $(document).ready(function() {
 
 		$("a.thumb").hover(function(e){
 			$("#thumb").remove();
-			$("body").append("<div id=\"thumb\"><img src=\"?thumb="+ $(this).attr("href") +"\" alt=\"Preview\" \/><\/div>");
+			$("body").append("<div id=\"thumb\"><img src=\"?thumb="+ $(this).attr("href").replace("?dl=","").replace("?file=","") +"\" alt=\"Preview\" \/><\/div>");
 			positionThumbnail(e);
 			$("#thumb").fadeIn("medium");
 		},
@@ -3192,8 +3260,10 @@ if($this->files)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style.(++$count == count($this->files)?" last":"")."\">\n";
 		print "<td class=\"icon\"><img alt=\"".$file->getType()."\" src=\"".$this->makeIcon($file->getType())."\" /></td>\n";
-		print "<td class=\"name\" colspan=\"1\">\n";
-		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
+		print "<td class=\"name\">\n";
+		print GateKeeper::isLoginRequired()
+			? "\t\t<a href=\"?file=".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\""
+			: "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
 		if(EncodeExplorer::getConfig('open_in_new_window') == true)
 			print "target=\"_blank\"";
 		print " class=\"item file";
@@ -3222,7 +3292,9 @@ if($this->files)
 		}
 		
 		print "<td class=\"icon\">";
-		print "<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\" class=\"item file\" download>";
+		print GateKeeper::isLoginRequired()
+			? "<a href=\"?dl=".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\" class=\"item file\" download>"
+			: "<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\" class=\"item file\" download>";
 		print "<img alt=\"download\" src=\"?img=download\" />";
 		print "</a></td>\n";
 		

@@ -1728,6 +1728,10 @@ $_IMAGES["xls"] = $_IMAGES["spreadsheet"];
 $_IMAGES["xlsx"] = $_IMAGES["spreadsheet"];
 $_IMAGES["xml"] = $_IMAGES["code"];
 $_IMAGES["zip"] = $_IMAGES["archive"];
+$_IMAGES["download"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAA
+CxMAAAsTAQCanBgAAAAHdElNRQfhAxUJJiDGyieZAAAAeklEQVQoz62QsQqAMAxEn7Wbn9NZP0Dw
+/0e/Qu0QGhcrTakI4mVIAncXLvCCzmz+6tImeyKCEG9ioclbX6tcMStquiEMuMLN4xis00hC0KuE
+xFgfC0QSipKIhFaKiQNFOZievhLY2dvqjIWFb1jvBLlW+8m5zs3GTzgBdP0qMaa27WIAAAAASUVO";
 
 /***************************************************************************/
 /*   HERE COMES THE CODE.                                                  */
@@ -3131,13 +3135,14 @@ if($this->mobile == false)
 	<?php if($this->mobile == false && GateKeeper::isDeleteAllowed()){?>
 	<td class="del"><?php print EncodeExplorer::getString("del"); ?></td>
 	<?php } ?>
+	<td class="icon">DL</td>
 </tr>
 <?php
 }
 ?>
 <tr class="row two">
 	<td class="icon"><img alt="dir" src="?img=directory" /></td>
-	<td colspan="<?php print (($this->mobile == true?1:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
+	<td colspan="<?php print (($this->mobile == true?1:(GateKeeper::isDeleteAllowed()?5:4))); ?>" class="long">
 		<a class="item" href="<?php print $this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
 	</td>
 </tr>
@@ -3170,6 +3175,7 @@ if($this->dirs)
 		{
 			print "<td class=\"del\"><a data-name=\"".htmlentities($dir->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
 		}
+		print "<td></td>";		
 		print "</tr>\n";
 		$row =! $row;
 	}
@@ -3214,6 +3220,12 @@ if($this->files)
 				</a>
 			</td>";
 		}
+		
+		print "<td class=\"icon\">";
+		print "<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\" class=\"item file\" download>";
+		print "<img alt=\"download\" src=\"?img=download\" />";
+		print "</a></td>\n";
+		
 		print "</tr>\n";
 		$row =! $row;
 	}

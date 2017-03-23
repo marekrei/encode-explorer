@@ -131,7 +131,7 @@ $_CONFIG['charset'] = "UTF-8";
 // The array of folder names that will be hidden from the list.
 // Default: $_CONFIG['hidden_dirs'] = array();
 //
-$_CONFIG['hidden_dirs'] = array();
+$_CONFIG['hidden_dirs'] = array("test");
 
 //
 // Filenames that will be hidden from the list.
@@ -151,7 +151,7 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // large/slow downloads might break due to php_script_timeout
 // Default: $_CONFIG['require_login'] = false;
 //
-$_CONFIG['require_login'] = false;
+$_CONFIG['require_login'] = true;
 
 //
 // Usernames and passwords for restricting access to the page.
@@ -163,7 +163,7 @@ $_CONFIG['require_login'] = false;
 // For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
-$_CONFIG['users'] = array();
+$_CONFIG['users'] = array(array("x", "y", "admin"));
 
 //
 // Permissions for uploading, creating new directories and deleting.
@@ -2129,6 +2129,13 @@ class GateKeeper
 			return true;
 		return false;
 	}
+
+
+	public static function isAccessAllowedOnFile($filepath) {
+		$path = str_replace(basename($filepath), "", $filepath);
+		return empty(array_intersect(explode("/", $path), EncodeExplorer::getConfig('hidden_dirs')))
+			&& !in_array(basename($filepath), EncodeExplorer::getConfig('hidden_files'));
+	}
 }
 
 //
@@ -2243,6 +2250,8 @@ class FileManager
 	function downloadFile($filepath)
 	{
 		$filepath = EncodeExplorer::getConfig('basedir').$filepath;
+		if (strpos($filepath, '../') !== false)
+			return;	// Not allowed
 		if( file_exists( $filepath ) )
 		{
 		  header( 'Cache-Control: public' );
@@ -2259,9 +2268,10 @@ class FileManager
 	function provideFile($filepath)
 	{
 		$filepath = EncodeExplorer::getConfig('basedir').$filepath;
+		if (strpos($filepath, '../') !== false)
+			return;	// Not allowed
 		if( file_exists( $filepath ) )
 		{
-
 			$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
 			$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
 
@@ -2349,18 +2359,10 @@ class FileManager
 			}
 		}
 		
-		if (isset($_GET['dl'])) {
-			if( (!GateKeeper::isLoginRequired()) || (GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed())) {
-				if (!empty($_GET['dl']))
-					$this->downloadFile($_GET['dl']);
-			}
-		}
-		if (isset($_GET['file'])) {
-			if( (!GateKeeper::isLoginRequired()) || (GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed())) {
-				if (!empty($_GET['file']))
-					$this->provideFile($_GET['file']);
-			}
-		}
+		if (isset($_GET['dl']) && !empty($_GET['dl']) && GateKeeper::isAccessAllowed() && GateKeeper::isAccessAllowedOnFile($_GET['dl']))
+			$this->downloadFile($_GET['dl']);
+		if (isset($_GET['file']) && !empty($_GET['file']) && GateKeeper::isAccessAllowed() && GateKeeper::isAccessAllowedOnFile($_GET['file']))
+			$this->provideFile($_GET['file']);
 	}
 }
 

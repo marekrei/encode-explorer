@@ -2133,8 +2133,13 @@ class GateKeeper
 
 	public static function isAccessAllowedOnFile($filepath) {
 		$path = str_replace(basename($filepath), "", $filepath);
-		return empty(array_intersect(explode("/", $path), EncodeExplorer::getConfig('hidden_dirs')))
-			&& !in_array(basename($filepath), EncodeExplorer::getConfig('hidden_files'));
+
+		foreach(explode("/", $path) as $dir) {
+			if (in_array($dir, EncodeExplorer::getConfig('hidden_dirs')))
+				return false;
+		}
+		
+		return !in_array(basename($filepath), EncodeExplorer::getConfig('hidden_files'));
 	}
 }
 

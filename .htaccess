@@ -5,4 +5,6 @@ Deny from all
 <Files "index.php">
 	Allow from all
 </Files>
-
+<Files ".">
+	Allow from all
+</Files>

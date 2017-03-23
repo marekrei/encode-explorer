@@ -131,7 +131,7 @@ $_CONFIG['charset'] = "UTF-8";
 // The array of folder names that will be hidden from the list.
 // Default: $_CONFIG['hidden_dirs'] = array();
 //
-$_CONFIG['hidden_dirs'] = array("test");
+$_CONFIG['hidden_dirs'] = array();
 
 //
 // Filenames that will be hidden from the list.
@@ -151,7 +151,7 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // large/slow downloads might break due to php_script_timeout
 // Default: $_CONFIG['require_login'] = false;
 //
-$_CONFIG['require_login'] = true;
+$_CONFIG['require_login'] = false;
 
 //
 // Usernames and passwords for restricting access to the page.
@@ -163,7 +163,7 @@ $_CONFIG['require_login'] = true;
 // For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
-$_CONFIG['users'] = array(array("x", "y", "admin"));
+$_CONFIG['users'] = array();
 
 //
 // Permissions for uploading, creating new directories and deleting.

@@ -119,10 +119,12 @@ $_CONFIG['time_format'] = "d.m.y H:i:s";
 
 //
 // Charset. Use the one that suits for you.
+// N.B. The form is now written in UTF-8 and
+// the translations are in UTF-8. PT
 // Default: $_CONFIG['charset'] = "UTF-8";
 //
 $_CONFIG['charset'] = "UTF-8";
-
+//$_CONFIG['charset'] = "ISO-8859-1"; // PT
 /*
 * PERMISSIONS
 */
@@ -149,14 +151,32 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 //
 $_CONFIG['require_login'] = false;
 
+// Option: Store the hash of the password instead of the plain text. PT
+// Default: $_CONFIG['hash_psw'] = false;
+
+$_CONFIG['hash_psw'] = false;
+//$_CONFIG['hash_psw'] = true;
+
 //
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
+
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
 // For example: $_CONFIG['users'] = array(array("username1", "password1", "user"), array("username2", "password2", "admin"));
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
-// For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+// For example: $_CONFIG['users'] = array(array("username", "sha256 of password", "admin"));
+
+// It's bad practice to store passwords in plain text.
+// You'd better use sha256-hashes for example:
+//$_CONFIG['users'] = array(array("admin", "secret", "admin"), 
+//		array("test", "password", "user")); // may be replaced by:
+//$_CONFIG['users'] = array(array("admin", "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", "admin"), 
+//		array("test", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8", "user"));
+
+// If the password contains national characters, make sure it's utf-8 encoded when you hash it!
+// N.B. If you use hashed passwords, set hash_psw = true above.
+
 // Default: $_CONFIG['users'] = array();
 //
 $_CONFIG['users'] = array();
@@ -1930,7 +1950,23 @@ class Logger
 		$message .= " ".$path;
 		Logger::log($message);
 	}
-
+	
+	// log uploading PT
+	public static function logUpload($userfile)
+	{
+		$message .= $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." uploaded: ";
+		$message .= $userfile;
+		Logger::log($message);
+	}
+	
+	// log file listing PT
+	public static function logFileList($filename)
+	{
+		$message .= $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." listed: ";
+		$message .= $filename;
+		Logger::log($message);
+	}
+	
 	public static function logQuery()
 	{
 		if(isset($_POST['log']) && strlen($_POST['log']) > 0)
@@ -1954,8 +1990,13 @@ class Logger
 	{
 		if(strlen(EncodeExplorer::getConfig('upload_email')) > 0)
 		{
+			// Added date and time PT
+			$date = date("Y-m-d");
+			$time = date("H:i:s");
+		
 			$message = "This is a message to let you know that ".GateKeeper::getUserName()." ";
 			$message .= ($isFile?"uploaded a new file":"created a new directory")." in Encode Explorer.\n\n";
+			$message .= "Date: " . $date . " Time: " . $time . "\n";
 			$message .= "Path : ".$path."\n";
 			$message .= "IP : ".$_SERVER['REMOTE_ADDR']."\n";
 			mail(EncodeExplorer::getConfig('upload_email'), "Upload notification", $message);
@@ -2008,8 +2049,7 @@ class GateKeeper
 				}
 				header( "Location: ".$addr.$param);
 			}
-			else
-				$encodeExplorer->setErrorString("wrong_pass");
+			else $encodeExplorer->setErrorString("wrong_pass");
 		}
 	}
 
@@ -2017,7 +2057,16 @@ class GateKeeper
 	{
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
-			if($user[1] == $userPass)
+			
+			if (EncodeExplorer::getConfig('hash_psw') == true)
+			{
+			$key = hash(sha256, $userPass, $raw_output = false);
+			}
+			else
+			$key = $userPass;
+			
+			//if($user[1] == $userPass)
+			if($user[1] == $key)
 			{
 				if(strlen($userName) == 0 || $userName == $user[0])
 				{
@@ -2025,6 +2074,7 @@ class GateKeeper
 				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -2162,9 +2212,24 @@ class FileManager
 	function uploadFile($location, $userfile)
 	{
 		global $encodeExplorer;
-		$name = basename($userfile['name']);
+		
+		$name = $userfile['name'];
+		Logger::logUpload($name); // Before. PT
+		
+		if (EncodeExplorer::getConfig('charset') == "UTF-8")
+		{
+			// Konversion utf-8 > ISO. PT
+			$name = iconv ("UTF-8", "ISO-8859-1", $name); //PT
+			//$name = basename($userfile['name']); // doesn't work for national characters
+		}
+		
+		Logger::logUpload($name); // After. PT
+		
+		/*************************
+		// Always 'false' in modern PHP-versions.
 		if(get_magic_quotes_gpc())
 			$name = stripslashes($name);
+		****************************/
 
 		$upload_dir = $location->getFullPath();
 		$upload_file = $upload_dir . $name;
@@ -2958,6 +3023,7 @@ class EncodeExplorer
 <head>
 <meta name="viewport" content="width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php print $this->getConfig('charset'); ?>">
+<meta name="robots" content="noindex, nofollow"> 
 <?php css(); ?>
 <!-- <meta charset="<?php print $this->getConfig('charset'); ?>" /> -->
 <?php
@@ -3170,7 +3236,24 @@ if($this->files)
 		if($file->isValidForThumb())
 			print " thumb";
 		print "\">";
-		print $file->getNameHtml();
+		
+		if (EncodeExplorer::getConfig('charset') == "UTF-8")
+		{
+			// Konversion ISO > UTF-8. PT
+			//$fil = $file->getNameHtml();
+			$fil = $file->getName(); // PT testar
+			Logger::logFileList($fil); // PT
+			$fil = iconv ("ISO-8859-1", "UTF-8", $fil); // PT
+		}
+		
+		else
+		$fil = $file->getName();
+		//print $file->getNameHtml(); // *** Här skrivs namnet ***
+		//$fil = iconv ("UTF-8", "ISO-8859-1", $fil); //PT Konvertera före utskrift!
+		
+		print $fil;
+		Logger::logFileList($fil); // PT
+		
 		if($this->mobile == true)
 		{
 			print "<span class =\"size\">".$this->formatSize($file->getSize())."</span>";

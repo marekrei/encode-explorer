@@ -2017,12 +2017,9 @@ class GateKeeper
 	{
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
-			if($user[1] == $userPass)
+			if($userName == $user[0] && $user[1] == $userPass)
 			{
-				if(strlen($userName) == 0 || $userName == $user[0])
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;

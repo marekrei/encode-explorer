@@ -180,6 +180,9 @@ class FileManager
 					FileManager::delete_dir($path);
 				else if(is_file($path))
 					FileManager::delete_file($path);
+
+				// Refresh so 'del' param is not in address anymore
+				EncodeExplorer::refresh();
 			}
 		}
 	}

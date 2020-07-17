@@ -14,11 +14,6 @@ it is kept simple and functional. Free for everyone.
 * Interface for mobile devices
 
 
-Looking for a new manager
-----------------------------------
-Updated 5 March 2018: I am currently busy with other projects and therefore unable to continue updating encode explorer. Since the project is still quite popular, I am looking for someone to take over the maintenance and development of this code. This person should be someone with an established github history of contributing to open-source PHP projects. If you are interested, contact me at marek.rei@gmail.com.
-
-
 Manual
 ----------------------------------
 You have to upload index.php into your server.

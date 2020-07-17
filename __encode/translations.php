@@ -743,6 +743,40 @@ $_TRANSLATIONS["tr"] = array(
 	"log_out" => "Çıkış Yap"
 );
 
+
+// Ukrainian
+$_TRANSLATIONS["ua"] = array(
+	"file_name" => "Ім'я файлу",
+	"size" => "Розмір",
+	"last_changed" => "Востаннє змінено",
+	"total_used_space" => "Всього використано",
+	"free_space" => "Вільно",
+	"password" => "Пароль",
+	"upload" => ">> Завантажити",
+	"failed_upload" => "Не вдалось завантажити файл!",
+	"failed_move" => "Не вдалось перемістити файл в потрібну теку!",
+	"wrong_password" => "Невірний пароль",
+	"make_directory" => "Нова тека",
+	"new_dir_failed" => "Не вдалось створити теку",
+	"chmod_dir_failed" => "Не вдалось змінити права доступу до теки",
+	"unable_to_read_dir" => "Неможливо прочитати теку",
+	"location" => "Знаходження",
+	"root" => "Початок",
+	"log_file_permission_error" => "Скрипт не має прав запису лог файлу.",
+	"upload_not_allowed" => "Завантаження в цю теку заборонено в налаштуваннях скрипта",
+	"upload_dir_not_writable" => "В цю теку запис заборонений",
+	"mobile_version" => "Мобільний",
+	"standard_version" => "Звичайний вид",
+	"page_load_time" => "Сторінка завантажена за %.2f мс.",
+	"wrong_pass" => "Невірне ім'я користувача чи пароль",
+	"username" => "Ім'я користувача",
+	"log_in" => "Вийти",
+	"upload_type_not_allowed" => "Цей тип файлу завантажувати заборонено",
+	"del" => "Видалити",
+	"log_out" => "вийти"
+);
+
+
 // 简体中文(Simplified Chinese)
 $_TRANSLATIONS["zh_CN"] = array(
 	"file_name" => "文件名",

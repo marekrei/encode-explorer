@@ -395,32 +395,50 @@ class EncodeExplorer
 <!-- <meta charset="<?php print $this->getConfig('charset'); ?>" /> -->
 
 <?php
-if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file')) > 0)
-	|| ($this->getConfig('thumbnails') != null && $this->getConfig('thumbnails') == true && $this->mobile == false)
-	|| (GateKeeper::isDeleteAllowed()))
+if($this->getConfig('jquery_source') != null && $this->getConfig('jquery_source') != "none")
 {
-?>
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-<?php
-	if(GateKeeper::isDeleteAllowed())
+	if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file')) > 0)
+		|| ($this->getConfig('thumbnails') != null && $this->getConfig('thumbnails') == true && $this->mobile == false)
+		|| (GateKeeper::isDeleteAllowed()))
 	{
 
-		echo "
+		//
+		// Jquery source selection
+		//
+		$jq_src = "";
+		if ($this->getConfig('jquery_source') == "local")
+		{
+			$jq_src = '__encode/static/jquery.min.js';
+		}
+		elseif ($this->getConfig('jquery_source') == "cdn")
+		{
+			$jq_src = $this->getConfig('jquery_cdn_url');
+		}
+		else {} // Do nothing
+
+
+		// begin JS code
+		echo "<script type=\"text/javascript\" src=\"" . $jq_src . "\"></script>\n";
+		echo "<script type=\"text/javascript\">\n";
+		echo "//<![CDATA[\n";
+		echo "$(document).ready(function() {\n";
+
+
+		if(GateKeeper::isDeleteAllowed())
+		{
+
+			echo "
 	$('td.del a').click(function(){
 		var answer = confirm('Are you sure you want to delete : \"' + $(this).attr(\"data-name\") + '\" ?');
 		return answer;
 	});
-		";
+";
 
-	}
-	if($this->logging == true)
-	{
+		}
 
-		echo "
+		if($this->logging == true)
+		{
+			echo "
 	function logFileClick(path)
 	{
 		$.ajax({
@@ -436,13 +454,12 @@ $(document).ready(function() {
 		logFileClick('" . $this->location->getDir(true, true, false, 0) . "' + $(this).html());
 		return true;
 	});
-		";
+";
+		}
 
-	}
-	if(EncodeExplorer::getConfig("thumbnails") == true && $this->mobile == false)
-	{
-
-		echo "
+		if(EncodeExplorer::getConfig("thumbnails") == true && $this->mobile == false)
+		{
+			echo "
 	function positionThumbnail(e) {
 		xOffset = 30;
 		yOffset = 10;
@@ -465,14 +482,13 @@ $(document).ready(function() {
 
 	$('a.thumb').mousemove(function(e) { positionThumbnail(e); });
 	$('a.thumb').click(function(e) { $('#thumb').remove(); return true;} );
-		";
+";
+		}
 
+
+		// End of JS code
+		echo "\n});\n//]]>\n</script>\n";
 	}
-?>
-});
-//]]>
-</script>
-<?php
 }
 ?>
 

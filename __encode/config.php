@@ -279,4 +279,22 @@ $_CONFIG['large_files'] = false;
 //
 $_CONFIG['session_name'] = "";
 
+//
+// Defines where to find the JQuery file.
+// Allowed values:
+//  * "local": use the locally hosted file (at __encode/static/jquery.min.js)
+//  * "cdn"  : use the CDN url provided by $_CONFIG['jquery_cdn_url']
+//  * "none" : don't use JQuery (Warning: limited functionnality)
+//
+$_CONFIG['jquery_source'] = "cdn";
+
+//
+// URL to the JQuery javascript file (Usually a CDN).
+// You can use the CDN of your choice or any custom URL. See:
+// https://jquery.com/download/#using-jquery-with-a-cdn
+// Respected only when $_CONFIG['jquery_source'] == "cdn".
+// Default: $_CONFIG['session_name'] = "";
+//
+$_CONFIG['jquery_cdn_url'] = "https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js";
+
 ?>

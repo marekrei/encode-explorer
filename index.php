@@ -406,73 +406,76 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 //<![CDATA[
 $(document).ready(function() {
 <?php
-	if(GateKeeper::isDeleteAllowed()){
-?>
+	if(GateKeeper::isDeleteAllowed())
+	{
+
+		echo "
 	$('td.del a').click(function(){
-		var answer = confirm('Are you sure you want to delete : \'' + $(this).attr("data-name") + "\' ?");
+		var answer = confirm('Are you sure you want to delete : \"' + $(this).attr(\"data-name\") + '\" ?');
 		return answer;
 	});
-<?php
+		";
+
 	}
 	if($this->logging == true)
 	{
-?>
-		function logFileClick(path)
-		{
-			 $.ajax({
-					async: false,
-					type: "POST",
-					data: {log: path},
-					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-					cache: false
-				});
-		}
 
-		$("a.file").click(function(){
-			logFileClick("<?php print $this->location->getDir(true, true, false, 0);?>" + $(this).html());
-			return true;
+		echo "
+	function logFileClick(path)
+	{
+		$.ajax({
+			async: false,
+			type: \"POST\",
+			data: {log: path},
+			contentType: \"application/x-www-form-urlencoded; charset=UTF-8\",
+			cache: false
 		});
-<?php
+	}
+
+	$('a.file').click(function(){
+		logFileClick('" . $this->location->getDir(true, true, false, 0) . "' + $(this).html());
+		return true;
+	});
+		";
+
 	}
 	if(EncodeExplorer::getConfig("thumbnails") == true && $this->mobile == false)
 	{
-?>
-		function positionThumbnail(e) {
-			xOffset = 30;
-			yOffset = 10;
-			$("#thumb").css("left",(e.clientX + xOffset) + "px");
 
-			diff = 0;
-			if(e.clientY + $("#thumb").height() > $(window).height())
-				diff = e.clientY + $("#thumb").height() - $(window).height();
+		echo "
+	function positionThumbnail(e) {
+		xOffset = 30;
+		yOffset = 10;
+		$('#thumb').css(\"left\",(e.clientX + xOffset) + \"px\");
 
-			$("#thumb").css("top",(e.pageY - yOffset - diff) + "px");
-		}
+		diff = 0;
+		if(e.clientY + $('#thumb').height() > $(window).height())
+			diff = e.clientY + $('#thumb').height() - $(window).height();
 
-		$("a.thumb").hover(function(e){
-			$("#thumb").remove();
-			$("body").append("<div id=\"thumb\"><img src=\"?thumb="+ $(this).attr("href") +"\" alt=\"Preview\" \/><\/div>");
-			positionThumbnail(e);
-			$("#thumb").fadeIn("medium");
-		},
-		function(){
-			$("#thumb").remove();
-		});
+		$('#thumb').css(\"top\",(e.pageY - yOffset - diff) + \"px\");
+	}
 
-		$("a.thumb").mousemove(function(e){
-			positionThumbnail(e);
-			});
+	$('a.thumb').hover(function(e){
+		$('#thumb').remove();
+		$('body').append('<div id=\"thumb\"><img src=\"?thumb='+ $(this).attr(\"href\") +'\" alt=\"Preview\" \/><\/div>');
+		positionThumbnail(e);
+		$('#thumb').fadeIn(\"medium\");
+	},
+	function() { $('#thumb').remove(); });
 
-		$("a.thumb").click(function(e){$("#thumb").remove(); return true;});
-<?php
+	$('a.thumb').mousemove(function(e) { positionThumbnail(e); });
+	$('a.thumb').click(function(e) { $('#thumb').remove(); return true;} );
+		";
+
 	}
 ?>
-	});
+});
 //]]>
 </script>
 <?php
 }
 ?>
+
 <title><?php if(EncodeExplorer::getConfig('main_title') != null) print EncodeExplorer::getConfig('main_title'); ?></title>
 </head>
 <body class="<?php print ($this->mobile == true?"mobile":"standard");?>">

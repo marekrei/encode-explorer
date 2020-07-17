@@ -126,9 +126,9 @@ $_CONFIG['charset'] = "UTF-8";
 
 //
 // The array of folder names that will be hidden from the list.
-// Default: $_CONFIG['hidden_dirs'] = array();
+// Default: $_CONFIG['hidden_dirs'] = array("__encode");
 //
-$_CONFIG['hidden_dirs'] = array();
+$_CONFIG['hidden_dirs'] = array("__encode");
 
 //
 // Filenames that will be hidden from the list.

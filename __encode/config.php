@@ -295,6 +295,6 @@ $_CONFIG['jquery_source'] = "cdn";
 // Respected only when $_CONFIG['jquery_source'] == "cdn".
 // Default: $_CONFIG['session_name'] = "";
 //
-$_CONFIG['jquery_cdn_url'] = "https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js";
+$_CONFIG['jquery_cdn_url'] = "https://code.jquery.com/jquery-3.5.1.min.js";
 
 ?>

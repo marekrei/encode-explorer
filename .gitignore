@@ -1,0 +1,2 @@
+# Ignore local jquery file
+__encode/static/jquery*.js

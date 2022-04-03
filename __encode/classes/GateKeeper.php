@@ -26,12 +26,17 @@ class GateKeeper
 		global $encodeExplorer;
 		if(strlen(EncodeExplorer::getConfig("session_name")) > 0)
 				session_name(EncodeExplorer::getConfig("session_name"));
-
-		if(count(EncodeExplorer::getConfig("users")) > 0)
-			session_start();
-		else
-			return;
-
+		session_start();
+		if(!empty($_SESSION['ee_user_name'])) {
+			return true;
+		}
+		if (!isset($_SESSION['ee_user_name'])) {
+			header('Location: https://ebdz.xyz/forum/');
+			exit;
+		}
+		header('HTTP/1.0 403 Forbidden');
+		die('You are not allowed to access explorer.');
+		exit;
 		if(isset($_GET['logout']))
 		{
 			$_SESSION['ee_user_name'] = null;
@@ -55,6 +60,9 @@ class GateKeeper
 
 	public static function isUser($userName, $userPass)
 	{
+		if(!empty($_SESSION['ee_user_name'])) {
+			return true;
+		}
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
 			if($user[0] == $userName && $user[1] == $userPass)
@@ -75,6 +83,14 @@ class GateKeeper
 
 	public static function isUserLoggedIn()
 	{
+		if (isset($_SESSION['ee_user_name'], $_SESSION['ee_user_right'], $_SESSION['ee_user_dir'])) {
+			$userdir = $_SESSION['ee_user_dir'];
+			$basepath = getcwd();
+			if(!is_dir($basepath ."/" . $userdir)) {
+				@mkdir($basepath ."/" . $userdir);
+			}
+			return true;
+		}
 		if(isset($_SESSION['ee_user_name'], $_SESSION['ee_user_pass']))
 		{
 			if(GateKeeper::isUser($_SESSION['ee_user_name'], $_SESSION['ee_user_pass']))
@@ -93,22 +109,40 @@ class GateKeeper
 	public static function isUploadAllowed(){
 		if(EncodeExplorer::getConfig("upload_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
 			return true;
-		return false;
+		return self::isUserDir();
 	}
 
 	public static function isNewdirAllowed(){
 		if(EncodeExplorer::getConfig("newdir_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
 			return true;
-		return false;
+		return self::isUserDir();
 	}
 
 	public static function isDeleteAllowed(){
 		if(EncodeExplorer::getConfig("delete_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
 			return true;
-		return false;
+		return self::isUserDir();
+	}
+
+	public static function isUserDir(){
+		if(empty($_SESSION['ee_user_dir'])) {
+			return false;
+		}
+		$userdir = $_SESSION['ee_user_dir'];
+		$location = new Location();
+		$location->init();
+		$currentDir = $location->getDir(true, false, false, 0);
+		return substr($currentDir, 0, strlen($userdir)) === $userdir;
 	}
 
 	public static function getUserStatus(){
+		if (!empty($_SESSION['ee_user_right'])) {
+			if($_SESSION['ee_user_right'] == "admin") {
+				return "admin";
+			}
+			return $_SESSION['ee_user_right'];
+		}
+		return null;
 		if(GateKeeper::isUserLoggedIn() == true && EncodeExplorer::getConfig("users") != null && is_array(EncodeExplorer::getConfig("users"))){
 			foreach(EncodeExplorer::getConfig("users") as $user){
 				if($user[0] != null && $user[0] == $_SESSION['ee_user_name'])

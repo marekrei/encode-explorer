@@ -144,7 +144,7 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // They will still be able to access the files with a direct link.
 // Default: $_CONFIG['require_login'] = false;
 //
-$_CONFIG['require_login'] = false;
+$_CONFIG['require_login'] = true;
 
 //
 // Usernames and passwords for restricting access to the page.

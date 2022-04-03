@@ -20,6 +20,11 @@ You have to upload index.php into your server.
 If you open index.php you can edit several settings.
 You should make sure the edited file will be saved in UTF-8!
 
+MybBB hack
+----------------------------------
+
+This version use already set session. It(s done to use with mybb-encodeexplorer plugin.
+Session must be shared on same server.
 
 License
 ----------------------------------

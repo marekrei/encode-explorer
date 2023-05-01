@@ -46,7 +46,6 @@ class FileManager
 			{
 				$dirname = str_replace($forbidden[$i], "", $dirname);
 			}
-
 			if(!$location->uploadAllowed())
 			{
 				// The system configuration does not allow uploading here
@@ -80,8 +79,6 @@ class FileManager
 	{
 		global $encodeExplorer;
 		$name = basename($userfile['name']);
-		if(get_magic_quotes_gpc())
-			$name = stripslashes($name);
 
 		$upload_dir = $location->getFullPath();
 		$upload_file = $upload_dir . $name;
@@ -125,6 +122,18 @@ class FileManager
 		}
 	}
 
+	private function reArrayFiles($file_post) {
+		$file_ary = array();
+		$file_count = count($file_post['name']);
+		$file_keys = array_keys($file_post);
+		for ($i=0; $i<$file_count; $i++) {
+			foreach ($file_keys as $key) {
+				$file_ary[$i][$key] = $file_post[$key][$i];
+			}
+		}
+
+		return $file_ary;
+	}
 	public static function delete_dir($dir) {
 		if (is_dir($dir)) {
 			$objects = scandir($dir);
@@ -158,12 +167,16 @@ class FileManager
 			}
 		}
 
-		if(isset($_FILES['userfile']['name']) && strlen($_FILES['userfile']['name']) > 0){
+		if(isset($_FILES['userfile']['name']) && is_array($_FILES['userfile']['name']) ){
 			if($location->uploadAllowed() && GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isUploadAllowed()){
-				$this->uploadFile($location, $_FILES['userfile']);
+				$userfiles = $this->reArrayFiles($_FILES['userfile']);
+				foreach ($userfiles as $userfile) {
+					if (!empty($userfile['name'])) {
+						$this->uploadFile($location, $userfile);
+					}
+				}
 			}
 		}
-
 		if(isset($_GET['del'])){
 			if(GateKeeper::isUserLoggedIn() && GateKeeper::isAccessAllowed() && GateKeeper::isDeleteAllowed()){
 				$split_path = Location::splitPath($_GET['del']);
@@ -187,5 +200,3 @@ class FileManager
 		}
 	}
 }
-
-?>

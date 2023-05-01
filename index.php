@@ -720,7 +720,7 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKee
 		if(GateKeeper::isUploadAllowed()){
 		?>
 		<div id="upload_container">
-			<input name="userfile" type="file" class="upload_file" />
+			<input name="userfile[]" type="file" multiple class="upload_file" />
 			<input type="submit" value="<?php print $this->getString("upload"); ?>" class="upload_sumbit" />
 		</div>
 		<?php
@@ -786,4 +786,3 @@ if(!ImageServer::showImage() && !Logger::logQuery())
 	}
 	$encodeExplorer->run($location);
 }
-?>

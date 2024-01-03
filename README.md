@@ -13,6 +13,10 @@ it is kept simple and functional. Free for everyone.
 * Optional password protection
 * Interface for mobile devices
 
+Black Interface
+==================================
+* Delete the "index.php" file / Change the "index.php" file name.
+* Rename the file "index-black.php" to "index.php".
 
 Manual
 ----------------------------------

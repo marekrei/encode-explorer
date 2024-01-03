@@ -74,7 +74,7 @@ $_CONFIG['mobile_default'] = false;
 $_CONFIG['open_in_new_window'] = false;
 
 //
-// Will the files be downloaded rather than opened? true/false
+// When clicking on files, will the files be downloaded rather than opened? true/false
 // Default: $_CONFIG['force_download'] = false;
 //
 $_CONFIG['force_download'] = false;
@@ -3206,6 +3206,7 @@ if($this->files)
 		if($file->isValidForThumb())
 			print " thumb";
 		print "\"";
+		print "WOOOO".EncodeExplorer::getConfig('force_download');
 		if(EncodeExplorer::getConfig('force_download') == true)
 			print " download";
 		print ">";

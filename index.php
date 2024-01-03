@@ -2877,7 +2877,7 @@ class EncodeExplorer
 
 	public static function cmp_name($a, $b)
 	{
-		return strcasecmp($a->name, $b->name);
+		return strnatcmp($a->name, $b->name);
 	}
 
 	public static function cmp_size($a, $b)

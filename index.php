@@ -74,6 +74,12 @@ $_CONFIG['mobile_default'] = false;
 $_CONFIG['open_in_new_window'] = false;
 
 //
+// Will the files be downloaded rather than opened? true/false
+// Default: $_CONFIG['force_download'] = false;
+//
+$_CONFIG['force_download'] = false;
+
+//
 // How deep in subfolders will the script search for files?
 // Set it larger than 0 to display the total used space.
 // Default: $_CONFIG['calculate_space_level'] = 0;
@@ -3199,7 +3205,10 @@ if($this->files)
 		print " class=\"item file";
 		if($file->isValidForThumb())
 			print " thumb";
-		print "\">";
+		print "\"";
+		if(EncodeExplorer::getConfig('force_download') == true)
+			print " download";
+		print ">";
 		print $file->getNameHtml();
 		if($this->mobile == true)
 		{

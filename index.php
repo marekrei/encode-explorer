@@ -764,6 +764,38 @@ $_TRANSLATIONS["ko"] = array(
 	"log_out" => "로그아웃"
 ); 
 
+// Lithuanian
+$_TRANSLATIONS["lt"] = array(
+        "file_name" => "Pavadinimas",
+        "size" => "Dydis",
+        "last_changed" => "Paskutiniai pakeitimai",
+        "total_used_space" => "Visa naudojama vieta",
+        "free_space" => "Laisva vieta",
+        "password" => "Slaptažodis",
+        "upload" => "Įkelti",
+        "failed_upload" => "Įkėlimas nepavyko",
+        "failed_move" => "Failo perkėlimas nepavyko",
+        "wrong_password" => "Klaidingas slaptažodis",
+        "make_directory" => "Kurti aplanką",
+        "new_dir_failed" => "Aplanko sukurti nepavyko",
+        "chmod_dir_failed" => "Privilegijų keitimas nepavyko",
+        "unable_to_read_dir" => "Nepavyko atverti aplanko",
+        "location" => "Vieta",
+        "root" => "Šakninis",
+	"log_file_permission_error" => "Šis skriptas neturi teisių rašyti log failo.",
+        "upload_not_allowed" => "Šis skriptas neleidžia failų įklimo į šį aplanką.",
+        "upload_dir_not_writable" => "Neturite teisių rašyti į šį aplanką.",
+        "mobile_version" => "Versija mobiliesiems",
+        "standard_version" => "Paprasta versija",
+        "page_load_time" => "Puslapis įkeltas per %.2f ms",
+        "wrong_pass" => "Klaidingas vartotojo vardas ar slaptažodis",
+        "username" => "Vartotojo vardas",
+        "log_in" => "Prisijungti",
+        "upload_type_not_allowed" => "Šio tipo failų įkelti negalima.",
+        "del" => "Trinti", // short for Delete
+        "log_out" => "Atsijungti"
+);
+
 // Norwegian
 $_TRANSLATIONS["no"] = array(
 	"file_name" => "Navn",

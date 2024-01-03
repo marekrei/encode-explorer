@@ -2876,8 +2876,9 @@ class EncodeExplorer
 	//
 
 	public static function cmp_name($a, $b)
-	{
-		return strcasecmp($a->name, $b->name);
+	{		
+		$coll = collator_create( EncodeExplorer::getConfig("lang") );
+		return $res  = collator_compare( $coll, $a->name, $b->name );
 	}
 
 	public static function cmp_size($a, $b)

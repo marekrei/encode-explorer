@@ -156,6 +156,14 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 $_CONFIG['require_login'] = false;
 
 //
+// Whether use md5 to store passwords both in session and this script.
+// If set to false, the password will be stored as is.
+// If set to true, script will use md5 to store and check passwords.
+// Default: $_CONFIG['md5_passwords'] = false;
+//
+$_CONFIG['md5_passwords'] = false;
+
+//
 // Usernames and passwords for restricting access to the page.
 // The format is: array(username, password, status)
 // Status can be either "user" or "admin". User can read the page, admin can upload and delete.
@@ -163,6 +171,8 @@ $_CONFIG['require_login'] = false;
 // You can also keep require_login=false and specify an admin.
 // That way everyone can see the page but username and password are needed for uploading.
 // For example: $_CONFIG['users'] = array(array("username", "password", "admin"));
+// IF md5_passwords config is set, than password should be md5 encrypted
+// For example: $_CONFIG['users'] = array(array("username", "5f4dcc3b5aa765d61d8327deb882cf99", "admin"));
 // Default: $_CONFIG['users'] = array();
 //
 $_CONFIG['users'] = array();
@@ -968,6 +978,38 @@ $_TRANSLATIONS["ru"] = array(
 	"upload_type_not_allowed" => "Этот тип файла запрещено загружать",
 	"del" => "удалить",
 	"log_out" => "выйти"
+);
+
+// Ukrainian
+$_TRANSLATIONS["ua"] = array(
+	"file_name" => "Ім'я файлу",
+	"size" => "Розмір",
+	"last_changed" => "Востаннє змінено",
+	"total_used_space" => "Всього використано",
+	"free_space" => "Вільно",
+	"password" => "Пароль",
+	"upload" => ">> Завантажити",
+	"failed_upload" => "Не вдалось завантажити файл!",
+	"failed_move" => "Не вдалось перемістити файл в потрібну теку!",
+	"wrong_password" => "Невірний пароль",
+	"make_directory" => "Нова тека",
+	"new_dir_failed" => "Не вдалось створити теку",
+	"chmod_dir_failed" => "Не вдалось змінити права доступу до теки",
+	"unable_to_read_dir" => "Неможливо прочитати теку",
+	"location" => "Знаходження",
+	"root" => "Початок",
+	"log_file_permission_error" => "Скрипт не має прав запису лог файлу.",
+	"upload_not_allowed" => "Завантаження в цю теку заборонено в налаштуваннях скрипта",
+	"upload_dir_not_writable" => "В цю теку запис заборонений",
+	"mobile_version" => "Мобільний",
+	"standard_version" => "Звичайний вид",
+	"page_load_time" => "Сторінка завантажена за %.2f мс.",
+	"wrong_pass" => "Невірне ім'я користувача чи пароль",
+	"username" => "Ім'я користувача",
+	"log_in" => "Вийти",
+	"upload_type_not_allowed" => "Цей тип файлу завантажувати заборонено",
+	"del" => "Видалити",
+	"log_out" => "вийти"
 );
 
 // Slovensky
@@ -2041,10 +2083,15 @@ class GateKeeper
 
 		if(isset($_POST['user_pass']) && strlen($_POST['user_pass']) > 0)
 		{
-			if(GateKeeper::isUser((isset($_POST['user_name'])?$_POST['user_name']:""), $_POST['user_pass']))
+			if (EncodeExplorer::getConfig("md5_passwords") == false)
+			{
+				$password = $_POST['user_pass'];
+			} else $password = md5($_POST['user_pass']);
+		
+			if(GateKeeper::isUser((isset($_POST['user_name'])?$_POST['user_name']:""), $password))
 			{
 				$_SESSION['ee_user_name'] = isset($_POST['user_name'])?$_POST['user_name']:"";
-				$_SESSION['ee_user_pass'] = $_POST['user_pass'];
+				$_SESSION['ee_user_pass'] = $password;
 
 				$addr  = $_SERVER['PHP_SELF'];
 				$param = '';

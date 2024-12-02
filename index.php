@@ -1921,6 +1921,7 @@ class ImageServer
 	
 	public static function isAllowedToOpenPath($file)
 	{
+	    global $_CONFIG;
 	    if(realpath($file) && str_starts_with(realpath($file), realpath($_CONFIG['starting_dir'])))
             return true;
         return false;

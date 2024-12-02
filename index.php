@@ -1177,7 +1177,6 @@ input {
 table.table {
 	width:100%;
 	border-collapse: collapse;
-	table-layout: fixed;
 	word-wrap: break-word;
 }
 

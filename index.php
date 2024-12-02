@@ -1828,6 +1828,9 @@ class ImageServer
 		if(!ImageServer::isEnabledPdf())
 			return null;
 
+        if(!ImageServer::isAllowedToOpenPath($file))
+            return null;
+            
 		$im = new Imagick($file.'[0]');
 		$im->setImageFormat( "png" );
 		$str = $im->getImageBlob();
@@ -1915,30 +1918,42 @@ class ImageServer
 			imagepng($image);
 		}
 	}
+	
+	public static function isAllowedToOpenPath($file)
+	{
+	    if(realpath($file) && str_starts_with(realpath($file), realpath($_CONFIG['starting_dir'])))
+            return true;
+        return false;
+	}
 
 	//
 	// A helping function for opening different types of image files
 	//
 	public static function openImage ($file)
 	{
-		$size = getimagesize($file);
-		switch($size["mime"])
-		{
-			case "image/jpeg":
-				$im = imagecreatefromjpeg($file);
-			break;
-			case "image/gif":
-				$im = imagecreatefromgif($file);
-			break;
-			case "image/png":
-				$im = imagecreatefrompng($file);
-			break;
-			default:
-				$im=null;
-			break;
-		}
+	    if(!ImageServer::isAllowedToOpenPath($file))
+            return null;
+            
+	    $im = null;
+	    $size = getimagesize($file);
+	    switch($size["mime"])
+	    {
+		    case "image/jpeg":
+			    $im = imagecreatefromjpeg($file);
+		    break;
+		    case "image/gif":
+			    $im = imagecreatefromgif($file);
+		    break;
+		    case "image/png":
+			    $im = imagecreatefrompng($file);
+		    break;
+		    default:
+			    $im = null;
+		    break;
+	    }
 		return $im;
 	}
+
 }
 
 //
@@ -3206,7 +3221,7 @@ if($this->files)
 		if($file->isValidForThumb())
 			print " thumb";
 		print "\"";
-		print "WOOOO".EncodeExplorer::getConfig('force_download');
+		print " ".EncodeExplorer::getConfig('force_download');
 		if(EncodeExplorer::getConfig('force_download') == true)
 			print " download";
 		print ">";

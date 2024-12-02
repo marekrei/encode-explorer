@@ -347,6 +347,7 @@ $_TRANSLATIONS["bg"] = array(
 	"del" => "Изтриване",
 	"log_out" => "Изход"
 );
+
 //Catalan
 $_TRANSLATIONS["ca"] = array(
         "file_name" => "Nom d'arxiu",
@@ -1085,6 +1086,38 @@ $_TRANSLATIONS["zh_CN"] = array(
 	"log_out" => "注销",
 	"upload_type_not_allowed" => "禁止上传该文件类型",
 	"del" => "删除"
+);
+
+// 正體中文(Traditional Chinese)
+$_TRANSLATIONS["zh_TW"] = array(
+    "file_name" => "檔案名稱",
+    "size" => "檔案大小",
+    "last_changed" => "最後更改",
+    "total_used_space" => "總共大小",
+    "free_space" => "剩餘空間",
+    "password" => "密碼",
+    "upload" => "上傳檔案",
+    "failed_upload" => "上傳失敗",
+    "failed_move" => "移動失敗",
+    "wrong_password" => "密碼錯誤",
+    "make_directory" => "建立新資料夾",
+    "new_dir_failed" => "資料夾新增失敗",
+    "chmod_dir_failed" => "無法更改資料夾權限",
+    "unable_to_read_dir" => "無法讀取資料夾",
+    "location" => "位置",
+    "root" => "根目錄",
+    "log_file_permission_error" => "本程式沒有權限寫入記錄檔",
+    "upload_not_allowed" => "不允許在這個資料夾上傳檔案",
+    "upload_dir_not_writable" => "這個資料夾沒有寫入權限",
+    "mobile_version" => "手機模式",
+    "standard_version" => "標準模式",
+    "page_load_time" => "執行使用%.2f毫秒",
+    "wrong_pass" => "帳號或密碼錯誤",
+    "username" => "帳號",
+    "log_in" => "登入",
+    "upload_type_not_allowed" => "不允許上傳這種類型的檔案",
+    "del" => "刪除",
+    "log_out" => "登出",
 );
 
 /***************************************************************************/
@@ -2071,12 +2104,9 @@ class GateKeeper
 	{
 		foreach(EncodeExplorer::getConfig("users") as $user)
 		{
-			if($user[1] == $userPass)
+			if($userName == $user[0] && $user[1] == $userPass)
 			{
-				if(strlen($userName) == 0 || $userName == $user[0])
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;

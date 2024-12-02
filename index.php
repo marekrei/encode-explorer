@@ -134,13 +134,21 @@ $_CONFIG['charset'] = "UTF-8";
 */
 
 //
+// Wether wildcard is allowed for filename list
+// Default: $_CONFIG['allow_wildcards'] = false;
+//
+$_CONFIG['allow_wildcards'] = false;
+
+//
 // The array of folder names that will be hidden from the list.
+// Note: to allow usage of '*' or '?', see $_CONFIG['allow_wildcards']
 // Default: $_CONFIG['hidden_dirs'] = array();
 //
 $_CONFIG['hidden_dirs'] = array();
 
 //
 // Filenames that will be hidden from the list.
+// Note: to allow usage of '*' or '?', see $_CONFIG['allow_wildcards']
 // Default: $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
 //
 $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htaccess", ".htpasswd");
@@ -204,6 +212,7 @@ $_CONFIG['upload_allow_type'] = array();
 //
 // File extensions that are not allowed for uploading.
 // For example: $_CONFIG['upload_reject_extension'] = array("php", "html", "htm");
+// Note: to allow usage of '*' or '?', see $_CONFIG['allow_wildcards']
 // Default: $_CONFIG['upload_reject_extension'] = array();
 //
 $_CONFIG['upload_reject_extension'] = array("php", "php2", "php3", "php4", "php5", "phtml");
@@ -2244,7 +2253,7 @@ class FileManager
 		{
 			$encodeExplorer->setErrorString("upload_type_not_allowed");
 		}
-		else if(is_array(EncodeExplorer::getConfig("upload_reject_extension")) && count(EncodeExplorer::getConfig("upload_reject_extension")) > 0 && in_array($extension, EncodeExplorer::getConfig("upload_reject_extension")))
+		else if(is_array(EncodeExplorer::getConfig("upload_reject_extension")) && count(EncodeExplorer::getConfig("upload_reject_extension")) > 0 && EncodeExplorer::in_list($extension, EncodeExplorer::getConfig("upload_reject_extension")))
 		{
 			$encodeExplorer->setErrorString("upload_type_not_allowed");
 		}
@@ -2716,10 +2725,10 @@ class EncodeExplorer
 				{
 					if(is_dir($this->location->getDir(true, false, false, 0)."/".$object))
 					{
-						if(!in_array($object, EncodeExplorer::getConfig('hidden_dirs')))
+						if(!EncodeExplorer::in_list($object, EncodeExplorer::getConfig('hidden_dirs')))
 							$this->dirs[] = new Dir($object, $this->location);
 					}
-					else if(!in_array($object, EncodeExplorer::getConfig('hidden_files')))
+					else if(!EncodeExplorer::in_list($object, EncodeExplorer::getConfig('hidden_files')))
 						$this->files[] = new File($object, $this->location);
 				}
 			}
@@ -2728,6 +2737,24 @@ class EncodeExplorer
 		else
 		{
 			$encodeExplorer->setErrorString("unable_to_read_dir");;
+		}
+	}
+    
+	//
+	// Function to check if an object is in a list
+	// Uses wildcard if allowed
+	//
+	public static function in_list($object, $list)
+	{
+		if (EncodeExplorer::getConfig('allow_wildcards') === true) {
+			foreach ($list as $pattern)
+			{
+				if (fnmatch($pattern, $object) === true)
+					return true;
+			}
+			return false;
+		} else {
+			return in_array($object, $list);
 		}
 	}
 

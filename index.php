@@ -151,6 +151,10 @@ $_CONFIG['hidden_files'] = array(".ftpquota", "index.php", "index.php~", ".htacc
 // If set to true, you should specify some users as well (see below).
 // Important: This only prevents people from seeing the list.
 // They will still be able to access the files with a direct link.
+// Addition: Combine htaccess and require_login to disallow
+// direct access to file. File access gets logged more precisely.
+// Attention: Be advised, the file is processed by PHP,
+// large/slow downloads might break due to php_script_timeout
 // Default: $_CONFIG['require_login'] = false;
 //
 $_CONFIG['require_login'] = false;
@@ -825,7 +829,7 @@ $_TRANSLATIONS["no"] = array(
 //Polish
 $_TRANSLATIONS["pl"] = array(
   "file_name" => "Nazwa pliku",
-  "size" => "Rozmiar",
+	"size" => "Rozmiar",
   "last_changed" => "Data zmiany",
   "total_used_space" => "Cała przestrzeń",
   "free_space" => "Wolna przestrzeń",
@@ -834,17 +838,17 @@ $_TRANSLATIONS["pl"] = array(
   "failed_upload" => "Przesłanie pliku nie powiodło się",
   "failed_move" => "Przenoszenie pliku nie powiodło się!",
   "wrong_password" => "Niepoprawne hasło",
-  "make_directory" => "Nowy folder",
+	"make_directory" => "Nowy folder",
   "new_dir_failed" => "Błąd podczas tworzenia nowego folderu",
   "chmod_dir_failed" => "Błąd podczas zmiany uprawnień folderu",
   "unable_to_read_dir" => "Odczytanie folderu nie powiodło się",
-  "location" => "Miejsce",
+	"location" => "Miejsce",
   "root" => "Start",
   "log_file_permission_error" => "Brak uprawnień aby utworzyć dziennik działań.",
   "upload_not_allowed" => "Konfiguracja zabrania przesłania pliku do tego folderu.",
   "upload_dir_not_writable" => "Nie można zapisać pliku do tego folderu.",
   "mobile_version" => "Wersja mobilna",
-  "standard_version" => "Widok standardowy",
+	"standard_version" => "Widok standardowy",
   "page_load_time" => "Załadowano w %.2f ms",
   "wrong_pass" => "Niepoprawna nazwa użytkownika lub złe hasło",
   "username" => "Użytkownik",
@@ -1766,6 +1770,10 @@ $_IMAGES["xls"] = $_IMAGES["spreadsheet"];
 $_IMAGES["xlsx"] = $_IMAGES["spreadsheet"];
 $_IMAGES["xml"] = $_IMAGES["code"];
 $_IMAGES["zip"] = $_IMAGES["archive"];
+$_IMAGES["download"] = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAA
+CxMAAAsTAQCanBgAAAAHdElNRQfhAxUJJiDGyieZAAAAeklEQVQoz62QsQqAMAxEn7Wbn9NZP0Dw
+/0e/Qu0QGhcrTakI4mVIAncXLvCCzmz+6tImeyKCEG9ioclbX6tcMStquiEMuMLN4xis00hC0KuE
+xFgfC0QSipKIhFaKiQNFOZievhLY2dvqjIWFb1jvBLlW+8m5zs3GTzgBdP0qMaa27WIAAAAASUVO";
 
 /***************************************************************************/
 /*   HERE COMES THE CODE.                                                  */
@@ -1980,8 +1988,12 @@ class Logger
 	public static function logAccess($path, $isDir)
 	{
 		$message = $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." accessed ";
-		$message .= $isDir?"dir":"file";
+		$message .= $isDir && !(isset($_GET['file']) || isset($_GET['dl'])) ? "dir" : "file";
 		$message .= " ".$path;
+		if (isset($_GET['file']))
+			$message.= $_GET['file'];
+		if (isset($_GET['dl']))
+			$message.= $_GET['dl'];
 		Logger::log($message);
 	}
 
@@ -2004,6 +2016,14 @@ class Logger
 		Logger::log($message);
 	}
 
+	public static function logDeletion($path, $isDir)
+	{
+		$message = $_SERVER['REMOTE_ADDR']." ".GateKeeper::getUserName()." deleted ";
+		$message .= $isDir?"dir":"file";
+		$message .= " ".$path;
+		Logger::log($message);
+	}
+
 	public static function emailNotification($path, $isFile)
 	{
 		if(strlen(EncodeExplorer::getConfig('upload_email')) > 0)
@@ -2013,6 +2033,18 @@ class Logger
 			$message .= "Path : ".$path."\n";
 			$message .= "IP : ".$_SERVER['REMOTE_ADDR']."\n";
 			mail(EncodeExplorer::getConfig('upload_email'), "Upload notification", $message);
+		}
+	}
+	
+	public static function emailNotificationDeletion($path, $isFile)
+	{
+		if(strlen(EncodeExplorer::getConfig('upload_email')) > 0)
+		{
+			$message = "This is a message to let you know that ".GateKeeper::getUserName()." ";
+			$message .= ($isFile?"deleted a file":"deleted a directory")." in Encode Explorer.\n\n";
+			$message .= "Path : ".$path."\n";
+			$message .= "IP : ".$_SERVER['REMOTE_ADDR']."\n";
+			mail(EncodeExplorer::getConfig('delete_email'), "Deletion notification", $message);
 		}
 	}
 }
@@ -2151,6 +2183,18 @@ class GateKeeper
 			return true;
 		return false;
 	}
+
+
+	public static function isAccessAllowedOnFile($filepath) {
+		$path = str_replace(basename($filepath), "", $filepath);
+
+		foreach(explode("/", $path) as $dir) {
+			if (in_array($dir, EncodeExplorer::getConfig('hidden_dirs')))
+				return false;
+		}
+		
+		return !in_array(basename($filepath), EncodeExplorer::getConfig('hidden_files'));
+	}
 }
 
 //
@@ -2260,6 +2304,56 @@ class FileManager
 		}
 	}
 
+	function downloadFile($filepath)
+	{
+		$filepath = EncodeExplorer::getConfig('basedir').$filepath;
+		if (strpos($filepath, '../') !== false)
+			return;	// Not allowed
+		if( file_exists( $filepath ) )
+		{
+		  header( 'Cache-Control: public' );
+		  header( 'Content-Description: File Transfer' );
+		  header( 'Content-Disposition: attachment; filename='.basename($filepath) );
+		  header( 'Content-Type: '.File::getFileMime($filepath) );	// application/octet-stream
+		  header( 'Content-Length: '.filesize($filepath));
+		  header( 'Content-Transfer-Encoding: binary' );
+		  readfile( $filepath );
+		  exit;
+		}
+	}
+
+	function provideFile($filepath)
+	{
+		$filepath = EncodeExplorer::getConfig('basedir').$filepath;
+		if (strpos($filepath, '../') !== false)
+			return;	// Not allowed
+		if( file_exists( $filepath ) )
+		{
+			$mtime = gmdate('r', filemtime($_SERVER['SCRIPT_FILENAME']));
+			$etag = md5($mtime.$_SERVER['SCRIPT_FILENAME']);
+
+			if ((isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $mtime)
+				|| (isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $etag))
+			{
+				header('HTTP/1.1 304 Not Modified');
+				return true;
+			}
+			else {
+				header( 'ETag: "'.$etag.'"' );
+				header( 'Last-Modified: '.$mtime );
+				header( 'Cache-Control: public' );
+				//header( 'Content-Description: File Transfer' );
+				header( 'Content-Disposition: filename='.basename($filepath) );
+				header( 'Content-type: '.File::getFileMime($filepath) );
+				header( 'Content-Length: '.filesize($filepath));
+				header( 'Content-Transfer-Encoding: binary' );
+				readfile( $filepath );
+				exit;
+			}
+			return true;
+		}
+	}
+	
 	public static function delete_dir($dir) {
 		if (is_dir($dir)) {
 			$objects = scandir($dir);
@@ -2273,12 +2367,16 @@ class FileManager
 			}
 			reset($objects);
 			rmdir($dir);
+			Logger::logDeletion("./".$dir, true);
+			Logger::emailNotificationDeletion("./".$dir, false);
 		}
 	}
 
 	public static function delete_file($file){
 		if(is_file($file)){
 			unlink($file);
+			Logger::logDeletion("./".$file, false);
+			Logger::emailNotificationDeletion("./".$file, true);
 		}
 	}
 
@@ -2317,6 +2415,11 @@ class FileManager
 					FileManager::delete_file($path);
 			}
 		}
+		
+		if (isset($_GET['dl']) && !empty($_GET['dl']) && GateKeeper::isAccessAllowed() && GateKeeper::isAccessAllowedOnFile($_GET['dl']))
+			$this->downloadFile($_GET['dl']);
+		if (isset($_GET['file']) && !empty($_GET['file']) && GateKeeper::isAccessAllowed() && GateKeeper::isAccessAllowedOnFile($_GET['file']))
+			$this->provideFile($_GET['file']);
 	}
 }
 
@@ -2678,7 +2781,7 @@ class EncodeExplorer
 		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set'))
 		{
 			@date_default_timezone_set(date_default_timezone_get());
-		}
+				}
 
 		if(isset($_GET['lang']) && is_scalar($_GET['lang']) && isset($_TRANSLATIONS[$_GET['lang']]))
 			$this->lang = $_GET['lang'];
@@ -2778,8 +2881,8 @@ class EncodeExplorer
 			usort($this->dirs, array('EncodeExplorer', 'cmp_'.$sort_by));
 			if($this->sort_as == "desc") {
 				$this->dirs = array_reverse($this->dirs);
-			}
 		}
+	}
 
 		// Here we filter the comparison functions supported by our file object
 		$sort_by = in_array($this->sort_by, array('name', 'size', 'mod')) ? $this->sort_by : 'name';
@@ -2788,7 +2891,7 @@ class EncodeExplorer
 			usort($this->files, array('EncodeExplorer', 'cmp_'.$sort_by));
 			if($this->sort_as == "desc") {
 				$this->files = array_reverse($this->files);
-			}
+		}
 		}
 	}
 
@@ -3031,7 +3134,7 @@ $(document).ready(function() {
 	});
 <?php
 	}
-	if($this->logging == true)
+	if($this->logging == true && !GateKeeper::isLoginRequired())
 	{
 ?>
 		function logFileClick(path)
@@ -3046,7 +3149,7 @@ $(document).ready(function() {
 		}
 
 		$("a.file").click(function(){
-			logFileClick("<?php print $this->location->getDir(true, true, false, 0);?>" + $(this).html());
+			logFileClick("./" + $(this).attr('href').replace("?dl=","").replace("?file=",""));
 			return true;
 		});
 <?php
@@ -3068,7 +3171,7 @@ $(document).ready(function() {
 
 		$("a.thumb").hover(function(e){
 			$("#thumb").remove();
-			$("body").append("<div id=\"thumb\"><img src=\"?thumb="+ $(this).attr("href") +"\" alt=\"Preview\" \/><\/div>");
+			$("body").append("<div id=\"thumb\"><img src=\"?thumb="+ $(this).attr("href").replace("?dl=","").replace("?file=","") +"\" alt=\"Preview\" \/><\/div>");
 			positionThumbnail(e);
 			$("#thumb").fadeIn("medium");
 		},
@@ -3159,13 +3262,14 @@ if($this->mobile == false)
 	<?php if($this->mobile == false && GateKeeper::isDeleteAllowed()){?>
 	<td class="del"><?php print EncodeExplorer::getString("del"); ?></td>
 	<?php } ?>
+	<td class="icon">DL</td>
 </tr>
 <?php
 }
 ?>
 <tr class="row two">
 	<td class="icon"><img alt="dir" src="?img=directory" /></td>
-	<td colspan="<?php print (($this->mobile == true?1:(GateKeeper::isDeleteAllowed()?4:3))); ?>" class="long">
+	<td colspan="<?php print (($this->mobile == true?1:(GateKeeper::isDeleteAllowed()?5:4))); ?>" class="long">
 		<a class="item" href="<?php print $this->makeLink(false, false, null, null, null, $this->location->getDir(false, true, false, 1)); ?>">..</a>
 	</td>
 </tr>
@@ -3198,6 +3302,7 @@ if($this->dirs)
 		{
 			print "<td class=\"del\"><a data-name=\"".htmlentities($dir->getName())."\" href=\"".$this->makeLink(false, false, null, null, $this->location->getDir(false, true, false, 0).$dir->getNameEncoded(), $this->location->getDir(false, true, false, 0))."\"><img src=\"?img=del\" alt=\"Delete\" /></a></td>";
 		}
+		print "<td></td>";		
 		print "</tr>\n";
 		$row =! $row;
 	}
@@ -3214,8 +3319,10 @@ if($this->files)
 		$row_style = ($row ? "one" : "two");
 		print "<tr class=\"row ".$row_style.(++$count == count($this->files)?" last":"")."\">\n";
 		print "<td class=\"icon\"><img alt=\"".$file->getType()."\" src=\"".$this->makeIcon($file->getType())."\" /></td>\n";
-		print "<td class=\"name\" colspan=\"1\">\n";
-		print "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
+		print "<td class=\"name\">\n";
+		print GateKeeper::isLoginRequired()
+			? "\t\t<a href=\"?file=".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\""
+			: "\t\t<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\"";
 		if(EncodeExplorer::getConfig('open_in_new_window') == true)
 			print "target=\"_blank\"";
 		print " class=\"item file";
@@ -3246,6 +3353,14 @@ if($this->files)
 				</a>
 			</td>";
 		}
+		
+		print "<td class=\"icon\">";
+		print GateKeeper::isLoginRequired()
+			? "<a href=\"?dl=".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\" class=\"item file\" download>"
+			: "<a href=\"".$this->location->getDir(false, true, false, 0).$file->getNameEncoded()."\" class=\"item file\" download>";
+		print "<img alt=\"download\" src=\"?img=download\" />";
+		print "</a></td>\n";
+		
 		print "</tr>\n";
 		$row =! $row;
 	}
@@ -3286,7 +3401,7 @@ if(GateKeeper::isAccessAllowed() && $this->location->uploadAllowed() && (GateKee
 {
 ?>
 <!-- START: Upload area -->
-<form enctype="multipart/form-data" method="post">
+<form enctype="multipart/form-data" method="post" <?=isset($_GET['dir'])? 'action="?dir='.$_GET['dir'].'">' : ''?>>
 	<div id="upload">
 		<?php
 		if(GateKeeper::isNewdirAllowed()){

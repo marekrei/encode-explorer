@@ -178,7 +178,7 @@ $_CONFIG['users'] = array();
 $_CONFIG['upload_enable'] = true;
 $_CONFIG['newdir_enable'] = true;
 $_CONFIG['delete_enable'] = false;
-
+$_CONFIG['rename_enable'] = true;
 /*
  * UPLOADING
  */
@@ -2112,6 +2112,12 @@ class GateKeeper
 			return true;
 		return false;
 	}
+	
+	public static function isRenameAllowed(){
+		if(EncodeExplorer::getConfig("rename_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
+			return true;
+		return false;
+	}
 
 	public static function isNewdirAllowed(){
 		if(EncodeExplorer::getConfig("newdir_enable") == true && GateKeeper::isUserLoggedIn() == true && GateKeeper::getUserStatus() == "admin")
@@ -3018,7 +3024,7 @@ if(($this->getConfig('log_file') != null && strlen($this->getConfig('log_file'))
 	|| (GateKeeper::isDeleteAllowed()))
 {
 ?>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -3338,6 +3344,67 @@ if($this->mobile == false && $this->getConfig("show_load_time") == true)
 <a href="http://encode-explorer.siineiolekala.net">Encode Explorer</a>
 </div>
 <!-- END: Info area -->
+
+<?php 
+if(GateKeeper::isAccessAllowed() && GateKeeper::isRenameAllowed()){
+?>
+<script type="text/javascript">// <![CDATA[
+	$(function () {
+		$("td.name").dblclick(function (e) {
+			e.stopPropagation();
+			var currentEle = $(this).children("a");
+			var currentVal = currentEle.html();
+			if ($("#NewName").length <= 0){
+				updateVal(currentEle, currentVal);
+			}
+		});
+	});
+	
+	function updateVal(currentEle, currentVal) {
+		var is_file = 0;
+		if(currentEle.hasClass('file')){
+			is_file = 1;
+		}
+		var rnm_dir = currentEle.attr('href');
+		rnm_dir = rnm_dir.replace('?dir=','');
+		
+		$(currentEle).parent().append('<input id="NewName" type="text" value="' + currentVal + '" />');
+		$(currentEle).hide();
+		$("#NewName").focus();
+		
+		$("#NewName").keyup(function (event) {
+			if (event.keyCode == 13) {
+				var n_name = $("#NewName").val();
+				$('#NewName').remove();
+				$.ajax({
+					cache: false,
+					type: 'GET',
+					url: 'addfunctions.php',
+					data: {'rnm_dir':rnm_dir, 'is_file':is_file, 'new_name':n_name, 'function':'rename'},
+					dataType: "json",
+					success: function(response){
+						if(!is_file){
+							response.name = '?dir=' + response.name;
+						}
+						currentEle.attr('href', response.name);
+						$(currentEle).html(n_name).show();
+					},
+					error: function (request, status, error) {
+						$(currentEle).html('Error updating').show();
+						alert(request.responseText);
+					}
+				});
+			}
+		}).blur(function () {
+			$('#NewName').remove();
+			$(currentEle).html(currentVal).show();
+		});
+	}
+// ]]></script>
+<?php
+}
+?>
+
 </body>
 </html>
 
